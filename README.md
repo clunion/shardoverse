@@ -1,4 +1,4 @@
-![shardoverse](./assets/images/shardoverse-title.png)
+![shardoverse](./assets/images/Shardoverse-title.png)
 
 # shardoverse
 
