@@ -1,0 +1,19 @@
+[package]
+name    = "shardoverse"
+version = "0.0.1"
+
+authors = [
+          "Christian Lunau <Christian.Lunau@gmx.de>",
+          "Jaron Lunau <Jaronn.Lunau@gmx.de>",
+          "Julian Lunau <Julian.Lunau@gmx.de>",
+          ]
+edition = "2018"
+
+[dependencies]
+rand = "0.7.2"
+
+[dependencies.sdl2]
+  version = "0.32.1"
+  default-features = false
+  features = ["ttf","image","gfx","mixer"]
+
