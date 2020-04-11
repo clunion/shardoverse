@@ -1,4 +1,6 @@
-assets
+assets/audio
+assets/cursors
+assets/fonts
+assets/grafics
+assets/videos
 target
-.idea
-*.dll
