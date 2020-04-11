@@ -1,16 +1,10 @@
 ![shardoverse](./assets/images/Shardoverse-title.png)
 
-# shardoverse
-
-[![GitHub Releases][github-release-svg]][github-release]
-
-                        Shardoverse
-
-                        A Rougelike
-                   Peer-to-Peer Multi Player
-                     Dungeon Explorer
-                    and Fortres Builder (? maybe later)
-                    Game written in Rust
+A Rougelike  
+Peer-to-Peer Multi Player  
+Dungeon Explorer  
+and Fortres Builder (? maybe later)  
+Game written in Rust.  
 
 ## Idea and story
 
