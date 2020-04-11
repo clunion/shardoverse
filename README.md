@@ -1,10 +1,10 @@
-![shardoverse](./assets/images/Shardoverse-title.png)
+![Shardoverse](./assets/images/Shardoverse-title.png)
 
-A Rougelike  
-Peer-to-Peer Multi Player  
-Dungeon Explorer  
-and Fortres Builder (? maybe later)  
-Game written in Rust.  
+A Rougelike
+Peer-to-Peer Multi Player
+Dungeon Explorer
+and Fortres Builder (? maybe later)
+Game written in Rust.
 
 ## Idea and story
 
@@ -16,7 +16,7 @@ Is he alone, are there other survivers, other shards?
 
 ## This is a learning project!
 
-We are one software developer (expierienced in writing business & database applications)
+We are one software developer (expierienced in writing business & database applications, not games)
 and two newcomers, all interested in game programming.
 
 Goal of this project is to learn:
@@ -152,6 +152,17 @@ To run:
 
     cargo run --release
 
+
+# License(s)
+The game Shardoverse and all originaly created parts of it (source code, texts, descriptions and such) are licensed under the MIT licese, see the LICENSE.md file.
+
+Parts which are used by the game, namely several assets like grafics (including tiles, tilesets, textures, icons, cursors), sounds, music and fonts,
+which are not originally created by direct contributors to Shardoverse, may hold there own licenses.
+The use within Shardoverse does not remove those licenses.
+For each asset a file describing the origin of the data and, wherever possible, naming the copyright owner and the license.
+
+There is absolutely no intention to infringe any copyrights, trademarks or patents of their respectiv owners.
+If that should happen nevertheless, that would be an accidental oversight and will be corrected.
 
 # Maintainer
 * [@clunion](https://github.com/clunion)
