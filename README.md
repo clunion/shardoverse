@@ -1,23 +1,23 @@
 ![Shardoverse](./assets/images/Shardoverse-title.png)
 
-A Rougelike
-Peer-to-Peer Multi Player
-Dungeon Explorer
-and Fortres Builder (? maybe later)
-Game written in Rust.
+A Rougelike  
+Peer-to-Peer Multi Player  
+Dungeon Explorer  
+and Fortres Builder (? maybe later)  
+Game written in Rust.  
 
 ## Idea and story
 
-The world is shattered to pieces, leaving the survivers each on his own shard of the universe.
+The world is shattered to pieces, leaving the survivers each on his own shard of the universe.  
+
 Now one has to run, to explore and to gather what is left, what is needed to survive, in the depth of the shard.
 
-Set in a broken fantasy world with a bit of steam, the player starts on his own in an unfmiliar place.
+Set in a broken fantasy world with a bit of steam, the player starts on his own in an unfmiliar place.  
 Is he alone, are there other survivers, other shards?
 
 ## This is a learning project!
 
-We are one software developer (expierienced in writing business & database applications, not games)
-and two newcomers, all interested in game programming.
+We are one software developer (expierienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
 
 Goal of this project is to learn:
 - the Rust programming language and
@@ -26,9 +26,9 @@ Goal of this project is to learn:
 We chose to write a little Roguelike game and maybe add some extras.
 
 ## Current state
-The project has not really started yet.
+The project has not really started yet.  
 Currently, we are setting up the development environment, select the tools and libraries we will use,
-choose some basic assets for grafics and sound and decide on the license.
+choose some basic assets for grafics and sound and such things.
 
 
 ## Decisions made
@@ -54,11 +54,11 @@ choose some basic assets for grafics and sound and decide on the license.
 ## Setting up the development environment
 
 ### Install MSYS2 + MinGW64
-As described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)
-(and possibly this may help:  [`unix-linux-environment-windows`](https://www.booleanworld.com/get-unix-linux-environment-windows-msys2/)
+As described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)  
+(and possibly this may help:  [`unix-linux-environment-windows`](https://www.booleanworld.com/get-unix-linux-environment-windows-msys2/) )
 
-Now there should be an Icon on the desktop to start the MSys2-Shell.
-For the further steps, open this shell.
+Now there should be an Icon on the desktop to start the MSys2-Shell.  
+For the further steps, open this shell.  
 May be it is now the right time to configure this shell/window for your liking.
 
 ### Updating the Msys2- and MinGW64-Packages and -Repositories
@@ -107,7 +107,7 @@ If not already done, add a Variable named 'HOME' to the Windows Users Environmen
     HOME=C:\<your own homedir>
 
 This directory is the location from which all the dot-files will be read when the shell is started, in Windows notation.
-(one description of how to do this can be seen here: [`environment-variables-windows-10`](https://www.techjunkie.com/environment-variables-windows-10/)
+(one description of how to do this can be seen here: [`environment-variables-windows-10`](https://www.techjunkie.com/environment-variables-windows-10/) )
 
 Add the location of the Mingw64 binaries to the Windows Users Environmentvariables PATH, also in Windows notation:
 
@@ -162,52 +162,62 @@ To run:
     cargo run --release
 
 ## Some Tools
-For a secure login to GitHub from our Windows-PCs, we use SSH.
-To automate the login:
-- KeePass 2
-- KeeAgent
+For a secure login to GitHub from our Windows-PCs, SSH is used.
 
-Setup as described here:
-https://code.mendhak.com/keepass-and-keeagent-setup/
+After trying to get the Git-in-Msys2 to use the SSH-Agent 'KeeAgent' from KeePass with no real success
+(both tools are able to access this GitHub repository, but not automagically integrated), 
+it was resorted to use [`TortoiseGit`](https://tortoisegit.org/) instead. 
+Some additional configuration-Info can be found here:  
+[`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)  
+
+
+To automate the login with KeePass2 via KeeAgent, a setup as described here was tried:
+[`keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
+Maybe someone has more luck.
+
+
+Originally it was intended not to use TortoiseGit from the start, because the intention was/is to learn Git the console way first.
 
 
 # License(s)
 The game Shardoverse and all originaly created parts of it (source code, texts, descriptions and such) are licensed under the MIT licese, see the LICENSE.md file.
 
-Parts which are used by the game, namely several assets like grafics (including tiles, tilesets, textures, icons, cursors), sounds, music and fonts,
-which are not originally created by direct contributors to Shardoverse, may hold there own licenses.
-The use within Shardoverse does not remove those licenses.
+Parts which are used by the game, namely several assets like grafics, tiles, tilesets, textures, icons, cursors, sounds, music and fonts,
+which are not originally created by direct contributors to Shardoverse, are holding their own licenses.  
+The use within Shardoverse does not remove those licenses.  
+
 For each asset a file describing the origin of the data and, wherever possible, naming the copyright owner and the license.
 
 There is absolutely no intention to infringe any copyrights, trademarks or patents of their respectiv owners.
+
 If that should happen nevertheless, that would be an accidental oversight and will be corrected.
 
 # Assets
 
-The following Assets are (or will be) used, if their creators do not object:
+The following Assets are (or will be) used, if their creators/owners do not object:
 
-./assets/audio/effects  
+- ./assets/audio/effects  
 
-./assets/audio/music  
-[`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)  
+- ./assets/audio/music  
+    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)  
 
-./assets/cursors  
+- ./assets/cursors  
 
-./assets/fonts  
-[`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)  
-[`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)  
-[`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)  
+- ./assets/fonts  
+    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)  
+    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)  
+    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)  
 
-./assets/grafics/2D/tiles  
-[`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)  
+- ./assets/grafics/2D/tiles  
+    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)  
 
-./assets grafics/2D-isometric/tiles  
-[`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)  
+-   ./assets grafics/2D-isometric/tiles  
+    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)  
 
-./assets/grafics/3D/meshes  
-./assets/grafics/3D/textures  
-./assets/images  
-./assets/videos  
+- ./assets/grafics/3D/meshes  
+- ./assets/grafics/3D/textures  
+- ./assets/images  
+- ./assets/videos  
 
 
 
