@@ -33,20 +33,22 @@ choose some basic assets for grafics and sound and decide on the license.
 
 ## Decisions made
 
-| What                                      | Why                                                                                      |
-|-------------------------------------------|------------------------------------------------------------------------------------------|
-| [`Rougelike`](http://www.roguebasin.com/) | Programming a rougelike should be simple enough and sound like fun!                      |
-| [`Rust`](https://www.rust-lang.org/)      | Rust is said to be fast and reliable at the same time, so it should be perfect for games |
-| [`MSys2`](https://www.msys2.org)          | To develop somewhat independend of the underlying system platform                        |
-| [`MinGW64`](http://mingw.org/)            | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity   |
-| [`SDL2`](https://wiki.libsdl.org/)        | A well probed and platform independend set of libraries                                  |
+| What                                      | Why                                                                                                 |
+|-------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| [`Rougelike`](http://www.roguebasin.com/) | Programming a rougelike should be simple enough and sound like fun!                                 |
+| [`Rust`](https://www.rust-lang.org/)      | Rust is said to be fast and reliable at the same time, so it should be perfect for games            |
+| [`MSys2`](https://www.msys2.org)          | To develop somewhat independend of the underlying system platform                                   |
+| [`MinGW64`](http://mingw.org/)            | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity              |
+| [`SDL2`](https://wiki.libsdl.org/)        | A well probed and platform independend set of libraries                                             |
+| [`git`](https://https://git-scm.com/)     | subversion would have done since this is just for learning, but let's do it right from the start.   |
+| [`GitHub`](https://github.com/)           | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too. |
 
 ## Considerations
 
 | What                                                  | Why                                                                                      |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------|
 | [`amethyst`](https://crates.io/crates/amethyst)       | Hm, data-driven development looks like a good idea, maybe a bit strange to grasp. What is the relation to SDL2? Is Amethyst a replacement for SDL2 or can both be integrated? |
-| [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docu is available! But that may be a bit much, and our goal is lerning how to do it in Rust. On the other hand, may be we could integrate some things. |
+| [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docu is available! But that may be a bit much, since our goal is to learn how to do it in Rust by ourselves. On the other hand, may be we could integrate some things. |
 
 
 ## Setting up the development environment
@@ -73,6 +75,13 @@ May be it is now the right time to configure this shell/window for your liking.
 
 ### Install git for Msys2
 as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
+
+#### In short:
+- Edit the pacman configuration file of Msys2: pacman.conf
+- add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
+- add and accept their signing-keys
+- update Msys2 repeatedly by using ```pacboy update``` untill there is nothing more to update
+- install git via: ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
 
 ### Just for fun, we'll not really need this
     pacman -S mingw-w64-x86_64-vulkan-devel
@@ -132,7 +141,7 @@ add the location of the Rust binaries to the PATH-variable (now in the unix nota
 ------------------
 > An example for a similiar environment is the Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt)!
 
-## Cloning this git repository
+## Clone the git repository of Shardoverse
 In the MSys2-Shell
 navigate to your intended base development directory,
 then clone the files from GitHub by issueing:
@@ -163,6 +172,35 @@ For each asset a file describing the origin of the data and, wherever possible, 
 
 There is absolutely no intention to infringe any copyrights, trademarks or patents of their respectiv owners.
 If that should happen nevertheless, that would be an accidental oversight and will be corrected.
+
+# Assets
+
+The following Assets are (or will be) used, if their creators do not object:
+
+./assets/audio/effects  
+
+./assets/audio/music  
+[`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)  
+
+./assets/cursors  
+
+./assets/fonts  
+[`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)  
+[`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)  
+[`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)  
+
+./assets/grafics/2D/tiles  
+[`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)  
+
+./assets grafics/2D-isometric/tiles  
+[`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)  
+
+./assets/grafics/3D/meshes  
+./assets/grafics/3D/textures  
+./assets/images  
+./assets/videos  
+
+
 
 # Maintainer
 * [@clunion](https://github.com/clunion)
