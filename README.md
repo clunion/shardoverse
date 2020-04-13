@@ -161,6 +161,15 @@ To run:
 
     cargo run --release
 
+## Some Tools
+For a secure login to GitHub from our Windows-PCs, we use SSH.
+To automate the login:
+- KeePass 2
+- KeeAgent
+
+Setup as described here:
+https://code.mendhak.com/keepass-and-keeagent-setup/
+
 
 # License(s)
 The game Shardoverse and all originaly created parts of it (source code, texts, descriptions and such) are licensed under the MIT licese, see the LICENSE.md file.
