@@ -76,6 +76,11 @@ May be it is now the right time to configure this shell/window for your liking.
 ### Install git for Msys2
 as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
 
+
+    pacman -S ssh-pageant  (not tested yet)
+    https://github.com/cuviper/ssh-pageant
+    
+    
 #### In short:
 - Edit the pacman configuration file of Msys2: pacman.conf
 - add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
