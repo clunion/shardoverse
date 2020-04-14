@@ -1,23 +1,23 @@
 ![Shardoverse](./assets/images/Shardoverse-title.png)
 
-A Rougelike  
+A Roguelike  
 Peer-to-Peer Multi Player  
 Dungeon Explorer  
-and Fortres Builder (? maybe later)  
+and Fortress Builder (? maybe later)  
 Game written in Rust.  
 
 ## Idea and story
 
-The world is shattered to pieces, leaving the survivers each on his own shard of the universe.  
+The world is shattered to pieces, leaving the survivors each on his own shard of the universe.  
 
 Now one has to run, to explore and to gather what is left, what is needed to survive, in the depth of the shard.
 
-Set in a broken fantasy world with a bit of steam, the player starts on his own in an unfmiliar place.  
-Is he alone, are there other survivers, other shards?
+Set in a broken fantasy world with a bit of steam, the player starts on his own in an unfamiliar place.  
+Is he alone, are there other survivors, other shards?
 
 ## This is a learning project!
 
-We are one software developer (expierienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
+We are one software developer (experienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
 
 Goal of this project is to learn:
 - the Rust programming language and
@@ -28,18 +28,18 @@ We chose to write a little Roguelike game and maybe add some extras.
 ## Current state
 The project has not really started yet.  
 Currently, we are setting up the development environment, select the tools and libraries we will use,
-choose some basic assets for grafics and sound and such things.
+choose some basic assets for graphics and sound and such things.
 
 
 ## Decisions made
 
 | What                                      | Why                                                                                                 |
 |-------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| [`Rougelike`](http://www.roguebasin.com/) | Programming a rougelike should be simple enough and sound like fun!                                 |
+| [`Roguelike`](http://www.roguebasin.com/) | Programming a roguelike should be simple enough and sound like fun!                                 |
 | [`Rust`](https://www.rust-lang.org/)      | Rust is said to be fast and reliable at the same time, so it should be perfect for games            |
-| [`MSys2`](https://www.msys2.org)          | To develop somewhat independend of the underlying system platform                                   |
+| [`MSys2`](https://www.msys2.org)          | To develop somewhat independent of the underlying system platform                                   |
 | [`MinGW64`](http://mingw.org/)            | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity              |
-| [`SDL2`](https://wiki.libsdl.org/)        | A well probed and platform independend set of libraries                                             |
+| [`SDL2`](https://wiki.libsdl.org/)        | A well probed and platform independent set of libraries                                             |
 | [`git`](https://https://git-scm.com/)     | subversion would have done since this is just for learning, but let's do it right from the start.   |
 | [`GitHub`](https://github.com/)           | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too. |
 
@@ -48,7 +48,7 @@ choose some basic assets for grafics and sound and such things.
 | What                                                  | Why                                                                                      |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------|
 | [`amethyst`](https://crates.io/crates/amethyst)       | Hm, data-driven development looks like a good idea, maybe a bit strange to grasp. What is the relation to SDL2? Is Amethyst a replacement for SDL2 or can both be integrated? |
-| [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docu is available! But that may be a bit much, since our goal is to learn how to do it in Rust by ourselves. On the other hand, may be we could integrate some things. |
+| [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docs is available! But that may be a bit much, since our goal is to learn how to do it in Rust by ourselves. On the other hand, may be we could integrate some things. |
 
 
 ## Setting up the development environment
@@ -80,14 +80,14 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
 - Edit the pacman configuration file of Msys2: pacman.conf
 - add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
 - add and accept their signing-keys
-- update Msys2 repeatedly by using ```pacboy update``` untill there is nothing more to update
+- update Msys2 repeatedly by using ```pacboy update``` until there is nothing more to update
 - install git via: ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
 
 ### Just for fun, we'll not really need this
     pacman -S mingw-w64-x86_64-vulkan-devel
 
 ### Installing the SDL2-Library:
-to chek which SDL2-Pakets are available for Mingw64:
+to check which SDL2-Packets are available for Mingw64:
 
     pacman -Ss mingw-w64-x86_64-SDL2
 
@@ -102,14 +102,14 @@ to chek which SDL2-Pakets are available for Mingw64:
 
 ------------------
 ## Install Rust
-If not already done, add a Variable named 'HOME' to the Windows Users Environmentvariables:
+If not already done, add a Variable named 'HOME' to the Windows users environment variables:
 
     HOME=C:\<your own homedir>
 
 This directory is the location from which all the dot-files will be read when the shell is started, in Windows notation.
 (one description of how to do this can be seen here: [`environment-variables-windows-10`](https://www.techjunkie.com/environment-variables-windows-10/) )
 
-Add the location of the Mingw64 binaries to the Windows Users Environmentvariables PATH, also in Windows notation:
+Add the location of the Mingw64 binaries to the Windows users environment variables PATH, also in Windows notation:
 
     PATH=C:\msys64\mingw64\bin
 
@@ -134,17 +134,17 @@ Now it's time to configure the environment within the shell.
 ### Configure the environment within the MSys2-Shell
 
 In one of the dot-files which get executed at start of the shell (in login-mode), maybe in .bash_profile,
-add the location of the Rust binaries to the PATH-variable (now in the unix notation):
+add the location of the Rust binaries to the PATH-variable (now in the Unix notation):
 
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
 ------------------
-> An example for a similiar environment is the Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt)!
+> An example for a similar environment is the Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt)!
 
 ## Clone the git repository of Shardoverse
 In the MSys2-Shell
 navigate to your intended base development directory,
-then clone the files from GitHub by issueing:
+then clone the files from GitHub by issuing:
 
     git clone https://github.com/clunion/shardoverse
 
@@ -180,15 +180,15 @@ Originally it was intended not to use TortoiseGit from the start, because the in
 
 
 # License(s)
-The game Shardoverse and all originaly created parts of it (source code, texts, descriptions and such) are licensed under the MIT licese, see the LICENSE.md file.
+The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
 
-Parts which are used by the game, namely several assets like grafics, tiles, tilesets, textures, icons, cursors, sounds, music and fonts,
+Parts which are used by the game, namely several assets like graphics, tiles, tilesets, textures, icons, cursors, sounds, music and fonts,
 which are not originally created by direct contributors to Shardoverse, are holding their own licenses.  
 The use within Shardoverse does not remove those licenses.  
 
 For each asset a file describing the origin of the data and, wherever possible, naming the copyright owner and the license.
 
-There is absolutely no intention to infringe any copyrights, trademarks or patents of their respectiv owners.
+There is absolutely no intention to infringe any copyrights, trademarks or patents of their respective owners.
 
 If that should happen nevertheless, that would be an accidental oversight and will be corrected.
 
@@ -208,14 +208,14 @@ The following Assets are (or will be) used, if their creators/owners do not obje
     [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)  
     [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)  
 
-- ./assets/grafics/2D/tiles  
+- ./assets/graphics/2D/tiles  
     [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)  
 
--   ./assets grafics/2D-isometric/tiles  
+-   ./assets graphics/2D-isometric/tiles  
     [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)  
 
-- ./assets/grafics/3D/meshes  
-- ./assets/grafics/3D/textures  
+- ./assets/graphics/3D/meshes  
+- ./assets/graphics/3D/textures  
 - ./assets/images  
 - ./assets/videos  
 
