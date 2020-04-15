@@ -164,7 +164,8 @@ add the location of the Rust binaries to the PATH-variable (now in the Unix nota
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
 ------------------
-> An example for a similar environment is the Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt)!
+> An example for a similar environment is the small but nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
+> And listen to the Game-Music!
 
 ## Clone the git repository of Shardoverse
 In the MSys2-Shell
@@ -173,35 +174,34 @@ then clone the files from GitHub by issuing:
 
     git clone https://github.com/clunion/shardoverse
 
-That creates a new sub directory with all the necessary files in it.
+That creates a new sub directory named ```shardoverse``` with all the necessary files in it.
 
 ## Build and Run
 
-To build:
+To build:   
 
-    cargo build
-
+    cd shardoverse  
+    cargo build --release
 
 To run:
 
     cargo run --release
 
-## Some Tools
-For a secure login to GitHub from our Windows-PCs, SSH is used.
+## SSH Tools
+For a secure login to GitHub from Windows-PCs, SSH is used.
 
-After trying to get the Git-in-Msys2 to use the SSH-Agent 'KeeAgent' from KeePass with no real success
-(both tools are able to access this GitHub repository, but not automagically integrated), 
-it was resorted to use [`TortoiseGit`](https://tortoisegit.org/) instead. 
+To automate the login with KeePass2 via KeeAgent, a setup as described here was tried:
+[`keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
+
 Some additional configuration-Info can be found here:  
 [`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)  
 
 
-To automate the login with KeePass2 via KeeAgent, a setup as described here was tried:
-[`keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
-Maybe someone has more luck.
+Alternatively, if the configuration of Git-within-Msys2 with ssh-pageant as proxy to KeeAgent fails,  
+it is reasonable to resort to using a Windows-Git tool like [`TortoiseGit`](https://tortoisegit.org/) instead.   
 
-
-Originally it was intended not to use TortoiseGit from the start, because the intention was/is to learn Git the console way first.
+Originally it was intended not to use TortoiseGit from the start, because the reason of this project is to learn Git, and that means in the console way first.
+But if the tools do not work as intended, than skip them and use an other way.
 
 
 # License(s)
