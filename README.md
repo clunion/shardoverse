@@ -43,6 +43,7 @@ choose some basic assets for graphics and sound and such things.
 | [`git`](https://https://git-scm.com/)     | subversion would have done since this is just for learning, but let's do it right from the start.   |
 | [`GitHub`](https://github.com/)           | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too. |
 
+
 ## Considerations
 
 | What                                                  | Why                                                                                      |
@@ -76,17 +77,24 @@ May be it is now the right time to configure this shell/window for your liking.
 ### Install git for Msys2
 as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
 
-
-    pacman -S ssh-pageant  (not tested yet)
-    https://github.com/cuviper/ssh-pageant
-    
-    
 #### In short:
 - Edit the pacman configuration file of Msys2: pacman.conf
 - add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
 - add and accept their signing-keys
 - update Msys2 repeatedly by using ```pacboy update``` until there is nothing more to update
-- install git via: ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
+- install git via:  
+    ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
+  
+  
+Also add: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)  
+
+    pacman -S ssh-pageant  
+(not really tested yet)
+
+Make sure to use the same Socket-File in the setup auf ssh-pageant (within the Msys2-Shell)  
+and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).  
+
+
 
 ### Just for fun, we'll not really need this
     pacman -S mingw-w64-x86_64-vulkan-devel
