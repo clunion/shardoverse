@@ -87,24 +87,32 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
   
 
 ### Also add ssh-pageant
+This is neccessary to get the automated/transparent SSH-Key login to GitHub working,
+it needs additionally an running Putty-Pageant or Keepass-KeeAdent, see further below.
 
     pacman -S ssh-pageant  
 (seems to work, but not sure yet)
 
 Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)  
 
-This is neccessary to get the automated/transparent SSH-Key Login to GitHub working,
-it needs additionally an working Putty-Pageant or Keepass-KeeAdent, see below.
-
 Make sure to use the same Socket-File in the setup auf ssh-pageant (within the Msys2-Shell)  
 and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).  
 
+Here, a file with Path and name like this is used:
+
+    /e/Temp/msys_cyglockfile
+
+Currently, the variant using the cygwin compatible socket seems to work with Msys2.  
+If not, try the other (msysgit) variant.
+Filepath and name used in KeeAgent:  
+
+    E:\Temp\msys_cyglockfile
 
 ### Just for fun, we'll not really need this
     pacman -S mingw-w64-x86_64-vulkan-devel
 
 ### Installing the SDL2-Library:
-to check which SDL2-Packets are available for Mingw64:
+To check which SDL2-Packets are available for Mingw64:
 
     pacman -Ss mingw-w64-x86_64-SDL2
 
