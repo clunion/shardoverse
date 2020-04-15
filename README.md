@@ -85,15 +85,19 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
 - install git via:  
     ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
   
-  
-Also add: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)  
+
+### Also add ssh-pageant
 
     pacman -S ssh-pageant  
-(not really tested yet)
+(seems to work, but not sure yet)
+
+Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)  
+
+This is neccessary to get the automated/transparent SSH-Key Login to GitHub working,
+it needs additionally an working Putty-Pageant or Keepass-KeeAdent, see below.
 
 Make sure to use the same Socket-File in the setup auf ssh-pageant (within the Msys2-Shell)  
 and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).  
-
 
 
 ### Just for fun, we'll not really need this
