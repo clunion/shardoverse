@@ -187,11 +187,22 @@ To run:
 
     cargo run --release
 
-## SSH Tools
+## Some notes rearding SSH Tools
+When setting up a development environment like this, it is helpful to enable an automatic/transparent
+login of the localy installed Git to the remote GitHub server.   
+To do this in a Windows-Environment it is (sometimes) possible to integrate 
+with a key management tool like [`KeePass2`](https://keepass.info/).
+
 For a secure login to GitHub from Windows-PCs, SSH is used.
 
-To automate the login with KeePass2 via KeeAgent, a setup as described here was tried:
-[`keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
+To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass.info/) via [`KeeAgent`](https://lechnology.com/software/keeagent/).  
+A setup like described here may work: 
+[`Mendhak's keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
+
+#### in Short:
+- install Git in Msys2 as depiceted here
+- install Keepass (tested here: Version 2.44) and the KeePass-Plugin KeeAgent (Version 0.11.1.0 by David Lechner)
+- ...
 
 Some additional configuration-Info can be found here:  
 [`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)  
