@@ -20,8 +20,9 @@ Is he alone, are there other survivors, other shards?
 We are one software developer (experienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
 
 Goal of this project is to learn:
-- the Rust programming language and
-- a bit of game programming.
+* the Rust programming language,
+* a bit of game programming and 
+* the network-stuff for peer-to-peer coupling. 
 
 We chose to write a little Roguelike game and maybe add some extras.
 
@@ -164,7 +165,7 @@ add the location of the Rust binaries to the PATH-variable (now in the Unix nota
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
 ------------------
-> An example for a similar environment is the small but nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
+> An example for a similar environment is the small but nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).  
 > And listen to the Game-Music!
 
 ## Clone the git repository of Shardoverse
@@ -188,72 +189,108 @@ To run:
     cargo run --release
 
 ## Some notes rearding SSH Tools
-When setting up a development environment like this, it is helpful to enable an automatic/transparent
-login of the localy installed Git to the remote GitHub server.   
-To do this in a Windows-Environment it is (sometimes) possible to integrate 
-with a key management tool like [`KeePass2`](https://keepass.info/).
+While using a secure key management software is already a good idea,   
+it sounds even better to integrate the development tools with that key management.
 
-For a secure login to GitHub from Windows-PCs, SSH is used.
+For a secure login to GitHub SSH can and should be used.
+
+With the process described in the previous sections, that is already working, 
+but every time git accesses GitHub (via git clone/pull/push/...), a login-window pops up and asks for the credentials.
 
 To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass.info/) via [`KeeAgent`](https://lechnology.com/software/keeagent/).  
-A setup like described here may work: 
+
+Follow this very fine description (all steps except those regarding Git-Bash, those tools should be already installed by now): 
 [`Mendhak's keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
 
 #### in Short:
-- install Git in Msys2 as depiceted here
-- install Keepass (tested here: Version 2.44) and the KeePass-Plugin KeeAgent (Version 0.11.1.0 by David Lechner)
-- ...
+- install Git in Msys2 as depiceted in the sections above
+- transfer your SSH public Key to GitHub
+- install [`KeePass2`](https://keepass.info/) (tested here: Version 2.44) 
+- install the KeePass2-Plugin [`KeeAgent`](https://lechnology.com/software/keeagent/) (Version 0.11.1.0, by David Lechner)
+- load and activate the ssh keys into KeePas2
+- load the Keys into KeeAgent
+- Let KeeAgent create (at least) the 'cygwin compatible socket file' 
+- take note of the socketfile's path and filename (may be somthing like: E:\Temp\msys_cyglockfile)
+- add a Shell-Environment varible named **SSH_AUTH_SOCK** to one of the Shell startup files, like .bash_profile
+- set and export the SSH_AUTH_SOCK with the **unix-style path** to the socket file like this:  
+```export SSH_AUTH_SOCK="/c/Temp7cyglockfile"```
+...
 
 Some additional configuration-Info can be found here:  
 [`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)  
 
 
-Alternatively, if the configuration of Git-within-Msys2 with ssh-pageant as proxy to KeeAgent fails,  
+Alternatively, if the configuration of Git-within-Msys2 with ssh-pageant as proxy to KeeAgent still does not work sufficiently,  
 it is reasonable to resort to using a Windows-Git tool like [`TortoiseGit`](https://tortoisegit.org/) instead.   
 
-Originally it was intended not to use TortoiseGit from the start, because the reason of this project is to learn Git, and that means in the console way first.
-But if the tools do not work as intended, than skip them and use an other way.
+Originally it was intended not to use TortoiseGit from the start, because one of goals of this project is to learn Git, and that means in the console way first.
 
+## Using Git with Notepad++ 
+
+There is a small problem integrating Notepad++: in usual configuration NP++ opens a new tab for a new text document, 
+which will happen every time when Git asks for, say, a commit description.   
+
+Then Git waits for the editor to be colsed, which is not what we want in our development flow.   
+
+Here is a description on how to integrate Notepad++ with Git in MSys2:
+
+[`how-do-i-use-notepad-or-other-with-msysgit`](https://stackoverflow.com/questions/1634161/how-do-i-use-notepad-or-other-with-msysgit)
+
+
+First, in Notepad++, allow the use of multiple instances. 
+There is a setting in the Notepad++ configuration called 'Multiple instances', the correct setting should read like 'Open session files in a new instance'.
+
+Add the directory which contains the Notepad++-Executable to the Windows environment variable PATH:  
+    PATH="C:\Program Files\Notepad++" (probably as one additional line, method is described here: [`environment-variables-windows-10`](https://www.techjunkie.com/environment-variables-windows-10/). )
+
+Create a wrapper shell-script for the call to start Notepad++ from Git within the MSys2-Shell.  
+The file may be named _npp_git.sh_ and should contain the following two lines:  
+
+    #!/bin/sh
+    notepad++ -multiInst -nosession -notabbar -noPlugin "$*"
+
+Put this shell script _npp_git.sh_ in a directory which can be found through your PATH-Environment variable within the MSys2-Shell.
+That could be a sub directory named _bin_ in the users HOME dir, or somewhere else, as long as that dir is in the PATH variable.
 
 # License(s)
 The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
 
 Parts which are used by the game, namely several assets like graphics, tiles, tilesets, textures, icons, cursors, sounds, music and fonts,
-which are not originally created by direct contributors to Shardoverse, are holding their own licenses.  
-The use within Shardoverse does not remove those licenses.  
+which are not originally created by direct contributors to Shardoverse, are provided under their own licenses.   
+Those parts are the property of their owners and the use within Shardoverse does not remove those licenses.   
 
-For each asset a file describing the origin of the data and, wherever possible, naming the copyright owner and the license.
+For each asset a file is provided in the directory of that asset, describing the origin of the data and, wherever possible, naming the copyright owner and the license.
 
 There is absolutely no intention to infringe any copyrights, trademarks or patents of their respective owners.
 
-If that should happen nevertheless, that would be an accidental oversight and will be corrected.
+If that should happen nevertheless, then that would be an accidental oversight and will be corrected.
 
 # Assets
 
 The following Assets are (or will be) used, if their creators/owners do not object:
 
-- ./assets/audio/effects  
+* ./assets/audio/effects  
 
-- ./assets/audio/music  
+* ./assets/audio/music  
     [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)  
 
-- ./assets/cursors  
+* ./assets/cursors  
 
-- ./assets/fonts  
+* ./assets/fonts  
     [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)  
     [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)  
     [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)  
 
-- ./assets/graphics/2D/tiles  
+* ./assets/graphics/2D/tiles  
     [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)  
 
--   ./assets graphics/2D-isometric/tiles  
+*   ./assets graphics/2D-isometric/tiles  
     [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)  
 
-- ./assets/graphics/3D/meshes  
-- ./assets/graphics/3D/textures  
-- ./assets/images  
-- ./assets/videos  
+* ./assets/graphics/3D/meshes  
+* ./assets/graphics/3D/textures  
+* ./assets/images  
+* ./assets/videos  
 
 
 

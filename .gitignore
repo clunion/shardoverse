@@ -1,6 +1,7 @@
+target
+log/*
 assets/audio
 assets/cursors
 assets/fonts
 assets/graphics
 assets/videos
-target

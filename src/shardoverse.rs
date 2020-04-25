@@ -1,21 +1,17 @@
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## PROJECT:             Shardoverse
-## HOME:                 plixx.de
+## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     main.rs
+## FILE:     shardoverse.rs
 ## SYNOPSIS: main, start and entry point of the program
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## A Rougelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
-## Uses:
-##     * SDL2 for handling of input, grafics and audio
-##     * Dungeon-Crawl-Stone-Soup Tile-Set
-##     * and some others
+## A Roguelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
 ##----------------------------------------------------------------------------------------------------------------------------
 ## LICENSE:
-## Copyright 2020 by Christian, Julian und Jaron Lunau.
-## <APACHE Software License 2> or MIT-License
+## Copyright 2020 by Christian Lunau (clunion), Julian Lunau and Jaron Lunau.
+## MIT-License, see LICENSE.md file 
 ##
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:  DATE:       AUTHOR: CHANGES:
@@ -48,8 +44,8 @@ use sdl2::gfx::primitives::DrawRenderer;
 
 // old C-Style section comments, to be replaced by Rust-equivalents:
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
-const INITIAL_WINDOW_WIDTH:  u32 = 1920;
-const INITIAL_WINDOW_HEIGHT: u32 = 1080;
+const INITIAL_WINDOW_WIDTH:  u32 = 1024;
+const INITIAL_WINDOW_HEIGHT: u32 =  768;
 
 //--- TYPE DEFINITIONS: ------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -112,17 +108,17 @@ for y in 0..height
         let fl_x  = x as f64;
         let fl_y  = y as f64;
 
-        // lineare Funktionen:
+        // linear functions:
         // let red   = (x as f64 /stretch_factor_x ) as u8;
         // let green = (y as f64 /stretch_factor_y ) as u8;
         // let blue  = (y as f64 /stretch_factor_y ) as u8;
 
-        // trigonometrische Funktionen:
+        // trigonometric functions:
         // let red   = (((fl_x.sin()+10.0).abs() *  9.0)       % 255.0) as u8;
         // let green = (((fl_x.sin()+10.0).abs() * 10.0)       % 255.0) as u8;
         // let blue  = (((fl_x.sin()+10.0).abs() * 11.0)       % 255.0) as u8;
 
-        // kombination von linearen mit trigonometrischen Funktionen:
+        // combination of linear and trigonometric functions:
         let red   = ( (x as f64 /stretch_factor_x )+(((fl_x/fl_y).sin() * 156.0)) % 256.0 ) as u8;
         let green = ( (y as f64 /stretch_factor_y )+(((fl_x/fl_y).sin() *  80.0)) % 256.0 ) as u8;
         let blue  = ( (y as f64 /stretch_factor_y )+(((fl_x/fl_y).sin() * 120.0)) % 256.0 ) as u8;

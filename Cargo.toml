@@ -17,3 +17,6 @@ rand = "0.7.2"
   default-features = false
   features = ["ttf","image","gfx","mixer"]
 
+[[bin]]
+name = "shardoverse"
+path = "src/shardoverse.rs"
