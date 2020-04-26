@@ -101,9 +101,9 @@ println!("canvas size: width={}, height={}",width,height);
 let     stretch_factor_x: f64 = width  as f64 / 256.0;
 let     stretch_factor_y: f64 = height as f64 / 256.0 ;
     
-for y in 0..height 
+for y in 1..height 
     {
-    for x in 0..width 
+    for x in 1..width 
         {
         let fl_x  = x as f64;
         let fl_y  = y as f64;
@@ -119,9 +119,9 @@ for y in 0..height
         // let blue  = (((fl_x.sin()+10.0).abs() * 11.0)       % 255.0) as u8;
 
         // combination of linear and trigonometric functions:
-        let red   = ( (x as f64 /stretch_factor_x )+(((fl_x/fl_y).sin() * 156.0)) % 256.0 ) as u8;
-        let green = ( (y as f64 /stretch_factor_y )+(((fl_x/fl_y).sin() *  80.0)) % 256.0 ) as u8;
-        let blue  = ( (y as f64 /stretch_factor_y )+(((fl_x/fl_y).sin() * 120.0)) % 256.0 ) as u8;
+        let red   = ( (x as f64 / stretch_factor_x )+(((fl_x/fl_y).cos() *  23.0)) % 256.0 ) as u8;
+        let green = ( (y as f64 / stretch_factor_y )+(((fl_x/fl_y).cos() *  72.0)) % 256.0 ) as u8;
+        let blue  = ( (y as f64 / stretch_factor_y )+(((fl_x/fl_y).cos() * 156.0)) % 256.0 ) as u8;
 
         // println!("x={}, y={} --> red={}, green={}, blue={}", x, y, red, green, blue);
 

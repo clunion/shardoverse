@@ -1,3 +1,5 @@
+![Rust](https://github.com/clunion/shardoverse/workflows/Rust/badge.svg)
+
 ![Shardoverse](./assets/images/Shardoverse-title.png)
 
 A Roguelike  
@@ -17,7 +19,7 @@ Is he alone, are there other survivors, other shards?
 
 ## This is a learning project!
 
-We are one software developer (experienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
+We are one software developer (somewhat experienced in writing business software & database applications, not games) and two newcomers, all interested in game programming.
 
 Goal of this project is to learn:
 * the Rust programming language,
@@ -202,19 +204,20 @@ To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass
 Follow this very fine description (all steps except those regarding Git-Bash, those tools should be already installed by now): 
 [`Mendhak's keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)  
 
-#### in Short:
-- install Git in Msys2 as depiceted in the sections above
-- transfer your SSH public Key to GitHub
-- install [`KeePass2`](https://keepass.info/) (tested here: Version 2.44) 
-- install the KeePass2-Plugin [`KeeAgent`](https://lechnology.com/software/keeagent/) (Version 0.11.1.0, by David Lechner)
-- load and activate the ssh keys into KeePas2
-- load the Keys into KeeAgent
-- Let KeeAgent create (at least) the 'cygwin compatible socket file' 
-- take note of the socketfile's path and filename (may be somthing like: E:\Temp\msys_cyglockfile)
-- add a Shell-Environment varible named **SSH_AUTH_SOCK** to one of the Shell startup files, like .bash_profile
-- set and export the SSH_AUTH_SOCK with the **unix-style path** to the socket file like this:  
-```export SSH_AUTH_SOCK="/c/Temp7cyglockfile"```
-...
+#### In Short:
+* install Git in Msys2 as depiceted in the sections above
+* transfer your SSH public Key to GitHub
+* install [`KeePass2`](https://keepass.info/) (tested here: Version 2.44) 
+* install the KeePass2-Plugin [`KeeAgent`](https://lechnology.com/software/keeagent/) (Version 0.11.1.0, by David Lechner)
+* load and activate the ssh keys into KeePas2
+* load the Keys into KeeAgent
+* Let KeeAgent create (at least) the 'cygwin compatible **socket file**' 
+* take note of the socket file's path and filename (in **windows style**, could be somthing like: E:\Temp\msys_cyglockfile)
+* in an Msys2 startup script like .bash_profile: set and export a shell environment varible named **SSH_AUTH_SOCK** with the **unix-style** path to the socket file like this:  
+```export SSH_AUTH_SOCK="/c/Temp7cyglockfile"```   
+
+Now Git actions involving the GitHub server (like push and pull) should not ask for credentials again. 
+But setting this up was a bit shaky first, it did not work right away, so some tinkering around for some time was neccessary.   
 
 Some additional configuration-Info can be found here:  
 [`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)  
@@ -237,6 +240,7 @@ Here is a description on how to integrate Notepad++ with Git in MSys2:
 [`how-do-i-use-notepad-or-other-with-msysgit`](https://stackoverflow.com/questions/1634161/how-do-i-use-notepad-or-other-with-msysgit)
 
 
+#### In Short:
 First, in Notepad++, allow the use of multiple instances. 
 There is a setting in the Notepad++ configuration called 'Multiple instances', the correct setting should read like 'Open session files in a new instance'.
 
@@ -251,6 +255,12 @@ The file may be named _npp_git.sh_ and should contain the following two lines:
 
 Put this shell script _npp_git.sh_ in a directory which can be found through your PATH-Environment variable within the MSys2-Shell.
 That could be a sub directory named _bin_ in the users HOME dir, or somewhere else, as long as that dir is in the PATH variable.
+
+Set the script _npp_git.sh_ as the editor in the global config of Git by entering the following in the MSys2-Shell:   
+
+    git config --global core.editor npp_git.sh
+
+Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
 
 # License(s)
 The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
