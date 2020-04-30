@@ -1,7 +1,7 @@
 target
 log/*
 assets/audio
-assets/cursors
 assets/fonts
 assets/graphics
+assets/gui
 assets/videos

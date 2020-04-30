@@ -9,6 +9,12 @@ authors = [
           ]
 edition = "2018"
 
+
+[[bin]]
+name = "shardoverse"
+path = "src/main.rs"
+
+
 [dependencies]
 rand = "0.7.2"
 
@@ -16,7 +22,3 @@ rand = "0.7.2"
   version = "0.32.1"
   default-features = false
   features = ["ttf","image","gfx","mixer"]
-
-[[bin]]
-name = "shardoverse"
-path = "src/shardoverse.rs"

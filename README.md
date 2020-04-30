@@ -1,6 +1,9 @@
-![Rust](https://github.com/clunion/shardoverse/workflows/Rust/badge.svg)
 
 ![Shardoverse](./assets/images/Shardoverse-title.png)
+
+| Build System    | Status                                                                         |
+|-----------------|--------------------------------------------------------------------------------|
+| GitHub Workflow |  ![Rust](https://github.com/clunion/shardoverse/workflows/Rust/badge.svg)      |
 
 A Roguelike  
 Peer-to-Peer Multi Player  
@@ -24,10 +27,10 @@ We are one software developer (somewhat experienced in writing business software
 Goal of this project is to learn:
 * the Rust programming language,
 * a bit of game programming and 
-* the network-stuff for peer-to-peer coupling. 
+* the network-stuff for peer-to-peer coupling.   
 
-We chose to write a little Roguelike game and maybe add some extras.
-
+We chose to write a little Roguelike game and maybe add some extras.   
+ 
 ## Current state
 The project has not really started yet.  
 Currently, we are setting up the development environment, select the tools and libraries we will use,
@@ -190,7 +193,7 @@ To run:
 
     cargo run --release
 
-## Some notes rearding SSH Tools
+## Some notes regarding SSH Tools
 While using a secure key management software is already a good idea,   
 it sounds even better to integrate the development tools with that key management.
 
@@ -262,6 +265,48 @@ Set the script _npp_git.sh_ as the editor in the global config of Git by enterin
 
 Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
 
+# Convenient build and run aliases
+In the `bin` directy is a set of scripts which may be used to start the diffent build and run variants Conveniently.
+Currently, they do simple calls to cargo, but that may change.   
+Such a set of build scripts can/should be located in every project folder, thus the method of building and running a project 
+is always the same, regardless if it is an C or C++ or, like this time, a Rust project.   
+To execute these local scripts, a set of aliases is used. 
+The reson behind this is, that then these scripts do not have to be found through the PATH-variable 
+(which is not possible to do right when working on several projects in parrallel), instead the scripts are because they are always in the same way relative to the current projects base-directory, 
+and thus can be reached via the aliases.   
+
+The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.   
+
+The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' in them, so i am not really willing to change that.
+    alias md="./bin/build_debug.sh"   
+    alias mr="./bin/build_release.sh"   
+    alias sd="./bin/run_debug.sh"   
+    alias sr="./bin/run_release.sh"   
+    alias st="./bin/run_test.sh"   
+    alias sdt="./bin/run_debug_tool.sh"   
+
+The more _rusty_ naming would be:
+    alias cbd="./bin/build_debug.sh"   
+    alias cbr="./bin/build_release.sh"   
+    alias crd="./bin/run_debug.sh"   
+    alias crt="./bin/run_test.sh"   
+    alias crr="./bin/run_release.sh"   
+
+
+# Debugging
+To investigate:   
+* ways to debug in this setup
+
+# Logging
+To investigate: 
+* Whats's the Rust aproach to logging?
+* Is there a way to use the plixx-logging-libs?
+
+# Project structure
+* Very small main.rs with only minimal logic
+* nearly everything goes into libs to make the functions unit-testable
+* integration testing (when network stuff ge
+
 # License(s)
 The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
 
@@ -277,7 +322,7 @@ If that should happen nevertheless, then that would be an accidental oversight a
 
 # Assets
 
-The following Assets are (or will be) used, if their creators/owners do not object:
+The following Assets are considered to be used, if their creators/owners do not object:
 
 * ./assets/audio/effects  
 
@@ -285,6 +330,10 @@ The following Assets are (or will be) used, if their creators/owners do not obje
     [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)  
 
 * ./assets/cursors  
+    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)  
+    [`Pointers_by_yd`](https://opengameart.org/content/pointers)  
+    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)  
+    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)  
 
 * ./assets/fonts  
     [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)  
@@ -299,7 +348,12 @@ The following Assets are (or will be) used, if their creators/owners do not obje
 
 * ./assets/graphics/3D/meshes  
 * ./assets/graphics/3D/textures  
+
+* ./assets/gui  
+    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)  
+
 * ./assets/images  
+
 * ./assets/videos  
 
 

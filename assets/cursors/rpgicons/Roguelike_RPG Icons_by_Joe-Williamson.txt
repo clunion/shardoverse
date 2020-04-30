@@ -1,0 +1,6 @@
+Roguelike/RPG Icons
+
+AUTHOR/OWNER:  Joe Williamson
+LICENSE:       Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) 
+ORIGIN:        https://opengameart.org/content/roguelikerpg-icons
+

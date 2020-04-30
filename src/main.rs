@@ -63,8 +63,6 @@ const INITIAL_WINDOW_HEIGHT: u32 =  768;
 //--- callbacks:
 
 
-
-
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## FUNCTION:   pixel_fill
@@ -140,6 +138,34 @@ canvas_p.present();
 return retval;
 }
 
+
+
+
+/*
+## ---------------------------------------------------------------------------------------------------------------------------
+*/
+fn shardoverse_setup () -> String
+{
+let retstr: String = "setup ok".to_string();
+    
+return retstr;
+}
+
+
+/*
+## ---------------------------------------------------------------------------------------------------------------------------
+*/
+#[cfg(test)]
+mod tests {
+  use super::*;
+  
+  #[test]
+  fn test_shardoverse_setup() {
+    let result = shardoverse_setup();
+    assert!(result.contains("setup ok"));
+  }
+}
+
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## FUNCTION:   main
@@ -161,6 +187,10 @@ fn main() -> Result<(), String>
 {
     let sdl_context = sdl2::init()?;
     let video_subsys = sdl_context.video()?;
+
+
+    println!("shardoverse_setup() returned: {}",shardoverse_setup());
+
 
     let window = video_subsys.window("Shardoverse", INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
                  .position_centered()
