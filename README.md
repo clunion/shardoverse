@@ -305,7 +305,13 @@ To investigate:
 # Project structure
 * Very small main.rs with only minimal logic
 * nearly everything goes into libs to make the functions unit-testable
-* integration testing (when network stuff ge
+* integration testing (when beginning network stuff)
+
+# GitHub Continuous Integration with Rust
+This is not needed to build Shardoverse locally, only describes what is done to get the build CI running on GitHub.
+* follows the templates provided by and described on [`trust`](https://github.com/japaric/trust)   
+* requires accounts at [`Travis CI`](https://travis-ci.org/) and [`AppVeyor`](https://www.appveyor.com/), both free for open source projects.   
+
 
 # License(s)
 The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
