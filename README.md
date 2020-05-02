@@ -1,18 +1,24 @@
-![Shardoverse](https://github.com/clunion/shardoverse/blob/master/assets/images/Shardoverse-title.png)   
+
 ![Shardoverse](assets/images/Shardoverse-title.png)   
 
-[![GitHub Releases][github-release-svg]][github-release]   
+[![GitHub Releases][github-release-svg]][github-release]
 
 
-| Build System    | Status                                                                         |
-|-----------------|--------------------------------------------------------------------------------|
-| GitHub Workflow |  ![Rust](https://github.com/clunion/shardoverse/workflows/Rust/badge.svg)      |
+| Build System    | Status                                                                                                    |
+|-----------------|-----------------------------------------------------------------------------------------------------------|
+| Travis-CI       | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
+| AppVeyor        | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
-A Roguelike  
-Peer-to-Peer Multi Player  
-Dungeon Explorer  
-and Fortress Builder (? maybe later)  
-Game written in Rust.  
+## What is this
+A learning project to get into the coding of:   
+
+	A Roguelike  
+	Peer-to-Peer Multi Player  
+	Role Playing Game 
+	written in Rust.  
+
+When it gets near completion a  `fortress building` scenario might get added.
+
 
 ## Idea and story
 
