@@ -1,22 +1,14 @@
 # Based on the "trust" template v0.1.2
 # https://github.com/japaric/trust/tree/v0.1.2
 
-dist: trusty
 language: rust
-services: docker
 sudo: required
-
-# TODO Rust builds on stable by default, this can be
-# overridden on a case by case basis down below.
 
 env:
   global:
-    # TODO Update this to match the name of your project.
     - CRATE_NAME=shardoverse
 
 matrix:
-  # TODO These are all the build jobs. Adjust as necessary. Comment out what you
-  # don't need
   include:
     ## Android
     #- env: TARGET=aarch64-linux-android DISABLE_TESTS=1
@@ -77,29 +69,57 @@ matrix:
     # - env: TARGET=thumbv7m-none-eabi
 
     # Testing other channels
-    - env: TARGET=x86_64-unknown-linux-gnu
-      rust: nightly
-    - env: TARGET=x86_64-apple-darwin
-      os: osx
-      rust: nightly
+    # - env: TARGET=x86_64-unknown-linux-gnu
+    #   rust: nightly
+    # - env: TARGET=x86_64-apple-darwin
+    #   os: osx
+    #   rust: nightly
 
 before_install:
+  - echo "section: before_install"
   - set -e
   - rustup self update
 
 install:
+  - echo "section: install"
   - sh ci/install.sh
   - source ~/.cargo/env || true
 
+  # Steps copied from the rust-sdl2 project:
+  - set -xueo pipefail
+  - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
+  - tar xzf sdl2.tar.gz
+  - pushd SDL2-* && ./configure && make && sudo make install && popd
+
+  - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
+  - tar xzf SDL2_ttf-*.tar.gz
+  - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
+
+  - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+  - tar xzf SDL2_image-*.tar.gz
+  - pushd SDL2_image-* && ./configure && make && sudo make install && popd
+
+  - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
+  - tar xzf SDL2_mixer-*.tar.gz
+  - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
+
+  - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
+  - tar xzf SDL2_gfx-*.tar.gz
+  - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
+
 script:
+  - echo "section: script"
   - bash ci/script.sh
+  - cargo build --verbose;
 
 after_script: set +e
 
 before_deploy:
+  - echo "section: before_deploy"
   - sh ci/before_deploy.sh
 
 deploy:
+  - echo "section: deploy"
   # TODO update `api_key.secure`
   # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
   # - Encrypt it: `travis encrypt 0123456789012345678901234567890123456789
@@ -119,7 +139,9 @@ deploy:
   skip_cleanup: true
 
 cache: cargo
+
 before_cache:
+  - echo "section: before_cache"
   # Travis can't cache files that are not readable by "others"
   - chmod -R a+r $HOME/.cargo
 
