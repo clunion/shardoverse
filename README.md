@@ -1,5 +1,8 @@
+![Shardoverse](https://github.com/clunion/shardoverse/blob/master/assets/images/Shardoverse-title.png)   
+![Shardoverse](assets/images/Shardoverse-title.png)   
 
-![Shardoverse](./assets/images/Shardoverse-title.png)
+[![GitHub Releases][github-release-svg]][github-release]   
+
 
 | Build System    | Status                                                                         |
 |-----------------|--------------------------------------------------------------------------------|
@@ -268,9 +271,9 @@ Set the script _npp_git.sh_ as the editor in the global config of Git by enterin
 Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
 
 # Convenient build and run aliases
-In the `bin` directy is a set of scripts which may be used to start the diffent build and run variants Conveniently.
+In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the diffent build and run variants Conveniently.
 Currently, they do simple calls to cargo, but that may change.   
-Such a set of build scripts can/should be located in every project folder, thus the method of building and running a project 
+A set of this build- and run-scripts are meant to be located in every project's bin folder, thus the method of building and running a project 
 is always the same, regardless if it is an C or C++ or, like this time, a Rust project.   
 To execute these local scripts, a set of aliases is used. 
 The reson behind this is, that then these scripts do not have to be found through the PATH-variable 
