@@ -117,9 +117,9 @@ for y in 1..height
         // let blue  = (((fl_x.sin()+10.0).abs() * 11.0)       % 255.0) as u8;
 
         // combination of linear and trigonometric functions:
-        let red   = ( (x as f64 / stretch_factor_x )+(((fl_x/fl_y).cos() *  23.0)) % 256.0 ) as u8;
-        let green = ( (y as f64 / stretch_factor_y )+(((fl_x/fl_y).cos() *  72.0)) % 256.0 ) as u8;
-        let blue  = ( (y as f64 / stretch_factor_y )+(((fl_x/fl_y).cos() * 156.0)) % 256.0 ) as u8;
+        let red   = ( (x as f64 / stretch_factor_x )+((fl_x/fl_y).cos() *  23.0) % 256.0 ) as u8;
+        let green = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() *  72.0) % 256.0 ) as u8;
+        let blue  = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() * 156.0) % 256.0 ) as u8;
 
         // println!("x={}, y={} --> red={}, green={}, blue={}", x, y, red, green, blue);
 
@@ -135,7 +135,7 @@ for y in 1..height
 
 canvas_p.present();
 
-return retval;
+retval
 }
 
 
@@ -148,7 +148,7 @@ fn shardoverse_setup () -> String
 {
 let retstr: String = "setup ok".to_string();
     
-return retstr;
+retstr
 }
 
 
@@ -212,7 +212,7 @@ fn main() -> Result<(), String>
     let mut lasty = 0;
     let mut tick = 0;
 
-    let mut events = sdl_context.event_pump().map_err(|e| e.to_string())?;
+    let mut events = sdl_context.event_pump().map_err(|e| e)?;
 
     let mut prev_buttons = HashSet::new();
 

@@ -29,28 +29,30 @@ Goal of this project is to learn:
 * a bit of game programming and 
 * the network-stuff for peer-to-peer coupling.   
 
-We chose to write a little Roguelike game and maybe add some extras.   
+We chose to write a little roguelike game and maybe add some extras.   
  
 ## Current state
-The project has not really started yet.  
+**The project has not really started yet.**  
+
 Currently, we are setting up the development environment, select the tools and libraries we will use,
 choose some basic assets for graphics and sound and such things.
 
 
 ## Decisions made
 
-| What                                      | Why                                                                                                 |
-|-------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| [`Roguelike`](http://www.roguebasin.com/) | Programming a roguelike should be simple enough and sound like fun!                                 |
-| [`Rust`](https://www.rust-lang.org/)      | Rust is said to be fast and reliable at the same time, so it should be perfect for games            |
-| [`MSys2`](https://www.msys2.org)          | To develop somewhat independent of the underlying system platform                                   |
-| [`MinGW64`](http://mingw.org/)            | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity              |
-| [`SDL2`](https://wiki.libsdl.org/)        | A well probed and platform independent set of libraries                                             |
-| [`git`](https://https://git-scm.com/)     | subversion would have done since this is just for learning, but let's do it right from the start.   |
-| [`GitHub`](https://github.com/)           | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too. |
+| What                                                            | Why                                                                                                                                        |
+|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| [`Roguelike`](http://www.roguebasin.com/)                       | Programming a roguelike should be simple enough and sound like fun!                                                                        |
+| [`Rust`](https://www.rust-lang.org/)                            | Rust is said to be fast and reliable at the same time, so it should be perfect for games                                                   |
+| [`MSys2`](https://www.msys2.org)                                | To develop somewhat independent of the underlying system platform                                                                          |
+| [`MinGW64`](http://mingw.org/)                                  | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity                                                     |
+| [`SDL2`](https://wiki.libsdl.org/)                              | A well probed and platform independent set of libraries                                                                                    |
+| [`git`](https://https://git-scm.com/)                           | subversion would have done since this is just for learning, but let's do it right from the start.                                          |
+| [`GitHub`](https://github.com/)                                 | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too.                                        |
+| [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independend. |
 
 
-## Considerations
+## In Consideration
 
 | What                                                  | Why                                                                                      |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------|
@@ -277,7 +279,8 @@ and thus can be reached via the aliases.
 
 The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.   
 
-The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' in them, so i am not really willing to change that.
+The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' in them, so i am not really willing to change that.   
+
     alias md="./bin/build_debug.sh"   
     alias mr="./bin/build_release.sh"   
     alias sd="./bin/run_debug.sh"   
@@ -286,12 +289,17 @@ The naming of the scripts here is changed to the terms used by Rust (build and r
     alias sdt="./bin/run_debug_tool.sh"   
 
 The more _rusty_ naming would be:
+
     alias cbd="./bin/build_debug.sh"   
     alias cbr="./bin/build_release.sh"   
     alias crd="./bin/run_debug.sh"   
     alias crt="./bin/run_test.sh"   
     alias crr="./bin/run_release.sh"   
 
+These scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).   
+If it is not installed yet, this can be done in the MSys2-Shell via:   
+
+	 rustup component add clippy
 
 # Debugging
 To investigate:   
@@ -308,9 +316,9 @@ To investigate:
 * integration testing (when beginning network stuff)
 
 # GitHub Continuous Integration with Rust
-This is not needed to build Shardoverse locally, only describes what is done to get the build CI running on GitHub.
-* follows the templates provided by and described on [`trust`](https://github.com/japaric/trust)   
-* requires accounts at [`Travis CI`](https://travis-ci.org/) and [`AppVeyor`](https://www.appveyor.com/), both free for open source projects.   
+This is not needed to build Shardoverse locally, only describes what is done here to get the build CI running with GitHub.
+* follow the templates provided by and described on [`trust`](https://github.com/japaric/trust)   
+* this requires accounts at [`Travis CI`](https://travis-ci.org/) and [`AppVeyor`](https://www.appveyor.com/), for both free accounts for open source projects are available.   
 
 
 # License(s)
