@@ -2,7 +2,6 @@
 # https://github.com/japaric/trust/tree/v0.1.2
 
 language: rust
-sudo: required
 
 env:
   global:
@@ -59,6 +58,8 @@ matrix:
     #
     # Windows
     - env: TARGET=x86_64-pc-windows-gnu
+      os: windows
+      rust: stable
 
     # Bare metal
     # These targets don't support std and as such are likely not suitable for
@@ -77,6 +78,24 @@ matrix:
 
 before_install:
   - echo "section: before_install"
+- |-
+    case $TRAVIS_OS_NAME in
+      windows)
+        [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
+        choco uninstall -y mingw
+        choco upgrade --no-progress -y msys2
+        export msys2='cmd //C RefreshEnv.cmd '
+        export msys2+='& set MSYS=winsymlinks:nativestrict '
+        export msys2+='& C:\\tools\\msys64\\msys2_shell.cmd -defterm -no-start'
+        export mingw64="$msys2 -mingw64 -full-path -here -c "\"\$@"\" --"
+        export msys2+=" -msys2 -c "\"\$@"\" --"
+        $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
+        ## Install more MSYS2 packages from https://packages.msys2.org/base here
+        taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
+        export PATH=/C/tools/msys64/mingw64/bin:$PATH
+        export MAKE=mingw32-make  # so that Autotools can find it
+        ;;
+    esac
   - set -e
   - rustup self update
 
@@ -120,6 +139,8 @@ before_deploy:
 
 deploy:
   - echo "section: deploy"
+  on:
+    condition: $DEPLOY = never
   # TODO update `api_key.secure`
   # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
   # - Encrypt it: `travis encrypt 0123456789012345678901234567890123456789
@@ -138,12 +159,23 @@ deploy:
   provider: releases
   skip_cleanup: true
 
-cache: cargo
-
 before_cache:
   - echo "section: before_cache"
   # Travis can't cache files that are not readable by "others"
   - chmod -R a+r $HOME/.cargo
+- |-
+    case $TRAVIS_OS_NAME in
+      windows)
+        # https://unix.stackexchange.com/a/137322/107554
+        $msys2 pacman --sync --clean --noconfirm
+        ;;
+    esac
+
+cache:
+    cargo
+    directories:
+    - $HOME/AppData/Local/Temp/chocolatey
+    - /C/tools/msys64  
 
 branches:
   only:
