@@ -1,9 +1,6 @@
 
 ![Shardoverse](assets/images/Shardoverse-title.png)   
 
-[![GitHub Releases][github-release-svg]][github-release]
-
-
 | Build System    | Status                                                                                                    |
 |-----------------|-----------------------------------------------------------------------------------------------------------|
 | Travis-CI       | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
