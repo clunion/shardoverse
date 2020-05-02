@@ -32,6 +32,13 @@ install:
   - if "%TARGET%" == "i686-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw32\bin
   - if "%TARGET%" == "x86_64-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw64\bin
 
+  # Install SDL2_gfx (todo: fix download, build locally).
+  #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
+  - wget --content-disposition -O sdl2_gfx.tar.gz -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 
+  - ps: Expand-Archive sdl2_mixer.tar.gz -DestinationPath sdl2_gfx
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2_gfx\SDL2_gfx-1.0.4\lib\x64
+  - ps: Get-ChildItem -Recurse -Depth 4
+
   # Install SDL2.
   - curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
   - ps: Expand-Archive sdl2.zip -DestinationPath sdl2
@@ -56,7 +63,8 @@ install:
   - ps: Get-ChildItem -Recurse -Depth 4
 
   # Install SDL2_gfx (todo: fix download, build locally).
-  - curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
+  #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
+  - wget --content-disposition -O sdl2_gfx.tar.gz -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 
   - ps: Expand-Archive sdl2_mixer.tar.gz -DestinationPath sdl2_gfx
   - set LIB=%LIB%;C:\projects\shardoverse\sdl2_gfx\SDL2_gfx-1.0.4\lib\x64
   - ps: Get-ChildItem -Recurse -Depth 4
