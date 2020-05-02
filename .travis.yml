@@ -2,7 +2,14 @@
 # https://github.com/japaric/trust/tree/v0.1.2
 
 language: rust
-
+rust:
+  - stable
+  - beta
+  - nightly
+jobs:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
 env:
   global:
     - CRATE_NAME=shardoverse
@@ -59,7 +66,6 @@ matrix:
     # Windows
     - env: TARGET=x86_64-pc-windows-gnu
       os: windows
-      rust: stable
 
     # Bare metal
     # These targets don't support std and as such are likely not suitable for
@@ -179,9 +185,9 @@ cache:
 
 branches:
   only:
-    # release tags
-    - /^v\d+\.\d+\.\d+.*$/
-    - master
+  - master
+  # release tags
+  - /^v\d+\.\d+\.\d+.*$/
 
 notifications:
   email:
