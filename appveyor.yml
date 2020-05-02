@@ -1,88 +1,71 @@
-# Based on the "trust" template v0.1.2
-# https://github.com/japaric/trust/tree/v0.1.2
-
+# Based on the rust_belt v1.2.0,  https://github.com/johnthagen/rust-belt/blob/master/appveyor.yml 
+# with additions from the "trust" template v0.1.2, https://github.com/japaric/trust/tree/v0.1.2
 environment:
   global:
-    RUST_VERSION: stable
-
-    CRATE_NAME: shardoverse
+    PROJECT_NAME: shardoverse
 
   matrix:
-    # MinGW
-    # - TARGET: i686-pc-windows-gnu
-    - TARGET: x86_64-pc-windows-gnu
+      - TARGET: x86_64-pc-windows-msvc
+        CHANNEL: stable
+      - TARGET: x86_64-pc-windows-msvc
+        CHANNEL: beta
 
-    # MSVC
-    # - TARGET: i686-pc-windows-msvc
-    # - TARGET: x86_64-pc-windows-msvc
+matrix:
+  allow_failures:
+      - TARGET: x86_64-pc-windows-msvc
+        CHANNEL: beta
 
-    # Testing other channels
-    # - TARGET: x86_64-pc-windows-gnu
-    #   RUST_VERSION: nightly
-    # - TARGET: x86_64-pc-windows-msvc
-    #   RUST_VERSION: nightly
-
+# Based on https://github.com/japaric/rust-everywhere/blob/master/appveyor.yml
 install:
-  - ps: >-
-      If ($env:TARGET -eq 'x86_64-pc-windows-gnu') {
-        $env:PATH += ';C:\msys64\mingw64\bin'
-      } ElseIf ($env:TARGET -eq 'i686-pc-windows-gnu') {
-        $env:PATH += ';C:\msys64\mingw32\bin'
-      }
-  - curl -sSf -o rustup-init.exe https://win.rustup.rs/
-  - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
+  # Print Powershell version.
+  - ps: $PSVersionTable.PSVersion
+  - ps: pwd
+
+  # Install Rust and Cargo
+  - curl --fail --silent --show-error --location --output rustup-init.exe https://win.rustup.rs
+  - rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% -y
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
   - rustc -Vv
   - cargo -V
 
-# TODO This is the "test phase", tweak it as you see fit
-test_script:
-  # we don't run the "test phase" when doing deploys
-  - if [%APPVEYOR_REPO_TAG%]==[false] (
-      cargo build --target %TARGET% &&
-      cargo build --target %TARGET% --release &&
-      cargo test --target %TARGET% &&
-      cargo test --target %TARGET% --release &&
-      cargo run --target %TARGET% &&
-      cargo run --target %TARGET% --release
-    )
+  # Add GCC to PATH if needed.
+  - if "%TARGET%" == "i686-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw32\bin
+  - if "%TARGET%" == "x86_64-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw64\bin
 
-before_deploy:
-  # TODO Update this to build the artifacts that matter to you
-  - cargo rustc --target %TARGET% --release --bin %CRATE_NAME% -- -C lto
-  - ps: ci\before_deploy.ps1
+  # Install SDL2.
+  - curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
+  - ps: Expand-Archive sdl2.zip -DestinationPath sdl2
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2\SDL2-2.0.10\lib\x64
 
-deploy:
-  artifact: /.*\.zip/
-  # TODO update `auth_token.secure`
-  # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
-  # - Encrypt it. Go to https://ci.appveyor.com/tools/encrypt
-  # - Paste the output down here
-  auth_token:
-    secure: t3puM/2hOig26EHhAodcZBc61NywF7/PFEpimR6SwGaCiqS07KR5i7iAhSABmBp7
-  description: ''
-  on:
-    # TODO Here you can pick which targets will generate binary releases
-    # In this example, there are some targets that are tested using the stable
-    # and nightly channels. This condition makes sure there is only one release
-    # for such targets and that's generated using the stable channel
-    RUST_VERSION: stable
-    appveyor_repo_tag: true
-  provider: GitHub
+  # Install SDL2_ttf.
+  - curl --fail --silent --show-error --location --output sdl2_ttf.zip https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip
+  - ps: Expand-Archive sdl2_ttf.zip -DestinationPath sdl2_ttf
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2_ttf\SDL2_ttf-2.0.15\lib\x64
+  - ps: Get-ChildItem -Recurse -Depth 4
 
-cache:
-  - C:\Users\appveyor\.cargo\registry
-  - target
+  # Install SDL2_Image.
+  - curl --fail --silent --show-error --location --output sdl2_image.zip https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip
+  - ps: Expand-Archive sdl2_image.zip -DestinationPath sdl2_image
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2_image\SDL2_image-2.0.5\lib\x64
+  - ps: Get-ChildItem -Recurse -Depth 4
 
-branches:
-  only:
-    # Release tags
-    - /^v\d+\.\d+\.\d+.*$/
-    - master
+  # Install SDL2_Mixer.
+  - curl --fail --silent --show-error --location --output sdl2_mixer.zip https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip
+  - ps: Expand-Archive sdl2_mixer.zip -DestinationPath sdl2_mixer
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2_mixer\SDL2_mixer-2.0.4\lib\x64
+  - ps: Get-ChildItem -Recurse -Depth 4
 
-notifications:
-  - provider: Email
-    on_build_success: false
+  # Install SDL2_gfx (todo: fix download, build locally).
+  - curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
+  - ps: Expand-Archive sdl2_mixer.tar.gz -DestinationPath sdl2_gfx
+  - set LIB=%LIB%;C:\projects\shardoverse\sdl2_gfx\SDL2_gfx-1.0.4\lib\x64
+  - ps: Get-ChildItem -Recurse -Depth 4
 
-# Building is done in the test phase, so we disable Appveyor's build phase.
+# 'cargo test' takes care of building for us, so disable Appveyor's build stage. This prevents
+# the "directory does not contain a project or solution file" error.
+# source: https://github.com/starkat99/appveyor-rust/blob/master/appveyor.yml#L113
 build: false
+
+# Equivalent to Travis' `script` phase
+test_script:
+  - cargo build --verbose
