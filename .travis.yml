@@ -10,6 +10,7 @@ jobs:
   allow_failures:
     - rust: nightly
   fast_finish: true
+
 env:
   global:
     - CRATE_NAME=shardoverse
@@ -183,11 +184,11 @@ cache:
     - $HOME/AppData/Local/Temp/chocolatey
     - /C/tools/msys64  
 
-branches:
-  only:
-  - master
-  # release tags
-  - /^v\d+\.\d+\.\d+.*$/
+# branches:
+#   only:
+#   - master
+#   # release tags
+#   - /^v\d+\.\d+\.\d+.*$/
 
 notifications:
   email:
