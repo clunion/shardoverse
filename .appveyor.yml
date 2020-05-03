@@ -20,6 +20,7 @@ install:
   # Print Powershell version.
   - ps: $PSVersionTable.PSVersion
   - ps: pwd
+  - cinst: wget
 
   # Install Rust and Cargo
   - curl --fail --silent --show-error --location --output rustup-init.exe https://win.rustup.rs
@@ -28,9 +29,8 @@ install:
   - rustc -Vv
   - cargo -V
 
-  # Add GCC to PATH if needed.
-  - if "%TARGET%" == "i686-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw32\bin
-  - if "%TARGET%" == "x86_64-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw64\bin
+  # Add GCC to PATH
+  - set PATH=%PATH%;C:\msys64\mingw64\bin
 
   # Install SDL2_gfx (todo: fix download, build locally).
   #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
