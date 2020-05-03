@@ -20,7 +20,7 @@ install:
   # Print Powershell version.
   - ps: $PSVersionTable.PSVersion
   - ps: pwd
-  - cinst: wget
+  - cinst wget
 
   # Install Rust and Cargo
   - curl --fail --silent --show-error --location --output rustup-init.exe https://win.rustup.rs
