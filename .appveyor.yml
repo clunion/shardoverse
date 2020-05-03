@@ -35,7 +35,7 @@ install:
   # Install SDL2_gfx (todo: fix download, build locally).
   #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
   - wget --content-disposition -O sdl2_gfx.tar.gz -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 
-  - ps: Expand-Archive sdl2_mixer.tar.gz -DestinationPath sdl2_gfx
+  - ps: Expand-Archive sdl2_gfx.tar.gz -DestinationPath sdl2_gfx
   - set LIB=%LIB%;C:\projects\shardoverse\sdl2_gfx\SDL2_gfx-1.0.4\lib\x64
   - ps: Get-ChildItem -Recurse -Depth 4
 
