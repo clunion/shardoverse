@@ -16,6 +16,12 @@ environment:
     # MinGW
     #- TARGET: i686-pc-windows-gnu
     - TARGET: x86_64-pc-windows-gnu
+      COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
 
     # MSVC
     #- TARGET: i686-pc-windows-msvc
@@ -35,28 +41,64 @@ install:
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
   - rustc -Vv
   - cargo -V
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - echo Compiler: %COMPILER%
+  - echo Architecture: %MSYS2_ARCH%
+  - echo Platform: %PLATFORM%
+  - echo MSYS2 directory: %MSYS2_DIR%
+  - echo MSYS2 system: %MSYSTEM%
+  - echo Bits: %BIT%
 
-  # Steps copied from the rust-sdl2 project:
-  - set -xueo pipefail
-  - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
-  - tar xzf sdl2.tar.gz
-  - pushd SDL2-* && ./configure && make && sudo make install && popd
-
-  - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
-  - tar xzf SDL2_ttf-*.tar.gz
-  - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
-
-  - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
-  - tar xzf SDL2_image-*.tar.gz
-  - pushd SDL2_image-* && ./configure && make && sudo make install && popd
-
-  - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
-  - tar xzf SDL2_mixer-*.tar.gz
-  - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
-
-  - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
-  - tar xzf SDL2_gfx-*.tar.gz
-  - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
+  - REM Create a writeable TMPDIR
+  - mkdir %APPVEYOR_BUILD_FOLDER%\tmp
+  - set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
+  - dir
+  #IF %COMPILER%==msys2 (
+  #   SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+  #   bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
+  #   bash -lc "pacman -S --needed --noconfirm git"
+  #   REM Update
+  #   bash -lc "pacman -Syu --noconfirm"
+  # 
+  #   REM build tools
+  #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain autoconf automake libtool make patch mingw-w64-x86_64-libtool"
+  # 
+  #   REM Set up perl
+  #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-perl"
+  #   bash -lc "pl2bat $(which pl2bat)"
+  #   bash -lc "yes | cpan App::cpanminus"
+  #   bash -lc "cpanm --notest ExtUtils::MakeMaker"
+  # 
+  #   REM Native deps
+  #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-gobject-introspection mingw-w64-x86_64-cairo mingw-w64-x86_64-gtk3 mingw-w64-x86_64-expat mingw-w64-x86_64-openssl"
+  # 
+  #   REM There is not a corresponding cc for the mingw64 gcc. So we copy it in place.
+  #   bash -lc "cp -pv /mingw64/bin/gcc /mingw64/bin/cc"
+  # 
+  #   REM Install via cpanfile
+  #   bash -lc "cd $APPVEYOR_BUILD_FOLDER; . $APPVEYOR_BUILD_FOLDER/dev/ci/appveyor/EUMMnosearch.sh; export MAKEFLAGS='-j4 -P4'; cpanm --notest --installdeps ."
+  # 
+  # 
+  # # Steps copied from the rust-sdl2 project:
+  # - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
+  # - tar xzf sdl2.tar.gz
+  # - pushd SDL2-* && ./configure && make && sudo make install && popd
+  # 
+  # - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
+  # - tar xzf SDL2_ttf-*.tar.gz
+  # - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
+  # 
+  # - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+  # - tar xzf SDL2_image-*.tar.gz
+  # - pushd SDL2_image-* && ./configure && make && sudo make install && popd
+  # 
+  # - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
+  # - tar xzf SDL2_mixer-*.tar.gz
+  # - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
+  # 
+  # - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
+  # - tar xzf SDL2_gfx-*.tar.gz
+  # - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
 
 
 # TODO This is the "test phase", tweak it as you see fit
@@ -71,38 +113,15 @@ test_script:
       cargo run --target %TARGET% --release
     )
 
-before_deploy:
-  # TODO Update this to build the artifacts that matter to you
-  - cargo rustc --target %TARGET% --release --bin %CRATE_NAME% -- -C lto
-  - ps: ci\before_deploy.ps1
-
-deploy:
-  #artifact: /.*\.zip/
-  # TODO update `auth_token.secure`
-  # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
-  # - Encrypt it. Go to https://ci.appveyor.com/tools/encrypt
-  # - Paste the output down here
-  #auth_token:
-  #  secure: t3puM/2hOig26EHhAodcZBc61NywF7/PFEpimR6SwGaCiqS07KR5i7iAhSABmBp7
-  #description: ''
-  #on:
-  #  # TODO Here you can pick which targets will generate binary releases
-  #  # In this example, there are some targets that are tested using the stable
-  #  # and nightly channels. This condition makes sure there is only one release
-  #  # for such targets and that's generated using the stable channel
-  #  RUST_VERSION: stable
-  #  appveyor_repo_tag: true
-  #provider: GitHub
-
 cache:
   - C:\Users\appveyor\.cargo\registry
   - target
 
-branches:
-  only:
-    # Release tags
-    - /^v\d+\.\d+\.\d+.*$/
-    - master
+# branches:
+#   only:
+#     # Release tags
+#     - /^v\d+\.\d+\.\d+.*$/
+#     - master
 
 notifications:
   - provider: Email
