@@ -8,13 +8,6 @@ environment:
   matrix:
       - TARGET: x86_64-pc-windows-msvc
         CHANNEL: stable
-      - TARGET: x86_64-pc-windows-msvc
-        CHANNEL: beta
-
-matrix:
-  allow_failures:
-      - TARGET: x86_64-pc-windows-msvc
-        CHANNEL: beta
 
 # Based on https://github.com/japaric/rust-everywhere/blob/master/appveyor.yml
 install:
@@ -37,9 +30,10 @@ install:
   # Install SDL2_gfx (todo: fix extraction).
   #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
   - wget --content-disposition -O sdl2_gfx.tar.gz -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 
+  - dir
   - 7z.exe x sdl2_gfx.tar.gz 
   - del sdl2_gfx.tar.gz
-  - 7z.exe -sdel x sdl2_gfx.tar 
+  - 7z.exe x sdl2_gfx.tar 
   - del sdl2_gfx.tar
   - cd SDL2_gfx-* 
   - ./autogen.sh 
