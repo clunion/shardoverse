@@ -36,7 +36,7 @@ install:
   - del sdl2_gfx.tar.gz
   - dir
   - 7z.exe x sdl2_gfx.tar 
-  - del sdl2_gfx.tar
+  - del sdl2_gfx-1.0.4.tar
   - dir
   - cd SDL2_gfx-* 
   - dir
