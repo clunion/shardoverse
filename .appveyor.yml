@@ -43,13 +43,13 @@ install:
   - rustc -Vv
   - cargo -V
   - cd %APPVEYOR_BUILD_FOLDER%
-  - echo Compiler: %COMPILER%
-  - echo Architecture: %MSYS2_ARCH%
-  - echo Platform: %PLATFORM%
-  - echo MSYS2 directory: %MSYS2_DIR%
-  - echo MSYS2 system: %MSYSTEM%
-  - echo Bits: %BIT%
-
+  #- echo Compiler: %COMPILER%
+  #- echo Architecture: %MSYS2_ARCH%
+  #- echo Platform: %PLATFORM%
+  #- echo MSYS2 directory: %MSYS2_DIR%
+  #- echo MSYS2 system: %MSYSTEM%
+  #- echo Bits: %BIT%
+  #
   #   REM Create a writeable TMPDIR
   #   mkdir %APPVEYOR_BUILD_FOLDER%\tmp
   #   set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
