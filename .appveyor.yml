@@ -30,12 +30,16 @@ install:
   # Install SDL2_gfx (todo: fix extraction).
   #- curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
   - wget --content-disposition -O sdl2_gfx.tar.gz -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 
+  - set DIRCMD=/O
   - dir
   - 7z.exe x sdl2_gfx.tar.gz 
   - del sdl2_gfx.tar.gz
+  - dir
   - 7z.exe x sdl2_gfx.tar 
   - del sdl2_gfx.tar
+  - dir
   - cd SDL2_gfx-* 
+  - dir
   - ./autogen.sh 
   - ./configure 
   - make 
