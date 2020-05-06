@@ -67,48 +67,48 @@ install:
      bash -lc "pacman -S --needed --noconfirm git"
      )
 
-    #   REM Update
-    #   bash -lc "pacman -Syu --noconfirm"
-    # 
-    #   REM build tools
-    #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain autoconf automake libtool make patch mingw-w64-x86_64-libtool"
-    # 
-    #   REM Set up perl
-    #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-perl"
-    #   bash -lc "pl2bat $(which pl2bat)"
-    #   bash -lc "yes | cpan App::cpanminus"
-    #   bash -lc "cpanm --notest ExtUtils::MakeMaker"
-    # 
-    #   REM Native deps
-    #   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-gobject-introspection mingw-w64-x86_64-cairo mingw-w64-x86_64-gtk3 mingw-w64-x86_64-expat mingw-w64-x86_64-openssl"
-    # 
-    #   REM There is not a corresponding cc for the mingw64 gcc. So we copy it in place.
-    #   bash -lc "cp -pv /mingw64/bin/gcc /mingw64/bin/cc"
-    # 
-    #   REM Install via cpanfile
-    #   bash -lc "cd $APPVEYOR_BUILD_FOLDER; . $APPVEYOR_BUILD_FOLDER/dev/ci/appveyor/EUMMnosearch.sh; export MAKEFLAGS='-j4 -P4'; cpanm --notest --installdeps ."
-    # 
-    # 
-    # # Steps copied from the rust-sdl2 project:
-    # - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
-    # - tar xzf sdl2.tar.gz
-    # - pushd SDL2-* && ./configure && make && sudo make install && popd
-    # 
-    # - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
-    # - tar xzf SDL2_ttf-*.tar.gz
-    # - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
-    # 
-    # - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
-    # - tar xzf SDL2_image-*.tar.gz
-    # - pushd SDL2_image-* && ./configure && make && sudo make install && popd
-    # 
-    # - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
-    # - tar xzf SDL2_mixer-*.tar.gz
-    # - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
-    # 
-    # - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
-    # - tar xzf SDL2_gfx-*.tar.gz
-    # - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
+#   REM Update
+#   bash -lc "pacman -Syu --noconfirm"
+# 
+#   REM build tools
+#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain autoconf automake libtool make patch mingw-w64-x86_64-libtool"
+# 
+#   REM Set up perl
+#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-perl"
+#   bash -lc "pl2bat $(which pl2bat)"
+#   bash -lc "yes | cpan App::cpanminus"
+#   bash -lc "cpanm --notest ExtUtils::MakeMaker"
+# 
+#   REM Native deps
+#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-gobject-introspection mingw-w64-x86_64-cairo mingw-w64-x86_64-gtk3 mingw-w64-x86_64-expat mingw-w64-x86_64-openssl"
+# 
+#   REM There is not a corresponding cc for the mingw64 gcc. So we copy it in place.
+#   bash -lc "cp -pv /mingw64/bin/gcc /mingw64/bin/cc"
+# 
+#   REM Install via cpanfile
+#   bash -lc "cd $APPVEYOR_BUILD_FOLDER; . $APPVEYOR_BUILD_FOLDER/dev/ci/appveyor/EUMMnosearch.sh; export MAKEFLAGS='-j4 -P4'; cpanm --notest --installdeps ."
+# 
+# 
+# # Steps copied from the rust-sdl2 project:
+# - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
+# - tar xzf sdl2.tar.gz
+# - pushd SDL2-* && ./configure && make && sudo make install && popd
+# 
+# - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
+# - tar xzf SDL2_ttf-*.tar.gz
+# - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
+# 
+# - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+# - tar xzf SDL2_image-*.tar.gz
+# - pushd SDL2_image-* && ./configure && make && sudo make install && popd
+# 
+# - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
+# - tar xzf SDL2_mixer-*.tar.gz
+# - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
+# 
+# - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
+# - tar xzf SDL2_gfx-*.tar.gz
+# - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
 
 
 # TODO This is the "test phase", tweak it as you see fit
