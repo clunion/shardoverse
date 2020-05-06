@@ -50,12 +50,12 @@ install:
   - rustc -Vv
   - cargo -V
   - cd %APPVEYOR_BUILD_FOLDER%
-  - cmd: echo Compiler: %COMPILER%
-  - cmd: echo Architecture: %MSYS2_ARCH%
-  - cmd: echo Platform: %PLATFORM%
-  - cmd: echo MSYS2 directory: %MSYS2_DIR%
-  - cmd: echo MSYS2 system: %MSYSTEM%
-  - cmd: echo Bits: %BIT%
+  - cmd: echo Compiler        %COMPILER%
+  - cmd: echo Architecture    %MSYS2_ARCH%
+  - cmd: echo Platform        %PLATFORM%
+  - cmd: echo MSYS2 directory %MSYS2_DIR%
+  - cmd: echo MSYS2 system    %MSYSTEM%
+  - cmd: echo Bits            %BIT%
   
      REM Create a writeable TMPDIR
      mkdir %APPVEYOR_BUILD_FOLDER%\tmp
@@ -65,6 +65,7 @@ install:
      SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
      bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
      bash -lc "pacman -S --needed --noconfirm git"
+     )
   #   REM Update
   #   bash -lc "pacman -Syu --noconfirm"
   # 
