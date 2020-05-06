@@ -36,7 +36,7 @@ environment:
     #  RUST_VERSION: nightly
 
 install:
-  - cmd: @echo off
+  - cmd: echo off
   - cmd: echo "section1 install"
   - cmd: set PATH=%PATH%;C:\msys64\mingw64\bin
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
