@@ -18,12 +18,6 @@ environment:
     # MinGW
     #- TARGET: i686-pc-windows-gnu
     - TARGET: x86_64-pc-windows-gnu
-      COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
 
     # MSVC
     #- TARGET: i686-pc-windows-msvc
@@ -36,10 +30,16 @@ environment:
     #  RUST_VERSION: nightly
 
 install:
-  - cmd: echo off
   - cmd: echo "section1 install"
-  - cmd: set PATH=%PATH%;C:\msys64\mingw64\bin
+  - set DIRCMD=/O:GN
+  - set PATH=%PATH%;C:\msys64\mingw64\bin
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  # COMPILER: msys2
+  # PLATFORM: x64
+  # MSYS2_ARCH: x86_64
+  # MSYS2_DIR: msys64
+  # MSYSTEM: MINGW64
+  # BIT: 64
   - cmd: set
   - cmd: dir
   - cmd: dir C:\msys64
@@ -50,21 +50,21 @@ install:
   - rustc -Vv
   - cargo -V
   - cd %APPVEYOR_BUILD_FOLDER%
-  #- echo Compiler: %COMPILER%
-  #- echo Architecture: %MSYS2_ARCH%
-  #- echo Platform: %PLATFORM%
-  #- echo MSYS2 directory: %MSYS2_DIR%
-  #- echo MSYS2 system: %MSYSTEM%
-  #- echo Bits: %BIT%
-  #
-  #   REM Create a writeable TMPDIR
-  #   mkdir %APPVEYOR_BUILD_FOLDER%\tmp
-  #   set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
-  #   dir
-  #IF %COMPILER%==msys2 (
-  #   SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-  #   bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
-  #   bash -lc "pacman -S --needed --noconfirm git"
+  - cmd: echo Compiler: %COMPILER%
+  - cmd: echo Architecture: %MSYS2_ARCH%
+  - cmd: echo Platform: %PLATFORM%
+  - cmd: echo MSYS2 directory: %MSYS2_DIR%
+  - cmd: echo MSYS2 system: %MSYSTEM%
+  - cmd: echo Bits: %BIT%
+  
+     REM Create a writeable TMPDIR
+     mkdir %APPVEYOR_BUILD_FOLDER%\tmp
+     set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
+     dir
+  IF %COMPILER%==msys2 (
+     SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+     bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
+     bash -lc "pacman -S --needed --noconfirm git"
   #   REM Update
   #   bash -lc "pacman -Syu --noconfirm"
   # 
