@@ -35,8 +35,8 @@ environment:
 
 install:
   - ps: $env:PATH += ';C:\msys64\mingw64\bin'
-  - ps: Get-Variable
-  - ps: Write-Output 'section1 install'
+  - Get-Variable
+  - Write-Output 'section1 install'
   - curl -sSf -o rustup-init.exe https://win.rustup.rs/
   - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
