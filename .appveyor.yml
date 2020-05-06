@@ -38,9 +38,12 @@ environment:
 install:
   - ps: $env:PATH += ';C:\msys64\mingw64\bin'
   - ps: Get-Variable
-  - ps: Echo 'section1 install'
-  - cmd: echo 'section1 install'
-  - cmd: dir
+  - cmd: echo "section1 install"
+         set
+         dir
+         dir C:\msys64
+         dir C:\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0
+
   - curl -sSf -o rustup-init.exe https://win.rustup.rs/
   - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
