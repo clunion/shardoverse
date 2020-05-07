@@ -36,12 +36,12 @@ install:
   - rustc -Vv
   - cargo -V
 
-  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_10_instal.bat'
+  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_10_install.bat'
   - 'echo End intall at: & time /t'
 
 build_script:
   - cmd: echo "section2 build_script"
-    - 'echo Nothing to build'
+  - 'echo Nothing to build'
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_20_build.bat'
   - 'echo End intall at: & time /t'
 
@@ -49,7 +49,7 @@ test_script:
   - cmd: echo "section3 build_script"
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_30_test.bat'
   - 'echo End intall at: & time /t'
-    - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\test.bat'
+  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\test.bat'
 
 # TODO This is the "test phase", tweak it as you see fit
 # we don't run the "test phase" when doing deploys
