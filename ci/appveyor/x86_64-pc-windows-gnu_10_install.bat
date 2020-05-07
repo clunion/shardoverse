@@ -30,6 +30,9 @@ rustc -Vv
 cargo -V
 
 SET PATH=C:\%MSYS2_DIR%\%MINGW_DIR%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
+SET LIBRARY_PATH=C:\%MSYS2_DIR%\%MINGW_DIR%\lib;%LIBRARY_PATH%
+
+set 
 
 cd %APPVEYOR_BUILD_FOLDER%
 dir
@@ -48,12 +51,12 @@ bash -lc "pacman -S --needed --noconfirm base-devel"
 bash -lc "pacman -S --needed --noconfirm msys2-devel"
 
 REM ### Installing the SDL2-Library:
-REM To check which SDL2-Packets are available for Mingw64:
-
-bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-SDL2"
+REM ### The SDL2-Libraries wil be found via the Environment Variable LIBRARY_PATH!
+bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2"
 
 REM #### Then at least install the following:
 bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_image"
 bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_ttf"
 bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_mixer"
 bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_gfx"
+
