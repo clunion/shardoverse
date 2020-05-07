@@ -126,15 +126,21 @@ Filepath and name used in KeeAgent:
     pacman -S mingw-w64-x86_64-vulkan-devel
 
 ### Installing the SDL2-Library:
-To check which SDL2-Packets are available for Mingw64:
 
-    pacman -Ss mingw-w64-x86_64-SDL2
+    pacman -S mingw-w64-x86_64-SDL2
 
 #### Then at least install the following:
     pacman -S mingw-w64-x86_64-SDL2_image
     pacman -S mingw-w64-x86_64-SDL2_ttf
     pacman -S mingw-w64-x86_64-SDL2_mixer
     pacman -S mingw-w64-x86_64-SDL2_gfx
+
+#### The SDL2-Libraries will be found via the Environment Variable LIBRARY_PATH!
+This Variable has to be set in one of the MSys2-SHELL startup scripts (.bash_profile or the like)
+to the correct path, which may be:   
+
+	export LIBRARY_PATH=/mingw64/lib
+
 
 ### Generate the manpages for the installed Msys2-Tools
     /usr/bin/mandb --quiet

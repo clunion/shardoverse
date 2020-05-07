@@ -1,1 +1,2 @@
-REM Nothing here yet
+cargo test  --target %TARGET%
+cargo test  --target %TARGET% --release
