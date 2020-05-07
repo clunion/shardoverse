@@ -44,8 +44,6 @@ run_script:
   - 'echo Start test_script & time /t'
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_40_run.bat'
   - 'echo End of test_script at: & time /t'
-cargo run   --target %TARGET%
-cargo run   --target %TARGET% --release
   
 cache:
   - C:\Users\appveyor\.cargo\registry
