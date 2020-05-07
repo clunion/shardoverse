@@ -1,19 +1,15 @@
-# Based on the "trust" template v0.1.2
-# https://github.com/japaric/trust/tree/v0.1.2
+# Based on: 
+# https://project-renard.github.io/doc/development/meeting-log/posts/2016/05/03/windows-build-with-msys2/
 
 image: Visual Studio 2019
 
 environment:
   global:
-  # TODO This is the Rust channel that build jobs will use by default but can be
-  # overridden on a case by case basis down below
+  # TODO This is the Rust channel that build jobs will use by default but can be overridden on a case by case basis down below:
     RUST_VERSION: stable
 
-    # TODO Update this to match the name of your project.
     CRATE_NAME: shardoverse
 
-  # TODO These are all the build jobs. Adjust as necessary. Comment out what you
-  # don't need
   matrix:
     # MinGW
     #- TARGET: i686-pc-windows-gnu
@@ -34,61 +30,39 @@ install:
   - set DIRCMD=/O:GN
   - set PATH=%PATH%;C:\msys64\mingw64\bin
   - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
-  # COMPILER: msys2
-  # PLATFORM: x64
-  # MSYS2_ARCH: x86_64
-  # MSYS2_DIR: msys64
-  # MSYSTEM: MINGW64
-  # BIT: 64
-  - cmd: set
-  - cmd: dir
-  - cmd: dir C:\msys64
-  - cmd: dir C:\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0
 
   - curl -sSf -o rustup-init.exe https://win.rustup.rs/
   - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
   - rustc -Vv
   - cargo -V
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - cmd: echo "Compiler       "%COMPILER%
-  - cmd: echo "Architecture   "%MSYS2_ARCH%
-  - cmd: echo "Platform       "%PLATFORM%
-  - cmd: echo "MSYS2 directory"%MSYS2_DIR%
-  - cmd: echo "MSYS2 system   "%MSYSTEM%
-  - cmd: echo "Bits           "%BIT%
-  
-     REM Create a writeable TMPDIR
-     mkdir %APPVEYOR_BUILD_FOLDER%\tmp
-     set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
-     dir
-  IF %COMPILER%==msys2 (
-     SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-     bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
-     bash -lc "pacman -S --needed --noconfirm git"
-     )
 
-#   REM Update
-#   bash -lc "pacman -Syu --noconfirm"
-# 
-#   REM build tools
-#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain autoconf automake libtool make patch mingw-w64-x86_64-libtool"
-# 
-#   REM Set up perl
-#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-perl"
-#   bash -lc "pl2bat $(which pl2bat)"
-#   bash -lc "yes | cpan App::cpanminus"
-#   bash -lc "cpanm --notest ExtUtils::MakeMaker"
-# 
-#   REM Native deps
-#   bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-gobject-introspection mingw-w64-x86_64-cairo mingw-w64-x86_64-gtk3 mingw-w64-x86_64-expat mingw-w64-x86_64-openssl"
-# 
-#   REM There is not a corresponding cc for the mingw64 gcc. So we copy it in place.
-#   bash -lc "cp -pv /mingw64/bin/gcc /mingw64/bin/cc"
-# 
-#   REM Install via cpanfile
-#   bash -lc "cd $APPVEYOR_BUILD_FOLDER; . $APPVEYOR_BUILD_FOLDER/dev/ci/appveyor/EUMMnosearch.sh; export MAKEFLAGS='-j4 -P4'; cpanm --notest --installdeps ."
-# 
-# 
+  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_10_instal.bat'
+  - 'echo End intall at: & time /t'
+
+build_script:
+  - cmd: echo "section2 build_script"
+    - 'echo Nothing to build'
+  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_20_build.bat'
+  - 'echo End intall at: & time /t'
+
+test_script:
+  - cmd: echo "section3 build_script"
+  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_30_test.bat'
+  - 'echo End intall at: & time /t'
+    - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\test.bat'
+
+# TODO This is the "test phase", tweak it as you see fit
+# we don't run the "test phase" when doing deploys
+  - if [%APPVEYOR_REPO_TAG%]==[false] (
+      cargo build --target %TARGET% &&
+      cargo build --target %TARGET% --release &&
+      cargo test --target %TARGET% &&
+      cargo test --target %TARGET% --release &&
+      cargo run --target %TARGET% &&
+      cargo run --target %TARGET% --release
+    )
+  
+ 
 # # Steps copied from the rust-sdl2 project:
 # - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
 # - tar xzf sdl2.tar.gz
@@ -111,17 +85,6 @@ install:
 # - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
 
 
-# TODO This is the "test phase", tweak it as you see fit
-test_script:
-  # we don't run the "test phase" when doing deploys
-  - if [%APPVEYOR_REPO_TAG%]==[false] (
-      cargo build --target %TARGET% &&
-      cargo build --target %TARGET% --release &&
-      cargo test --target %TARGET% &&
-      cargo test --target %TARGET% --release &&
-      cargo run --target %TARGET% &&
-      cargo run --target %TARGET% --release
-    )
 
 cache:
   - C:\Users\appveyor\.cargo\registry
@@ -137,5 +100,5 @@ notifications:
   - provider: Email
     on_build_success: false
 
-# Building is done in the test phase, so we disable Appveyor's build phase.
+# Building is done in the test phase, so we disable Appveyor's build phase:
 build: false
