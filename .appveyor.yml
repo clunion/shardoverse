@@ -26,30 +26,19 @@ environment:
     #  RUST_VERSION: nightly
 
 install:
-  - cmd: echo "section1 install"
-  - set DIRCMD=/O:GN
-  - set PATH=%PATH%;C:\msys64\mingw64\bin
-  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
-
-  - curl -sSf -o rustup-init.exe https://win.rustup.rs/
-  - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
-  - rustc -Vv
-  - cargo -V
-
+  - 'echo Start install & time /t' '
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_10_install.bat'
-  - 'echo End intall at: & time /t'
+  - 'echo End install at: & time /t'
 
 build_script:
-  - cmd: echo "section2 build_script"
-  - 'echo Nothing to build'
+  - 'echo Start build_script & time /t''
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_20_build.bat'
-  - 'echo End intall at: & time /t'
+  - 'echo End of build_script at: & time /t'
 
 test_script:
-  - cmd: echo "section3 build_script"
+  - 'echo Start test_script & time /t''
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_30_test.bat'
-  - 'echo End intall at: & time /t'
-  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\test.bat'
+  - 'echo End of test_script at: & time /t'
 
 # TODO This is the "test phase", tweak it as you see fit
 # we don't run the "test phase" when doing deploys
@@ -62,30 +51,6 @@ test_script:
       cargo run --target %TARGET% --release
     )
   
- 
-# # Steps copied from the rust-sdl2 project:
-# - wget https://www.libsdl.org/release/SDL2-2.0.10.tar.gz -O sdl2.tar.gz
-# - tar xzf sdl2.tar.gz
-# - pushd SDL2-* && ./configure && make && sudo make install && popd
-# 
-# - wget -q https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
-# - tar xzf SDL2_ttf-*.tar.gz
-# - pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
-# 
-# - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
-# - tar xzf SDL2_image-*.tar.gz
-# - pushd SDL2_image-* && ./configure && make && sudo make install && popd
-# 
-# - wget -q https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
-# - tar xzf SDL2_mixer-*.tar.gz
-# - pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
-# 
-# - wget -q -O SDL2_gfx-1.0.1.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.1.tar.gz/download
-# - tar xzf SDL2_gfx-*.tar.gz
-# - pushd SDL2_gfx-* && ./autogen.sh && ./configure && make && sudo make install && popd
-
-
-
 cache:
   - C:\Users\appveyor\.cargo\registry
   - target

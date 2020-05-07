@@ -1,20 +1,38 @@
-cd %APPVEYOR_BUILD_FOLDER%
+set PLATFORM=x64
+set MSYS2_ARCH=x86_64
+set MSYS2_DIR=msys64
+set MINGW_DIR=mingw64
+set BIT=64
+set COMPILER=rustc
+
+echo Architecture:    %MSYS2_ARCH%
+echo Platform:        %PLATFORM%
+echo MSYS2 directory: %MSYS2_DIR%
+echo MINGW directory: %MINGW_DIR%
+echo Bits:            %BIT%
+echo Compiler:        %COMPILER%
 
 set DIRCMD=/O:GN
 dir
-
-echo Compiler: %COMPILER%
-echo Architecture: %MSYS2_ARCH%
-echo Platform: %PLATFORM%
-echo MSYS2 directory: %MSYS2_DIR%
-echo MSYS2 system: %MSYSTEM%
-echo Bits: %BIT%
+dir C:\%MSYS2_DIR%
+dir C:\%MSYS2_DIR%\%MINGW_DIR%
 
 REM Create a writeable TMPDIR
 mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 
-SET PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
+set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+echo %PATH%
+
+curl -sSf -o rustup-init.exe https://win.rustup.rs/
+rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
+rustc -Vv
+cargo -V
+
+SET PATH=C:\%MSYS2_DIR%\%MINGW_DIR%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
+
+cd %APPVEYOR_BUILD_FOLDER%
+dir
 
 bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
 bash -lc "pacman -S --needed --noconfirm git"
