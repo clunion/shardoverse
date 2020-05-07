@@ -39,11 +39,6 @@ test_script:
   - 'echo Start test_script & time /t'
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_30_test.bat'
   - 'echo End of test_script at: & time /t'
-
-run_script:
-  - 'echo Start test_script & time /t'
-  - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_40_run.bat'
-  - 'echo End of test_script at: & time /t'
   
 cache:
   - C:\Users\appveyor\.cargo\registry
