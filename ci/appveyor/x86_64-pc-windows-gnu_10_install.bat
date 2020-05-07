@@ -50,7 +50,7 @@ bash -lc "pacman -S --needed --noconfirm msys2-devel"
 REM ### Installing the SDL2-Library:
 REM To check which SDL2-Packets are available for Mingw64:
 
-bash -lc "pacman -Ss --needed --noconfirm mingw-w64-x86_64-SDL2
+bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-SDL2"
 
 REM #### Then at least install the following:
 bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_image"

@@ -40,16 +40,13 @@ test_script:
   - '%APPVEYOR_BUILD_FOLDER%\ci\appveyor\x86_64-pc-windows-gnu_30_test.bat'
   - 'echo End of test_script at: & time /t'
 
-# TODO This is the "test phase", tweak it as you see fit
-# we don't run the "test phase" when doing deploys
-  - if [%APPVEYOR_REPO_TAG%]==[false] (
-      cargo build --target %TARGET% &&
-      cargo build --target %TARGET% --release &&
-      cargo test --target %TARGET% &&
-      cargo test --target %TARGET% --release &&
-      cargo run --target %TARGET% &&
-      cargo run --target %TARGET% --release
-    )
+  - 'echo target: %TARGET%'
+  - cargo build --target %TARGET%
+  - cargo build --target %TARGET% --release
+  - cargo test  --target %TARGET%
+  - cargo test  --target %TARGET% --release
+  - cargo run   --target %TARGET%
+  - cargo run   --target %TARGET% --release
   
 cache:
   - C:\Users\appveyor\.cargo\registry
@@ -61,9 +58,9 @@ cache:
 #     - /^v\d+\.\d+\.\d+.*$/
 #     - master
 
-notifications:
-  - provider: Email
-    on_build_success: false
-
-# Building is done in the test phase, so we disable Appveyor's build phase:
-build: false
+# notifications:
+#   - provider: Email
+#     on_build_success: false
+# 
+# # Building is done in the test phase, so we disable Appveyor's build phase:
+# build: false
