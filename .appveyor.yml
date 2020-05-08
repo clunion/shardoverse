@@ -5,7 +5,6 @@ image: Visual Studio 2019
 
 environment:
   global:
-  # TODO This is the Rust channel that build jobs will use by default but can be overridden on a case by case basis down below:
     RUST_VERSION: stable
 
     CRATE_NAME: shardoverse
