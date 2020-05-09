@@ -12,7 +12,7 @@ main() {
 
     uname -a
     
-    apt-get install libsdl2-dev
+    sudo apt-get install libsdl2-dev
 
 
     # Builds for iOS are done on OSX, but require the specific target to be
