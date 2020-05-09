@@ -64,7 +64,8 @@ install:
 script:
   - bash ci/travisci/x86_64-unknown-linux-gnu_20_script.sh
 
-after_script: set +e
+after_script: 
+  - set +e
 
 # before_deploy:
 #   - sh ci/travisci/x86_64-unknown-linux-gnu_30_before_deploy.sh
@@ -92,7 +93,8 @@ before_cache:
   # Travis can't cache files that are not readable by "others"
   - chmod -R a+r $HOME/.cargo
 
-cache: cargo
+cache: 
+  - cargo
 
 branches:
   only:
