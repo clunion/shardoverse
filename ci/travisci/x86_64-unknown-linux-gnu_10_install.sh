@@ -10,8 +10,19 @@ main() {
         sort=gsort  # for `sort --sort-version`, from brew's coreutils.
     fi
 
+    echo "--------------------------------------------------------"
     uname -a
     
+    echo "--------------------------------------------------------"
+    sudo apt-cache policy
+    
+    echo "--------------------------------------------------------"
+    sudo apt-get update
+    
+    echo "--------------------------------------------------------"
+    sudo apt list --installed
+
+    echo "--------------------------------------------------------"
     sudo apt-get install libsdl2-dev
 
 

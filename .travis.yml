@@ -6,8 +6,8 @@ language: rust
 services: docker
 sudo: required
 
-# TODO Rust builds on stable by default, this can be
-# overridden on a case by case basis down below.
+git:
+  depth: 3
 
 env:
   global:
@@ -125,8 +125,6 @@ cache: cargo
 
 branches:
   only:
-    # release tags
-    - /^v\d+\.\d+\.\d+.*$/
     - master
 
 notifications:
