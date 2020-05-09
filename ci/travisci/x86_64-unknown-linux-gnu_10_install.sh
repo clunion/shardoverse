@@ -1,10 +1,9 @@
-set -ex
+#set -ex
+echo in Script: $0
+echo in Script: x86_64-unknown-linux-gnu_10_install.sh
 
 echo "--------------------------------------------------------"
 uname -a
-
-echo "--------------------------------------------------------"
-sudo apt-cache policy
 
 echo "--------------------------------------------------------"
 sudo apt-get update
