@@ -3,8 +3,8 @@ set -ex
 main() {
     local target=
     if [ $TRAVIS_OS_NAME = linux ]; then
-        target=x86_64-unknown-linux-musl
         sort=sort
+        # target=x86_64-unknown-linux-musl  <-- what, why?  from the trust template
     else
         target=x86_64-apple-darwin
         sort=gsort  # for `sort --sort-version`, from brew's coreutils.
