@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo in Script: $0
 
-set -xueo pipefail
+set -xe
 
 echo "--------------------------------------------------------"
 uname -a
