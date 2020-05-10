@@ -1,4 +1,3 @@
-# This script takes care of testing your crate
 echo in Script: $0
 
 set -ex

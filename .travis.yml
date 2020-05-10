@@ -60,7 +60,7 @@ before_install:
 
 install:
   - echo Stage install
-  - sh ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
+  - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
   - source ~/.cargo/env || true
 
 script:
