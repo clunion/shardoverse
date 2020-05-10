@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 echo in Script: $0
 
 set -xe
