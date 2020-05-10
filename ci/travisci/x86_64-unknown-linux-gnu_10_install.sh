@@ -1,12 +1,17 @@
 #set -ex
 echo in Script: $0
-echo in Script: x86_64-unknown-linux-gnu_10_install.sh
 
 echo "--------------------------------------------------------"
 uname -a
 
 echo "--------------------------------------------------------"
 sudo apt-cache search sdl
+
+echo "--------------------------------------------------------"
+sudo apt-get install libsdl2-2.0.0
+
+echo "--------------------------------------------------------"
+sudo apt-get install libsdl2-dev
 
 echo "--------------------------------------------------------"
 sudo apt-get update
