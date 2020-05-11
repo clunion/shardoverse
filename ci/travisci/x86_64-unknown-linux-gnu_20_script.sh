@@ -2,13 +2,13 @@ echo in Script: $0
 
 set -ex
 
-# searching for the SDL2-Libs, to get the correct path:
-find /usr/local -name libSDL2-2.0.so.0
-ls -al /usr/local/lib/
-env
+# let cargo find the SDL2-Libs:
+echo $LIBRARY_PATH
+echo $LD_LIBRARY_PATH
 export LIBRARY_PATH=/usr/local/lib/:$LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
-env
+echo $LIBRARY_PATH
+echo $LD_LIBRARY_PATH
 
 cargo build
 cargo build --release
