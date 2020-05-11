@@ -46,8 +46,6 @@ pushd SDL2_gfx-*/ && ./configure && make && sudo make install && popd
 ls -al
 
 # searching for the SDL2-Libs, to get the correct path:
-ls -al /usr
-ls -al /usr/local
 ls -al /usr/local/lib/
 export LIBRARY_PATH=/usr/local/lib/
  
