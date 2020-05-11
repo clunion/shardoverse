@@ -43,14 +43,14 @@ before_install:
 
 install:
   - echo Stage install
-  - bash ci/travisci/$TARGET_10_install.sh
-  #- bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
+  - echo Target=$TARGET
+  - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
   - source ~/.cargo/env || true
 
 script:
   - echo Stage script
-  - bash ci/travisci/$TARGET_20_script.sh
-#  - bash ci/travisci/x86_64-unknown-linux-gnu_20_script.sh
+  - echo Target=$TARGET
+  - bash ci/travisci/x86_64-unknown-linux-gnu_20_script.sh
 
 after_script: 
   - echo Stage after_script
