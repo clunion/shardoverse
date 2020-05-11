@@ -338,6 +338,11 @@ This worked until the integration of SDL2_gfx was tried, which could be download
 Setting this up in the crude mixture of weird powersehll and windows-cmd commands was no fun at all. At last it was decided to
 put the logic for install, build and test stages in separate windows-cmd scripts and install the neccessary libs through Msys2 using pacman, which works quite well.
 
+## SomeNotes on TravisCI
+The same as for AppVeyor apllies, most code moved into scripts. In this case these are bash-scripts, which is fine.
+That YAML-stuff is more weirdly in the way than helpfull.      
+Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets handy.
+
 
 # License(s)
 The game Shardoverse and all originally created parts of it (source code, texts, descriptions and such) are licensed under the MIT license, see the LICENSE.md file.
@@ -356,37 +361,38 @@ If that should happen nevertheless, then that would be an accidental oversight a
 
 The following Assets are considered to be used, if their creators/owners do not object:
 
-* ./assets/audio/effects
+* ./assets/audio/effects   
 
-* ./assets/audio/music
-    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)
+* ./assets/audio/music   
+    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)   
 
-* ./assets/cursors
-    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)
-    [`Pointers_by_yd`](https://opengameart.org/content/pointers)
-    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)
-    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)
+* ./assets/cursors   
+    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)   
+    [`Pointers_by_yd`](https://opengameart.org/content/pointers)   
+    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)   
+    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)   
 
-* ./assets/fonts
-    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)
-    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)
-    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)
+* ./assets/fonts   
+    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)   
+    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)   
+    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)   
 
-* ./assets/graphics/2D/tiles
-    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)
+* ./assets/graphics/2D/tiles   
+    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)   
 
-*   ./assets graphics/2D-isometric/tiles
-    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)
+*   ./assets graphics/2D-isometric/tiles   
+    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)   
 
-* ./assets/graphics/3D/meshes
-* ./assets/graphics/3D/textures
+* ./assets/graphics/3D/meshes   
 
-* ./assets/gui
-    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)
+* ./assets/graphics/3D/textures   
 
-* ./assets/images
+* ./assets/gui   
+    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)   
 
-* ./assets/videos
+* ./assets/images   
+
+* ./assets/videos   
 
 
 
