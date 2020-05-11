@@ -1,13 +1,11 @@
 echo in Script: $0
 
-set -ex
+set -xe
 
 # let cargo find the SDL2-Libs:
-echo $LIBRARY_PATH
-echo $LD_LIBRARY_PATH
-export LIBRARY_PATH=/usr/local/lib/:$LIBRARY_PATH
+#export LIBRARY_PATH=/usr/local/lib/:$LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
-echo $LIBRARY_PATH
+#echo $LIBRARY_PATH
 echo $LD_LIBRARY_PATH
 
 cargo build

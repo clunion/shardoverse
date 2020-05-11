@@ -2,11 +2,6 @@ echo in Script: $0
 
 set -xe
 
-echo "--------------------------------------------------------"
-uname -a
-
-echo "--------------------------------------------------------"
-
 sudo apt-get update
 
 sudo apt-get install --assume-yes libgl1-mesa-dev
