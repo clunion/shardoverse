@@ -365,38 +365,42 @@ If that should happen nevertheless, then that would be an accidental oversight a
 
 The following Assets are considered to be used, if their creators/owners do not object:
 
-* ./assets/audio/effects
+* ./assets/audio/effects   
 
-* ./assets/audio/music
-    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)
+* ./assets/audio/music   
+    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)   
 
-* ./assets/cursors
-    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)
-    [`Pointers_by_yd`](https://opengameart.org/content/pointers)
-    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)
-    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)
+* ./assets/cursors   
 
-* ./assets/fonts
-    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)
-    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)
-    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)
+    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)   
 
-* ./assets/graphics/2D/tiles
-    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)
+    [`Pointers_by_yd`](https://opengameart.org/content/pointers)   
 
-*   ./assets graphics/2D-isometric/tiles
-    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)
+    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)   
 
-* ./assets/graphics/3D/meshes
+    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)   
 
-* ./assets/graphics/3D/textures
+* ./assets/fonts   
+    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)   
+    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)   
+    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)   
 
-* ./assets/gui
-    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)
+* ./assets/graphics/2D/tiles   
+    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)   
 
-* ./assets/images
+*   ./assets graphics/2D-isometric/tiles   
+    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)   
 
-* ./assets/videos
+* ./assets/graphics/3D/meshes   
+
+* ./assets/graphics/3D/textures   
+
+* ./assets/gui   
+    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)   
+
+* ./assets/images   
+
+* ./assets/videos   
 
 
 
