@@ -2,8 +2,13 @@
 # https://github.com/japaric/trust/tree/v0.1.2
 
 dist: bionic
-language: rust
 sudo: required
+language: rust
+
+rust:
+  - stable
+  - beta
+  - nightly
 
 git:
   depth: 3
@@ -29,12 +34,6 @@ matrix:
     # Windows
     #- env: TARGET=x86_64-pc-windows-gnu
 
-    # Testing other channels
-    - env: TARGET=x86_64-unknown-linux-gnu
-      rust: nightly
-    #- env: TARGET=x86_64-apple-darwin
-    #  os: osx
-    #  rust: nightly
 
 before_install:
   - echo Stage before_install
@@ -44,13 +43,12 @@ before_install:
 install:
   - echo Stage install
   - echo Target=$TARGET
-  - echo Target2=${TARGET}
   - if [ "${TARGET}" = "x86_64-unknown-linux-gnu" ]; then
-      bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
-    fi
+       bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
+    fi;
+
 #  - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
 #  - source ~/.cargo/env || true
-
 
 script:
   - echo Stage script
