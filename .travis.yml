@@ -43,11 +43,11 @@ before_install:
 
 install:
   - echo Stage install
-  - echo TargetDollar=$TARGET
-  - echo TargetPercent=%TARGET%
-  - if [%TARGET%]==[x86_64-unknown-linux-gnu] (
+  - echo Target=$TARGET
+  - echo Target2=${TARGET}
+  - if [ "${TARGET}" = "x86_64-unknown-linux-gnu" ]; then
       bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
-    )
+    fi
 #  - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
 #  - source ~/.cargo/env || true
 
