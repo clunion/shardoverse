@@ -1,7 +1,7 @@
 
 ![Shardoverse](assets/images/Shardoverse-title.png)
 
-|CPU     |Operating System | Development Env.  | CI System    | Status                                                                                                    |
+|CPU     |Operating System | Development Env. | CI System    | Status                                                                                                    |
 |--------|-----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
 | x86_64 | Linux           | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
 | x86_64 | MS-Windows      | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
@@ -100,7 +100,7 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
     ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
 
 
-### Also add ssh-pageant
+### Also add ssh-pageant:
 This is neccessary to get the automated/transparent SSH-Key login to GitHub working,
 it needs additionally an running Putty-Pageant or Keepass-KeeAdent, see further below.
 
@@ -122,24 +122,28 @@ Filepath and name used in KeeAgent:
 
     E:\Temp\msys_cyglockfile
 
-### Just for fun, we'll not really need this
+### Just for fun, we'll not really need this:
     pacman -S mingw-w64-x86_64-vulkan-devel
 
-### Installing the SDL2-Library:
+### Installing the main SDL2-Library:
 
     pacman -S mingw-w64-x86_64-SDL2
 
-#### Then at least install the following:
+#### Then at least install the following additional SDL2-Libraries:
     pacman -S mingw-w64-x86_64-SDL2_image
     pacman -S mingw-w64-x86_64-SDL2_ttf
     pacman -S mingw-w64-x86_64-SDL2_mixer
     pacman -S mingw-w64-x86_64-SDL2_gfx
 
-#### The SDL2-Libraries will be found via the Environment Variable LIBRARY_PATH!
-This Variable has to be set in one of the MSys2-SHELL startup scripts (.bash_profile or the like)
-to the correct path, which may be:
+#### Tell Rust where to find the SDL2-Libraries!
+In the MSys2 environment on MS-Windows, Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
+This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_profile or the like) to the correct path containing the SDL2-Libs. The path might be /mingw64/lib, then set the variable this way:
 
-	export LIBRARY_PATH=/mingw64/lib
+    export LIBRARY_PATH=/mingw64/lib
+
+On Linux systems, the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
+
+    export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 
 
 ### Generate the manpages for the installed Msys2-Tools
@@ -340,7 +344,7 @@ put the logic for install, build and test stages in separate windows-cmd scripts
 
 ## SomeNotes on TravisCI
 The same as for AppVeyor apllies, most code moved into scripts. In this case these are bash-scripts, which is fine.
-That YAML-stuff is more weirdly in the way than helpfull.      
+That YAML-stuff is more weirdly in the way than helpfull.
 Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets handy.
 
 
@@ -361,38 +365,38 @@ If that should happen nevertheless, then that would be an accidental oversight a
 
 The following Assets are considered to be used, if their creators/owners do not object:
 
-* ./assets/audio/effects   
+* ./assets/audio/effects
 
-* ./assets/audio/music   
-    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)   
+* ./assets/audio/music
+    [`cave themeb4 from Brandon75689`](https://opengameart.org/content/cave-theme)
 
-* ./assets/cursors   
-    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)   
-    [`Pointers_by_yd`](https://opengameart.org/content/pointers)   
-    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)   
-    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)   
+* ./assets/cursors
+    [`Gauntlet Cursor_by_itsmars`](https://opengameart.org/content/gauntlet-cursor)
+    [`Pointers_by_yd`](https://opengameart.org/content/pointers)
+    [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)
+    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)
 
-* ./assets/fonts   
-    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)   
-    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)   
-    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)   
+* ./assets/fonts
+    [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)
+    [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)
+    [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)
 
-* ./assets/graphics/2D/tiles   
-    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)   
+* ./assets/graphics/2D/tiles
+    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)
 
-*   ./assets graphics/2D-isometric/tiles   
-    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)   
+*   ./assets graphics/2D-isometric/tiles
+    [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)
 
-* ./assets/graphics/3D/meshes   
+* ./assets/graphics/3D/meshes
 
-* ./assets/graphics/3D/textures   
+* ./assets/graphics/3D/textures
 
-* ./assets/gui   
-    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)   
+* ./assets/gui
+    [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)
 
-* ./assets/images   
+* ./assets/images
 
-* ./assets/videos   
+* ./assets/videos
 
 
 
