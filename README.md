@@ -1,10 +1,10 @@
 
 ![Shardoverse](assets/images/Shardoverse-title.png)
 
-|CPU     |Operating System | Development Env. | CI System    | Status                                                                                                    |
-|--------|-----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
-| x86_64 | Linux           | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
-| x86_64 | MS-Windows      | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
+|CPU     |Operating System |Rust            | Development Env. | CI System    | Status                                                                                                    |
+|--------|-----------------|----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
+| x86_64 | Linux, FreeBSD  |stable, nightly | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
+| x86_64 | MS-Windows      |stable          | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
 ## What is this
 A learning project to get into the coding of:
