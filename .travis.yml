@@ -45,9 +45,7 @@ before_install:
 install:
   - echo Stage install
   - echo Target=$TARGET
-  - if [%TARGET%]==[false] (
-      echo TargetDollar=$TARGET
-    )
+  - if [%TARGET%]==[false](echo TargetDollar=$TARGET;)
   - bash -c "if [ \"${TARGET}\" = \"x86_64-unknown-linux-gnu\" ]; then ci/travisci/x86_64-unknown-linux-gnu_10_install.sh; fi"
 
 # - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
