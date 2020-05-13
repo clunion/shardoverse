@@ -23,13 +23,16 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-gnu
     #- env: TARGET=x86_64-unknown-linux-musl
       os: linux
+
     # OSX
     #- env: TARGET=x86_64-apple-darwin
     #  os: osx
+
     # *BSD
     - env: TARGET=x86_64-unknown-freebsd 
     #- env: TARGET=x86_64-unknown-netbsd 
       os: bsd
+
     # Windows
     #- env: TARGET=x86_64-pc-windows-gnu
     #  os: mswin
@@ -42,7 +45,10 @@ before_install:
 install:
   - echo Stage install
   - echo Target=$TARGET
-  - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
+  - sh if [ "${TARGET}" = "x86_64-unknown-linux-gnu" ]; then
+          bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
+       fi;  
+# - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
   - source ~/.cargo/env || true
 
 script:
