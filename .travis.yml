@@ -45,6 +45,10 @@ before_install:
 install:
   - echo Stage install
   - echo Target=$TARGET
+  - bash -c "ls -al"
+  - bash -c "ls -al ci/travisci/"
+  - bash -c "whoami"
+  - bash -c "chmod 777 ci/travisci/x86_64-unknown-linux-gnu_10_install.sh"
   - bash -c "if [ \"${TARGET}\" = \"x86_64-unknown-linux-gnu\" ]; then ci/travisci/x86_64-unknown-linux-gnu_10_install.sh; fi"
 
 # - if [%TARGET%]==[false](echo TargetDollar=$TARGET;)
