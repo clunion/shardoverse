@@ -22,7 +22,7 @@ matrix:
     # Linux
     - env: TARGET=x86_64-unknown-linux-gnu
     #- env: TARGET=x86_64-unknown-linux-musl
-      os: linux
+    # os: linux
 
     # OSX
     #- env: TARGET=x86_64-apple-darwin
@@ -31,7 +31,7 @@ matrix:
     # *BSD
     - env: TARGET=x86_64-unknown-freebsd 
     #- env: TARGET=x86_64-unknown-netbsd 
-      os: bsd
+    # os: bsd
 
     # Windows
     #- env: TARGET=x86_64-pc-windows-gnu
