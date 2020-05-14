@@ -1,14 +1,14 @@
-# Based on the "trust" template v0.1.2
-# https://github.com/japaric/trust/tree/v0.1.2
+# Based on the "trust" template v0.1.2  https://github.com/japaric/trust/tree/v0.1.2
+# and rust-belt                         https://github.com/johnthagen/rust-belt
 
-dist: bionic
-sudo: required
+dist:     bionic
+sudo:     required
 language: rust
 
 rust:
   - stable
-# - beta
   - nightly
+# - beta
 
 git:
   depth: 3
@@ -25,13 +25,12 @@ matrix:
     # os: linux
 
     # OSX
-    #- env: TARGET=x86_64-apple-darwin
-    #  os: osx
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
 
     # *BSD
     - env: TARGET=x86_64-unknown-freebsd 
     #- env: TARGET=x86_64-unknown-netbsd 
-    # os: bsd
 
     # Windows
     #- env: TARGET=x86_64-pc-windows-gnu
@@ -47,16 +46,14 @@ install:
   - echo Stage install
   - bash -c 'if [[ "$TARGET" = "x86_64-unknown-linux-gnu" ]]; then ci/travisci/x86_64-unknown-linux-gnu_10_install.sh; fi'
   - bash -c 'if [[ "$TARGET" = "x86_64-unknown-freebsd" ]];   then ci/travisci/x86_64-unknown-freebsd_10_install.sh; fi'
-
-# - if [%TARGET%]==[false](echo TargetDollar=$TARGET;)
-# - bash ci/travisci/x86_64-unknown-linux-gnu_10_install.sh
-
+  - bash -c 'if [[ "$TARGET" = "x86_64-apple-darwin" ]];      then ci/travisci/x86_64-apple-darwin_10_install.sh; fi'
   - source ~/.cargo/env || true
 
 script:
   - echo Stage script
   - bash -c 'if [[ "$TARGET" = "x86_64-unknown-linux-gnu" ]]; then ci/travisci/x86_64-unknown-linux-gnu_20_script.sh; fi'
-  - bash -c 'if [[ "$TARGET" = "x86_64-unknown-freebsd" ]];   then ci/travisci/x86_64-unknown-freebsd_20_script.sh; fi'
+  - bash -c 'if [[ "$TARGET" = "x86_64-unknown-freebsd"   ]]; then ci/travisci/x86_64-unknown-freebsd_20_script.sh; fi'
+  - bash -c 'if [[ "$TARGET" = "x86_64-apple-darwin"      ]]; then ci/travisci/x86_64-apple-darwin_20_script.sh; fi'
 
 after_script: 
   - echo Stage after_script
