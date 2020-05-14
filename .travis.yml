@@ -5,11 +5,6 @@ dist:     bionic
 sudo:     required
 language: rust
 
-rust:
-  - stable
-  - nightly
-# - beta
-
 git:
   depth: 3
 
@@ -21,15 +16,25 @@ matrix:
   include:
     # Linux
     - env: TARGET=x86_64-unknown-linux-gnu
+      rust: stable
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
     #- env: TARGET=x86_64-unknown-linux-musl
     # os: linux
 
     # OSX
     - env: TARGET=x86_64-apple-darwin
       os: osx
+      rust: stable
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: nightly
 
     # *BSD
     - env: TARGET=x86_64-unknown-freebsd 
+      rust: stable
+    - env: TARGET=x86_64-unknown-freebsd 
+      rust: nightly
     #- env: TARGET=x86_64-unknown-netbsd 
 
     # Windows
@@ -45,8 +50,8 @@ before_install:
 install:
   - echo Stage install
   - bash -c 'if [[ "$TARGET" = "x86_64-unknown-linux-gnu" ]]; then ci/travisci/x86_64-unknown-linux-gnu_10_install.sh; fi'
-  - bash -c 'if [[ "$TARGET" = "x86_64-unknown-freebsd" ]];   then ci/travisci/x86_64-unknown-freebsd_10_install.sh; fi'
-  - bash -c 'if [[ "$TARGET" = "x86_64-apple-darwin" ]];      then ci/travisci/x86_64-apple-darwin_10_install.sh; fi'
+  - bash -c 'if [[ "$TARGET" = "x86_64-unknown-freebsd"   ]]; then ci/travisci/x86_64-unknown-freebsd_10_install.sh; fi'
+  - bash -c 'if [[ "$TARGET" = "x86_64-apple-darwin"      ]]; then ci/travisci/x86_64-apple-darwin_10_install.sh; fi'
   - source ~/.cargo/env || true
 
 script:
