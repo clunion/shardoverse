@@ -5,26 +5,19 @@ image: Visual Studio 2019
 
 environment:
   global:
-    RUST_VERSION: 
-        stable
-        nightly
-
     PROJECTNAME: shardoverse
 
   matrix:
-    # MinGW
-    #- TARGET: i686-pc-windows-gnu
+    # MinGW:
     - TARGET: x86_64-pc-windows-gnu
+      RUST_VERSION: stable
 
-    # MSVC
+    - TARGET: x86_64-pc-windows-gnu
+      RUST_VERSION: nightly
+
+    # MSVC:
     #- TARGET: i686-pc-windows-msvc
     #- TARGET: x86_64-pc-windows-msvc
-
-    # Testing other channels
-    #- TARGET: x86_64-pc-windows-gnu
-    #  RUST_VERSION: nightly
-    #- TARGET: x86_64-pc-windows-msvc
-    #  RUST_VERSION: nightly
 
 install:
   - 'echo Start install & time /t'
