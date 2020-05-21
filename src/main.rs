@@ -245,8 +245,8 @@ mod tests
   #[test]
   fn test_run() 
   {
-    let result = run(Path::new("assets/cursors/pointers_part_5/glove3.png"));
-    assert!(result.is_ok());
+    let result = run(Path::new("non_existant_file"));
+    assert!(!result.is_ok());
   }
 }
 
