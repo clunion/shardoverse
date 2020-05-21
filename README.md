@@ -4,7 +4,7 @@
 |CPU     |Operating System              |Rust            | Development Env. | CI System    | Status                                                                                                    |
 |--------|------------------------------|----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
 | x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
-| x86_64 | MS-Windows                   |stable          | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
+| x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
 ## What is this?
 A learning project to get into the coding of:
@@ -412,6 +412,4 @@ The following assets are considered to be used, if their creators/owners do not 
 
 # Maintainer
 * [@clunion](https://github.com/clunion)
-
-
 
