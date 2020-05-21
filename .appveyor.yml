@@ -5,9 +5,11 @@ image: Visual Studio 2019
 
 environment:
   global:
-    RUST_VERSION: stable
+    RUST_VERSION: 
+        stable
+        nightly
 
-    CRATE_NAME: shardoverse
+    PROJECTNAME: shardoverse
 
   matrix:
     # MinGW

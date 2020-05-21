@@ -6,7 +6,7 @@
 | x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
 | x86_64 | MS-Windows                   |stable          | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
-## What is this
+## What is this?
 A learning project to get into the coding of:
 
 	A Roguelike
@@ -363,7 +363,7 @@ If that should happen nevertheless, then that would be an accidental oversight a
 
 # Assets
 
-The following Assets are considered to be used, if their creators/owners do not object:
+The following assets are considered to be used, if their creators/owners do not object:
 
 * ./assets/audio/effects   
 
@@ -381,14 +381,19 @@ The following Assets are considered to be used, if their creators/owners do not 
     [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)   
 
 * ./assets/fonts   
+
     [`Dragonfly Font by Rick Mueller`](https://www.fontspace.com/dragonfly-font-f5775)   
+
     [`FiraSans-Regular.ttf by Mozilla`](https://github.com/mozilla/Fira)   
+
     [`NugieRomantic Font by cove703`](https://www.fontspace.com/nugie-romantic-font-f33764)   
 
 * ./assets/graphics/2D/tiles   
+
     [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)   
 
 *   ./assets graphics/2D-isometric/tiles   
+
     [`rltiles-pack by Mitsuhiro Itakura (maintainer)`](https://opengameart.org/content/64x64-isometric-roguelike-tiles)   
 
 * ./assets/graphics/3D/meshes   
@@ -396,6 +401,7 @@ The following Assets are considered to be used, if their creators/owners do not 
 * ./assets/graphics/3D/textures   
 
 * ./assets/gui   
+
     [`RPG GUI construction kit v1.0_by_Lamoot`](https://opengameart.org/content/rpg-gui-construction-kit-v10)   
 
 * ./assets/images   

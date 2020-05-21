@@ -3,7 +3,7 @@
 ## PROJECT:             Shardoverse
 ## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     shardoverse.rs
+## FILE:     main.rs
 ## SYNOPSIS: main, start and entry point of the program
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
@@ -12,7 +12,6 @@
 ## LICENSE:
 ## Copyright 2020 by Christian Lunau (clunion), Julian Lunau and Jaron Lunau.
 ## MIT-License, see LICENSE.md file 
-##
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:  DATE:       AUTHOR: CHANGES:
 ## 0.1       2020-04-04  CLu     creation
@@ -26,41 +25,49 @@
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
 extern crate sdl2;
 
-//--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-//--- none ---
-
-//--- MODULE USES: -----------------------------------------------------------------------------------------------------------
-use std::collections::HashSet;
+//--- MODULES: ---------------------------------------------------------------------------------------------------------------
+use std::env;
+use std::io;
+use std::path::Path;
+//use std::collections::HashSet;
 use std::time::Duration;
 
-use sdl2::pixels::Color;
 use sdl2::event::Event;
-use sdl2::pixels;
-use sdl2::keyboard::Keycode;
-use sdl2::video::{Window};
-use sdl2::render::{Canvas};
 use sdl2::gfx::primitives::DrawRenderer;
+use sdl2::image::{LoadSurface, InitFlag};
+use sdl2::keyboard::Keycode;
+use sdl2::mouse::Cursor;
+use sdl2::pixels::Color;
+use sdl2::pixels;
+//use sdl2::rect::Rect;
+use sdl2::render::{Canvas};
+use sdl2::surface::Surface;
+use sdl2::video::{Window};
 
+//--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
+mod config;
+mod assets;
 
-// old C-Style section comments, to be replaced by Rust-equivalents:
+use crate::config::*;
+use crate::assets::cursors::*;
+
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 const INITIAL_WINDOW_WIDTH:  u32 = 1024;
 const INITIAL_WINDOW_HEIGHT: u32 =  768;
 
-//--- TYPE DEFINITIONS: ------------------------------------------------------------------------------------------------------
+
+//--- TYPES: -----------------------------------------------------------------------------------------------------------------
 //--- none ---
 
-//--- CLASS DECLARATIONS: ----------------------------------------------------------------------------------------------------
+//--- ENUMS: -----------------------------------------------------------------------------------------------------------------
+//--- none ---
+
+//--- STRUCTS: ---------------------------------------------------------------------------------------------------------------
 //--- none ---
 
 //--- GLOBAL VARS: -----------------------------------------------------------------------------------------------------------
 //--- none ---
 
-//--- EXPORTS: ---------------------------------------------------------------------------------------------------------------
-//--- none ---
-
-//--- PROTOTYPES: ------------------------------------------------------------------------------------------------------------
-//--- callbacks:
 
 
 /*
@@ -72,7 +79,7 @@ const INITIAL_WINDOW_HEIGHT: u32 =  768;
 ## RETURNS:    Result
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## Fills the current Window with colored pixels
+## Test for pixel-Drawing, fills the current Window with colored pixels
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:    DATE:       AUTHOR: CHANGES:
 ## 1.0         2020        CLu     initial version
@@ -80,7 +87,7 @@ const INITIAL_WINDOW_HEIGHT: u32 =  768;
 ## TODO:     
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-fn pixel_fill(canvas_p: &mut Canvas<Window>) -> bool
+pub fn pixel_fill(canvas_p: &mut Canvas<Window>) -> bool
 {
 let retval: bool = true;
 
@@ -94,7 +101,6 @@ match canvas_p.output_size()
     }
 
 println!("canvas size: width={}, height={}",width,height);
-
 
 let     stretch_factor_x: f64 = width  as f64 / 256.0;
 let     stretch_factor_y: f64 = height as f64 / 256.0 ;
@@ -139,59 +145,19 @@ retval
 }
 
 
-
-
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-fn shardoverse_setup () -> String
-{
-let retstr: String = "setup ok".to_string();
-    
-retstr
-}
+pub fn run(png: &Path) -> Result<(), String> {
+    let mut lastx = 0;
+    let mut lasty = 0;
+    let mut tick = 0;
 
-
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
-#[cfg(test)]
-mod tests {
-  use super::*;
-  
-  #[test]
-  fn test_shardoverse_setup() {
-    let result = shardoverse_setup();
-    assert!(result.contains("setup ok"));
-  }
-}
-
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   main
-## TYPE:       entry point, 
-## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  ?
-## RETURNS:    ?
-## ---------------------------------------------------------------------------------------------------------------------------
-## DESCRIPTION:
-## The one and only main: startup and entry point of this program
-## ---------------------------------------------------------------------------------------------------------------------------
-## VERSION:    DATE:       AUTHOR: CHANGES:
-## 1.0         2020        CLu     initial version
-## ---------------------------------------------------------------------------------------------------------------------------
-## TODO:     
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
-fn main() -> Result<(), String>
-{
     let sdl_context = sdl2::init()?;
     let video_subsys = sdl_context.video()?;
-
-
-    println!("shardoverse_setup() returned: {}",shardoverse_setup());
-
-
+    
+    let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
+    
     let window = video_subsys.window("Shardoverse", INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
                  .position_centered()
                  .resizable()
@@ -204,81 +170,152 @@ fn main() -> Result<(), String>
                      .build()
                      .map_err(|e| e.to_string())?;
 
-    canvas.set_draw_color(pixels::Color::RGB(60, 42, 89));
+    let surface = Surface::from_file(png)
+                 .map_err(|err| format!("failed to load cursor image: {}", err))?;
+
+    let cursor = Cursor::from_surface(surface, 0, 0)
+                .map_err(|err| format!("failed to load cursor: {}", err))?;
+
+    cursor.set();
+    
+    canvas.set_draw_color(Color::RGBA( 50, 50, 50, 255));
     canvas.clear();
     canvas.present();
 
-    let mut lastx = 0;
-    let mut lasty = 0;
-    let mut tick = 0;
-
-    let mut events = sdl_context.event_pump().map_err(|e| e)?;
-
-    let mut prev_buttons = HashSet::new();
+    let mut events = sdl_context.event_pump()
+                    .map_err(|e| e)?;
 
     'main: loop 
         {
         for event in events.poll_iter() 
             {
-
             match event 
                 {
                 Event::Quit {..}                            => break 'main,
-                Event::KeyDown {keycode: Some(keycode), ..} => 
-                    {
-                    if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
-                    else if keycode == Keycode::Q      { println!("Q");    break 'main }
-                    else if keycode == Keycode::P      { println!("P");    pixel_fill(&mut canvas); }
-                    }
+                Event::KeyDown {keycode: Some(keycode), ..} =>  {
+                                                                if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
+                                                                else if keycode == Keycode::Q      { println!("Q");    break 'main }
+                                                                else if keycode == Keycode::P      { println!("P");    pixel_fill(&mut canvas); }
+                                                                }
 
-                Event::MouseButtonDown {x, y, ..} => 
-                    {
-                    let color = pixels::Color::RGB(x as u8, y as u8, 255);
-                    let _ = canvas.line(lastx, lasty, x as i16, y as i16, color);
-                    lastx = x as i16;
-                    lasty = y as i16;
-                    println!("mouse btn down at ({},{})", x, y);
-                    canvas.present();
-                    }
-
+                Event::MouseButtonDown {x, y, ..} =>            {
+                                                                let color = pixels::Color::RGB(x as u8, y as u8, 255);
+                                                                let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
+                                                                lastx     = x as i16;
+                                                                lasty     = y as i16;
+                                                                println!("mouse btn down at ({},{})", x, y);
+                                                                canvas.present();
+                                                                }
                 _ => {}
                 }
             }
 
-        // get a mouse state
-        let state = events.mouse_state();
 
-        // Create a set of pressed Keys.
-        let buttons = state.pressed_mouse_buttons().collect();
-
-        // Get the difference between the new and old sets.
-        let new_buttons = &buttons - &prev_buttons;
-        let old_buttons = &prev_buttons - &buttons;
-
-        if !new_buttons.is_empty() || !old_buttons.is_empty() {
-            println!("X = {:?}, Y = {:?} : {:?} -> {:?}", state.x(), state.y(),  new_buttons, old_buttons);
-        } // end of: loop main
-
-        prev_buttons = buttons;
-
-        std::thread::sleep(Duration::from_millis(100));
-
-        // Update the window title.
-        let window = canvas.window_mut();
-
-        let position = window.position();
-        let size = window.size();
-        let title = format!("Window - pos({}x{}), size({}x{}): {}",
-                            position.0,
-                            position.1,
-                            size.0,
-                            size.1,
-                            tick);
-        window.set_title(&title).map_err(|e| e.to_string())?;
+        // Update the window title:
+        let window       = canvas.window_mut();
+        let win_position = window.position();
+        let win_size     = window.size();
+        let win_title    = format!("Window - pos({}x{}), size({}x{}): {}", win_position.0, win_position.1, win_size.0, win_size.1, tick);
+        window.set_title(&win_title).map_err(|e| e.to_string())?;
 
         tick += 1;
+        std::thread::sleep(Duration::from_millis(100));
 
-    }
+    } // end of: loop main
 
     Ok(())
+}
+
+
+#[cfg(test)]
+mod tests 
+{
+  // importing names from outer (for mod tests) scope:
+  use super::*;
+  
+  /*
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## FUNCTION:   test_run()
+  ## TYPE:       unit test function
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## PARAMETER:  -
+  ## RETURNS:    -
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  */
+  #[test]
+  fn test_run() 
+  {
+    let result = run(Path::new("assets/cursors/pointers_part_5/glove3.png"));
+    assert!(result.is_ok());
+  }
+}
+
+
+/*
+## ---------------------------------------------------------------------------------------------------------------------------
+## FUNCTION:   main
+## TYPE:       entry point, 
+## ---------------------------------------------------------------------------------------------------------------------------
+## PARAMETER:  ?
+## RETURNS:    ?
+## ---------------------------------------------------------------------------------------------------------------------------
+## DESCRIPTION:
+## The one and only main: startup and entry point of this program
+## here only the handling of commandline paramaters is done
+## ---------------------------------------------------------------------------------------------------------------------------
+## VERSION:    DATE:       AUTHOR: CHANGES:
+## 1.0         2020        CLu     initial version
+## ---------------------------------------------------------------------------------------------------------------------------
+## TODO:
+## ---------------------------------------------------------------------------------------------------------------------------
+*/
+fn main() -> Result<(), io::Error>
+{
+let args: Vec<String> = env::args().collect();
+let mut i :i32 = 0;
+
+if !args.is_empty()
+    {
+    for arg in &args
+        {
+        println!("Parameter[{}] {:?}",i, &arg);
+        i+=1;
+        }
+    } 
+
+match load_config()
+    {
+    Ok(_)  => {},
+    Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
+    }
+
+
+match load_cursors()
+    {
+    Ok(_)  => {},
+    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
+    }
+
+
+match shardoverse_init()
+    {
+    Ok(_)  => {},
+    Err(error) => { println!("Error initialising: {:?}", error); return Err(error); },
+    }
+
+    
+match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
+    {
+    Ok(_)  => {},
+    Err(error) => { println!("Error initialissing: {:?}", error); }, //return Err(error); },
+    }
+
+
+match save_config()
+    {
+    Ok(_)  => {},
+    Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
+    }
+
+Ok(())
 }

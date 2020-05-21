@@ -1,3 +1,3 @@
-### shortcuts for Rust's cargo-Build-processes:
+### shortcut for Rust's cargo unit-test of the target:
  cargo test
 
