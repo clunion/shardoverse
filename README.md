@@ -295,9 +295,6 @@ The following content for wrapper shell-script works in UltraEdit64 Versions 27:
     #!/bin/sh   
     "C:\Program Files\IDM Computer Solutions\UltraEdit\uedit64.exe" //fni $*   
 
-
-
-
 One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
 UltraEdit defines the syntax coloring in word-files, for Rust it is named rust.uew.
 The currently available wordfile defines the single apostrophe (') as a string delimiter.
