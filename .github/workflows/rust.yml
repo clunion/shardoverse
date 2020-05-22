@@ -1,8 +1,6 @@
-name: shardoverse
-
 on: [push, pull_request]
 
-name: Continuous integration
+name: shardoverse
 
 jobs:
   check:

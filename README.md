@@ -1,5 +1,4 @@
-
-![Shardoverse](assets/images/Shardoverse-title.png)
+![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Shardoverse-title.png)
 
 |CPU     |Operating System              |Rust            | Development Env. | CI System    | Status                                                                                                    |
 |--------|------------------------------|----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
@@ -283,6 +282,19 @@ Set the script _npp_git.sh_ as the editor in the global config of Git by enterin
 
 Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
 
+## Coding in Rust with UltraEdit
+If you happen to have UltraEdit, it can be used for Git much in the same way as Notepad++.
+The Configuration setting to open the Git-Commit comment in another editor-session 
+is called 'Allow multiple instances' and can be found at Menu:Advanced/Configuration/Application layout/Miscellaneous  
+
+One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
+UltraEdit defines the syntax coloring in word-files, for Rust it is named rust.uew.
+The currently available wordfile defines the single apostrophe (') as a string delimiter.
+This leads to a funny coloring of Rust-code using labled loops, which also use the single apostrophe.
+Workaround: when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
+the coloring looks much better, at least around labled loops.
+
+      
 # Convenient build and run aliases
 In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the diffent build and run variants Conveniently.
 Currently, they do simple calls to cargo, but that may change.
