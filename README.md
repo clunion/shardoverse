@@ -293,12 +293,13 @@ Some more description about this can be found here:
 The following content for wrapper shell-script works in UltraEdit64 Versions 27:   
 
     #!/bin/sh   
-    "C:\Program Files\IDM Computer Solutions\UltraEdit\uedit64.exe" //fni $*   
+    "C:\Program Files\IDM Computer Solutions\UltraEdit\uedit64.exe" $*   
 
 One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
-UltraEdit defines the syntax coloring in word-files, for Rust it is named rust.uew.
-The currently available wordfile defines the single apostrophe (') as a string delimiter.
-This leads to a funny coloring of Rust-code using labled loops, which also use the single apostrophe.
+UltraEdit defines the syntax coloring in word-files, for Rust such a file is named rust.uew.
+The currently available wordfile defines the single apostrophe (') as one of the string delimiters.
+This leads to a funny coloring when the Rust-code is using labled loops, which also use the single apostrophe.   
+
 Workaround: when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
 the coloring looks much better, at least around labled loops.
 
