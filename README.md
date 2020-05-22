@@ -283,9 +283,20 @@ Set the script _npp_git.sh_ as the editor in the global config of Git by enterin
 Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
 
 ## Coding in Rust with UltraEdit
-If you happen to have UltraEdit, it can be used for Git much in the same way as Notepad++.
-The Configuration setting to open the Git-Commit comment in another editor-session 
-is called 'Allow multiple instances' and can be found at Menu:Advanced/Configuration/Application layout/Miscellaneous  
+If you happen to have UltraEdit, it can be used for Git much in a similiar way like Notepad++.
+There are several configuration settings which relate to session handling, 
+and thus how to open the Git commit comment in a separate editor-session.      
+One is called 'Maintain separate process for each file opened from external application' 
+and can be found at Menu:Advanced/Configuration/Application layout/Miscellaneous.  
+Some more description about this can be found here:
+
+The following content for wrapper shell-script works in UltraEdit64 Versions 27:   
+
+    #!/bin/sh   
+    "C:\Program Files\IDM Computer Solutions\UltraEdit\uedit64.exe" //fni $*   
+
+
+
 
 One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
 UltraEdit defines the syntax coloring in word-files, for Rust it is named rust.uew.
