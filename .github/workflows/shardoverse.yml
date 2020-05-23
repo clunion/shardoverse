@@ -13,7 +13,7 @@ jobs:
     - name: Install SDL2-libs
       run: |
         sudo apt-get update
-        sudo apt-get install libsdl2 libsdl2-image libsdl2-ttf libsdl2-mixer libsdl2-gfx 
+        sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-gfx-dev 
 
     - name: Run tests
       run: |
