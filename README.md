@@ -1,9 +1,11 @@
 ![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Shardoverse-title.png)
 
-|CPU     |Operating System              |Rust            | Development Env. | CI System    | Status                                                                                                    |
-|--------|------------------------------|----------------|------------------|--------------|-----------------------------------------------------------------------------------------------------------|
-| x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu              | Travis-CI    | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
-| x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64    | AppVeyor     | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
+|CPU     |Operating System              |Rust            | Development Env. | CI System      | Status                                                                                                    |
+|--------|------------------------------|----------------|------------------|----------------|-----------------------------------------------------------------------------------------------------------|
+| x86_64 | Ubuntu-latest                |stable          | gnu              | GitHub Actions | ![shardoverse](https://github.com/clunion/shardoverse/workflows/shardoverse/badge.svg)                    |
+| x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu              | Travis-CI      | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
+| x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64    | AppVeyor       | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
+
 
 ## What is this?
 A learning project to get into the coding of:
