@@ -39,7 +39,7 @@ Goal of this project is to learn:
 We chose to write a little roguelike game and maybe add some extras.
 
 ## Current state
-**The project has not really started yet.**
+**The project is not really started yet.**
 
 Currently, we are setting up the development environment, select the tools and libraries we will use,
 choose some basic assets for graphics and sound and such things.

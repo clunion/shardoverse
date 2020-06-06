@@ -3,32 +3,34 @@
 ## PROJECT:             Shardoverse
 ## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     config.rs
-## SYNOPSIS: functions for loading, storing, reding and manipulating the configuration information
+## FILE:     mod.rs
+## SYNOPSIS: this file contains the bindings/paths-to-the-sources of project shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## A Roguelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
+## The mod.rs-file is (at least, seems to be) handled in a special way. We use it solely for providing acces to our own modules.
 ##----------------------------------------------------------------------------------------------------------------------------
 ## LICENSE:
 ## Copyright 2020 by Christian Lunau (clunion), Julian Lunau and Jaron Lunau.
 ## MIT-License, see LICENSE.md file 
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:  DATE:       AUTHOR: CHANGES:
-## 0.1       2020-04-04  CLu     creation
+## 0.1       2020-06-03  CLu     creation
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## TODO:
-##    - everything
+##    - understand what is really happening with the Rust module access
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
 
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
-//--- none ---
+// Extern crate declarations only in main.rs (to be reevaluated later)
 
 //--- MODULES: ---------------------------------------------------------------------------------------------------------------
-use std::io;
+//--- none ---
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-//--- none ---
+pub mod assets;       // <filename>
+pub mod config;       // <filename>
+pub mod pixel_draw;   // <filename>
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -45,58 +47,3 @@ use std::io;
 //--- GLOBAL VARS: -----------------------------------------------------------------------------------------------------------
 //--- none ---
 
- 
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
-pub fn load_config() -> Result<bool, io::Error>  
-{
-println!("load_config() called");
-
-Ok(true)
-}
-
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
-pub fn save_config() -> Result<bool, io::Error> 
-{
-println!("save_config() called");
-
-Ok(true)
-}
-
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
-pub fn shardoverse_init () -> Result<String, io::Error> 
-{
-let retstr: String = "init ok".to_string();
-println!("shardoverse_init() called");
-    
-Ok(retstr)
-}
-
-
-#[cfg(test)]
-mod tests 
-{
-  // importing names from outer (for mod tests) scope:
-  use super::*;
-  
-  /*
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  ## FUNCTION:   test_shardoverse_init()
-  ## TYPE:       unit test function
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  ## PARAMETER:  -
-  ## RETURNS:    -
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  */
-  #[test]
-  fn test_shardoverse_init() 
-  {
-    let result = shardoverse_init();
-    assert!(result.is_ok());
-  }
-}

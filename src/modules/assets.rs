@@ -3,14 +3,14 @@
 ## PROJECT:             Shardoverse
 ## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     main.rs
-## SYNOPSIS: main, start and entry point of the program
+## FILE:     assets.rs
+## SYNOPSIS: handling of the assets: preloading, dynamic loading, switching of grafics, sounds and other assets
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
 ## A Roguelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
 ##----------------------------------------------------------------------------------------------------------------------------
 ## LICENSE:
-## Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).
+## Copyright 2020 by Christian Lunau (clunion), Julian Lunau and Jaron Lunau.
 ## MIT-License, see LICENSE.md file 
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:  DATE:       AUTHOR: CHANGES:
@@ -19,26 +19,16 @@
 ## TODO:
 ##    - everything
 ## ---------------------------------------------------------------------------------------------------------------------------
-
 */
 
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
-extern crate sdl2;
+// Extern crate declarations only in main.rs (to be reevaluated later)
 
 //--- MODULES: ---------------------------------------------------------------------------------------------------------------
-use std::env;
 use std::io;
-use std::path::Path;
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-mod modules;                              // <dirname>
-
-use crate::modules::assets::cursors::*;   // <dirname>::<filename>::<explicit mod name>::*
-use crate::modules::config::*;            // <dirname>::<filename>::*
-
-mod central_core;                         // <filename>
-use crate::central_core::*;               // <filename>::*
-
+//--- none ---
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -58,71 +48,55 @@ use crate::central_core::*;               // <filename>::*
 
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   main
-## TYPE:       entry point, 
+## FUNCTION:   pixel_fill
+## TYPE:       simple local function
 ## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  <none>
-## RETURNS:    Result - state OK
-##                    - io-Error
+## PARAMETER:  canvas
+## RETURNS:    Result
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## The one and only main: startup and entry point of this program
-## here only the handling of commandline paramaters is done
+## Test for pixel-Drawing, fills the current Window with colored pixels
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:    DATE:       AUTHOR: CHANGES:
 ## 1.0         2020        CLu     initial version
 ## ---------------------------------------------------------------------------------------------------------------------------
-## TODO:
+## TODO:     
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-fn main() -> Result<(), io::Error>
+pub mod cursors
 {
-let args: Vec<String> = env::args().collect();
-let mut i :i32 = 0;
+use super::*;
 
-if !args.is_empty()
-    {
-    for arg in &args
-        {
-        println!("Parameter[{}] {:?}",i, &arg);
-        i+=1;
-        }
-    } 
-
-match load_config()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
-    }
-
-
-match load_cursors()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
-    }
-
-
-match shardoverse_init()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error initialising: {:?}", error); return Err(error); },
-    }
-
-
-// Hand over control to central core:
-match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error initialissing: {:?}", error); }, //return Err(error); },
-    }
-
-
-match save_config()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
-    }
-
-Ok(())
+   pub fn load_cursors() -> Result<(), io::Error> 
+   {
+   println!("load_cursors() called");
+   Ok(())
+   }
 }
+
+
+#[cfg(test)]
+mod tests 
+{
+  // importing names from outer (for mod tests) scope:
+  use super::cursors::*;
+  
+  /*
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## FUNCTION:   test_load_cursors()
+  ## TYPE:       unit test function
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## PARAMETER:  -
+  ## RETURNS:    -
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  */
+  #[test]
+  fn test_load_cursors() 
+  {
+    let result = load_cursors();
+    assert!(result.is_ok());
+  }
+  
+}
+
+

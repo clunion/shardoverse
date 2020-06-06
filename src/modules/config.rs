@@ -3,14 +3,14 @@
 ## PROJECT:             Shardoverse
 ## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     main.rs
-## SYNOPSIS: main, start and entry point of the program
+## FILE:     config.rs
+## SYNOPSIS: functions for loading, storing, reding and manipulating the configuration information
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
 ## A Roguelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
 ##----------------------------------------------------------------------------------------------------------------------------
 ## LICENSE:
-## Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).
+## Copyright 2020 by Christian Lunau (clunion), Julian Lunau and Jaron Lunau.
 ## MIT-License, see LICENSE.md file 
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:  DATE:       AUTHOR: CHANGES:
@@ -19,26 +19,16 @@
 ## TODO:
 ##    - everything
 ## ---------------------------------------------------------------------------------------------------------------------------
-
 */
 
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
-extern crate sdl2;
+// Extern crate declarations only in main.rs (to be reevaluated later)
 
 //--- MODULES: ---------------------------------------------------------------------------------------------------------------
-use std::env;
 use std::io;
-use std::path::Path;
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-mod modules;                              // <dirname>
-
-use crate::modules::assets::cursors::*;   // <dirname>::<filename>::<explicit mod name>::*
-use crate::modules::config::*;            // <dirname>::<filename>::*
-
-mod central_core;                         // <filename>
-use crate::central_core::*;               // <filename>::*
-
+//--- none ---
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -55,74 +45,58 @@ use crate::central_core::*;               // <filename>::*
 //--- GLOBAL VARS: -----------------------------------------------------------------------------------------------------------
 //--- none ---
 
+ 
+/*
+## ---------------------------------------------------------------------------------------------------------------------------
+*/
+pub fn load_config() -> Result<bool, io::Error>  
+{
+println!("load_config() called");
+
+Ok(true)
+}
 
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   main
-## TYPE:       entry point, 
-## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  <none>
-## RETURNS:    Result - state OK
-##                    - io-Error
-## ---------------------------------------------------------------------------------------------------------------------------
-## DESCRIPTION:
-## The one and only main: startup and entry point of this program
-## here only the handling of commandline paramaters is done
-## ---------------------------------------------------------------------------------------------------------------------------
-## VERSION:    DATE:       AUTHOR: CHANGES:
-## 1.0         2020        CLu     initial version
-## ---------------------------------------------------------------------------------------------------------------------------
-## TODO:
+*/
+pub fn save_config() -> Result<bool, io::Error> 
+{
+println!("save_config() called");
+
+Ok(true)
+}
+
+/*
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-fn main() -> Result<(), io::Error>
+pub fn shardoverse_init () -> Result<String, io::Error> 
 {
-let args: Vec<String> = env::args().collect();
-let mut i :i32 = 0;
-
-if !args.is_empty()
-    {
-    for arg in &args
-        {
-        println!("Parameter[{}] {:?}",i, &arg);
-        i+=1;
-        }
-    } 
-
-match load_config()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
-    }
+let retstr: String = "init ok".to_string();
+println!("shardoverse_init() called");
+    
+Ok(retstr)
+}
 
 
-match load_cursors()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
-    }
-
-
-match shardoverse_init()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error initialising: {:?}", error); return Err(error); },
-    }
-
-
-// Hand over control to central core:
-match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error initialissing: {:?}", error); }, //return Err(error); },
-    }
-
-
-match save_config()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
-    }
-
-Ok(())
+#[cfg(test)]
+mod tests 
+{
+  // importing names from outer (for mod tests) scope:
+  use super::*;
+  
+  /*
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## FUNCTION:   test_shardoverse_init()
+  ## TYPE:       unit test function
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## PARAMETER:  -
+  ## RETURNS:    -
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  */
+  #[test]
+  fn test_shardoverse_init() 
+  {
+    let result = shardoverse_init();
+    assert!(result.is_ok());
+  }
 }
