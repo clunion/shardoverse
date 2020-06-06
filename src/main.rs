@@ -32,9 +32,7 @@ use std::path::Path;
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
 mod modules;                              // <dirname>
-
-use crate::modules::assets::cursors::*;   // <dirname>::<filename>::<explicit mod name>::*
-use crate::modules::config::*;            // <dirname>::<filename>::*
+use crate::modules::*;                    // <dirname>::*
 
 mod central_core;                         // <filename>
 use crate::central_core::*;               // <filename>::*
@@ -59,11 +57,11 @@ use crate::central_core::*;               // <filename>::*
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## FUNCTION:   main
-## TYPE:       entry point, 
+## TYPE:       program entry point
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## PARAMETER:  <none>
-## RETURNS:    Result - state OK
-##                    - io-Error
+## RETURNS:    Result - state (OK)
+##                    - Error
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
 ## The one and only main: startup and entry point of this program
@@ -89,36 +87,37 @@ if !args.is_empty()
         }
     } 
 
-match load_config()
+match config::load()
     {
     Ok(_)      => {},
     Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
     }
 
 
-match load_cursors()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
-    }
-
-
-match shardoverse_init()
+match config::init()
     {
     Ok(_)      => {},
     Err(error) => { println!("Error initialising: {:?}", error); return Err(error); },
     }
 
 
+
 // Hand over control to central core:
 match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
     {
     Ok(_)      => {},
-    Err(error) => { println!("Error initialissing: {:?}", error); }, //return Err(error); },
+    Err(error) => { println!("Error initialising: {:?}", error); }, //return Err(error); },
     }
 
 
-match save_config()
+
+match config::exit()
+    {
+    Ok(_)      => {},
+    Err(error) => { println!("Error de-initialising: {:?}", error); return Err(error); },
+    }
+
+match config::save()
     {
     Ok(_)      => {},
     Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },

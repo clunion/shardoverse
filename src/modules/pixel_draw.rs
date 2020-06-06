@@ -3,7 +3,7 @@
 ## PROJECT:             Shardoverse
 ## HOME:      https://github.com/clunion/shardoverse
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     pixels.rs
+## FILE:     pixel_draw.rs
 ## SYNOPSIS: a simple test for drawing pixels into an SDL2-window
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
@@ -24,7 +24,6 @@
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
-//--- MODULES: ---------------------------------------------------------------------------------------------------------------
 //use std::io;
 
 use sdl2::gfx::primitives::DrawRenderer;
@@ -55,14 +54,14 @@ use sdl2::video::{Window};
 
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   pixel_draw
+## FUNCTION:   formula_fill
 ## TYPE:       simple local function
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## PARAMETER:  canvas
 ## RETURNS:    Result
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## Test for pixel-drawing, fills the current Window with colored pixels based on a mathematical formula
+## Test for pixel-drawing, fills the current SDL2-window with colored pixels based on mathematical formulae
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:    DATE:       AUTHOR: CHANGES:
 ## 1.0         2020        CLu     initial version
@@ -70,7 +69,7 @@ use sdl2::video::{Window};
 ## TODO:     
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn pixel_draw_1(canvas_p: &mut Canvas<Window>) -> bool
+pub fn formula_fill(canvas_p: &mut Canvas<Window>) -> bool
 {
 let retval: bool = true;
 
@@ -137,7 +136,7 @@ mod tests
   
   /*
   ## ---------------------------------------------------------------------------------------------------------------------------
-  ## FUNCTION:   test_pixel_draw()
+  ## FUNCTION:   test_formula_fill()
   ## TYPE:       unit test function
   ## ---------------------------------------------------------------------------------------------------------------------------
   ## PARAMETER:  -

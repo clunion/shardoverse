@@ -25,8 +25,6 @@
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
-
-//--- MODULES: ---------------------------------------------------------------------------------------------------------------
 //use std::io;
 use std::path::Path;
 use std::time::Duration;
@@ -42,7 +40,7 @@ use sdl2::surface::Surface;
 
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-use crate::modules::pixel_draw::*;      // <dirname>::<filename>::*
+use crate::modules::pixel_draw;        // <dirname>::<filename>
 
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
@@ -123,20 +121,20 @@ pub fn run(png: &Path) -> Result<(), String> {
             match event 
                 {
                 Event::Quit {..}                            => break 'main,
-                Event::KeyDown {keycode: Some(keycode), ..} =>  {
-                                                                if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
-                                                                else if keycode == Keycode::Q      { println!("Q");    break 'main }
-                                                                else if keycode == Keycode::P      { println!("P");    pixel_draw_1(&mut canvas); }
-                                                                }
-
-                Event::MouseButtonDown {x, y, ..} =>            {
-                                                                let color = pixels::Color::RGB(x as u8, y as u8, 255);
-                                                                let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
-                                                                lastx     = x as i16;
-                                                                lasty     = y as i16;
-                                                                println!("mouse btn down at ({},{})", x, y);
-                                                                canvas.present();
-                                                                }
+                Event::KeyDown {keycode: Some(keycode), ..} => {
+                                                               if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
+                                                               else if keycode == Keycode::Q      { println!("Q");    break 'main }
+                                                               else if keycode == Keycode::P      { println!("P");    pixel_draw::formula_fill(&mut canvas); }
+                                                               }
+                                                               
+                Event::MouseButtonDown {x, y, ..} =>           {
+                                                               let color = pixels::Color::RGB(x as u8, y as u8, 255);
+                                                               let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
+                                                               lastx     = x as i16;
+                                                               lasty     = y as i16;
+                                                               println!("mouse btn down at ({},{})", x, y);
+                                                               canvas.present();
+                                                               }
                 _ => {}
                 }
             }

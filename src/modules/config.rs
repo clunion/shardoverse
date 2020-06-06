@@ -24,11 +24,10 @@
 //--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
-//--- MODULES: ---------------------------------------------------------------------------------------------------------------
 use std::io;
 
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
-//--- none ---
+use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod name>
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -48,32 +47,119 @@ use std::io;
  
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
+## FUNCTION:   <function name>
+## TYPE:       <type of function: local, call-back, ...>
+## ---------------------------------------------------------------------------------------------------------------------------
+## PARAMETER:  <list of parameters>
+## RETURNS:    <list of return values and their meaning>
+## ---------------------------------------------------------------------------------------------------------------------------
+## DESCRIPTION:
+## <textual description of the function, stating:
+##  1.: the purpose of this function (goal, WHAT shall be achieved with it)
+##  2.: the way this function works (HOW its works)> 
+## ---------------------------------------------------------------------------------------------------------------------------
+## VERSION:    DATE:       AUTHOR: CHANGES:
+## 0.1         2020-MM-DD  CLu     initial version
+## ---------------------------------------------------------------------------------------------------------------------------
+## TODO:
+##  everything
+## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn load_config() -> Result<bool, io::Error>  
+pub fn load() -> Result<bool, io::Error>  
 {
-println!("load_config() called");
+println!("load() called");
 
 Ok(true)
 }
 
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
+## FUNCTION:   <function name>
+## TYPE:       <type of function: local, call-back, ...>
+## ---------------------------------------------------------------------------------------------------------------------------
+## PARAMETER:  <list of parameters>
+## RETURNS:    <list of return values and their meaning>
+## ---------------------------------------------------------------------------------------------------------------------------
+## DESCRIPTION:
+## <textual description of the function, stating:
+##  1.: the purpose of this function (goal, WHAT shall be achieved with it)
+##  2.: the way this function works (HOW its works)> 
+## ---------------------------------------------------------------------------------------------------------------------------
+## VERSION:    DATE:       AUTHOR: CHANGES:
+## 0.1         2020-MM-DD  CLu     initial version
+## ---------------------------------------------------------------------------------------------------------------------------
+## TODO:
+##  everything
+## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn save_config() -> Result<bool, io::Error> 
+pub fn save() -> Result<bool, io::Error> 
 {
-println!("save_config() called");
+println!("save() called");
 
 Ok(true)
 }
 
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
+## FUNCTION:   <function name>
+## TYPE:       <type of function: local, call-back, ...>
+## ---------------------------------------------------------------------------------------------------------------------------
+## PARAMETER:  <list of parameters>
+## RETURNS:    <list of return values and their meaning>
+## ---------------------------------------------------------------------------------------------------------------------------
+## DESCRIPTION:
+## <textual description of the function, stating:
+##  1.: the purpose of this function (goal, WHAT shall be achieved with it)
+##  2.: the way this function works (HOW its works)> 
+## ---------------------------------------------------------------------------------------------------------------------------
+## VERSION:    DATE:       AUTHOR: CHANGES:
+## 0.1         2020-MM-DD  CLu     initial version
+## ---------------------------------------------------------------------------------------------------------------------------
+## TODO:
+##  everything
+## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn shardoverse_init () -> Result<String, io::Error> 
+pub fn init() -> Result<String, io::Error> 
 {
+println!("init() called");
+
+match cursors::load()
+    {
+    Ok(_)      => {},
+    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
+    }
+
 let retstr: String = "init ok".to_string();
-println!("shardoverse_init() called");
     
+Ok(retstr)
+}
+
+/*
+## ---------------------------------------------------------------------------------------------------------------------------
+## FUNCTION:   <function name>
+## TYPE:       <type of function: local, call-back, ...>
+## ---------------------------------------------------------------------------------------------------------------------------
+## PARAMETER:  <list of parameters>
+## RETURNS:    <list of return values and their meaning>
+## ---------------------------------------------------------------------------------------------------------------------------
+## DESCRIPTION:
+## <textual description of the function, stating:
+##  1.: the purpose of this function (goal, WHAT shall be achieved with it)
+##  2.: the way this function works (HOW its works)> 
+## ---------------------------------------------------------------------------------------------------------------------------
+## VERSION:    DATE:       AUTHOR: CHANGES:
+## 0.1         2020-MM-DD  CLu     initial version
+## ---------------------------------------------------------------------------------------------------------------------------
+## TODO:
+##  everything
+## ---------------------------------------------------------------------------------------------------------------------------
+*/
+pub fn exit() -> Result<String, io::Error> 
+{
+
+let retstr: String = "exit ok".to_string();
+println!("exit() called");
+
 Ok(retstr)
 }
 
@@ -86,7 +172,7 @@ mod tests
   
   /*
   ## ---------------------------------------------------------------------------------------------------------------------------
-  ## FUNCTION:   test_shardoverse_init()
+  ## FUNCTION:   test_init()
   ## TYPE:       unit test function
   ## ---------------------------------------------------------------------------------------------------------------------------
   ## PARAMETER:  -
@@ -94,9 +180,11 @@ mod tests
   ## ---------------------------------------------------------------------------------------------------------------------------
   */
   #[test]
-  fn test_shardoverse_init() 
+  fn test_init() 
   {
-    let result = shardoverse_init();
+    let result = init();
     assert!(result.is_ok());
   }
-}
+
+} // End of: mod test
+
