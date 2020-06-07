@@ -20,7 +20,7 @@ When it gets near completion a  `fortress building` scenario might get added.
 
 ## Idea and story
 
-The world is shattered to pieces, leaving the survivors each on his own shard of the universe.
+The world is shattered to pieces, leaving these survivors each on his own shard of the universe.
 
 Now one has to run, to explore and to gather what is left, what is needed to survive, in the depth of the shard.
 
@@ -41,8 +41,25 @@ We chose to write a little roguelike game and maybe add some extras.
 ## Current state
 **The project is not really started yet.**
 
-Currently, we are setting up the development environment, select the tools and libraries we will use,
-choose some basic assets for graphics and sound and such things.
+We did set up most of the development environment to be used (debugging and logging is still missing)
+some tools and libraries are chosen and set to work, 
+several basic assets for graphics and sound are selected.
+
+Currently, we 
+define the project structure (concept of how the functionalities are separated into modules, directories and files)
+apply some design principles to the project structure (thus laying the foundation of the game's software architecture)
+and such things.
+
+
+## Software Design Principles
+Design principles for a small learning project, for a small computer game? Yes, definitely.
+* [`KISS - Keep It Simple, Stupid!`](https://en.wikipedia.org/wiki/KISS_principle) (preferred interpretation: Keep it simple and smart)
+* [`TDD - Test Driven Design`](https://en.wikipedia.org/wiki/Test-driven_development) 
+* [`Secure by design`](https://en.wikipedia.org/wiki/Secure_by_design) (at least for everything regarding the networking)
+* [`SOLID`](https://en.wikipedia.org/wiki/SOLID)
+
+Even though this is just a small game project it is regarded as a good idea to have at least some principles in mind when designing the architecture of the program.
+It is surely not necessary to follow every detail of these principles, but the intent of most principles should always be clear.
 
 
 ## Decisions made
@@ -56,7 +73,7 @@ choose some basic assets for graphics and sound and such things.
 | [`SDL2`](https://wiki.libsdl.org/)                              | A well probed and platform independent set of libraries                                                                                    |
 | [`git`](https://https://git-scm.com/)                           | subversion would have done since this is just for learning, but let's do it right from the start.                                          |
 | [`GitHub`](https://github.com/)                                 | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too.                                        |
-| [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independend. |
+| [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independent. |
 
 
 ## In Consideration
@@ -102,15 +119,15 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
 
 
 ### Also add ssh-pageant:
-This is neccessary to get the automated/transparent SSH-Key login to GitHub working,
-it needs additionally an running Putty-Pageant or Keepass-KeeAdent, see further below.
+This is necessary to get the automated/transparent SSH-Key login to GitHub working,
+it needs additionally a running Putty-Pageant or Keepass-KeeAdent, see further below.
 
     pacman -S ssh-pageant
 (seems to work, but not sure yet)
 
 Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
 
-Make sure to use the same Socket-File in the setup auf ssh-pageant (within the Msys2-Shell)
+Make sure to use the same Socket-File in the setup of ssh-pageant (within the Msys2-Shell)
 and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).
 
 Here, a file with Path and name like this is used:
@@ -118,8 +135,8 @@ Here, a file with Path and name like this is used:
     /e/Temp/msys_cyglockfile
 
 Currently, the variant using the cygwin compatible socket seems to work with Msys2.
-If not, try the other (msysgit) variant.
-Filepath and name used in KeeAgent:
+If not, try the other (msysgit) variant.   
+File path and name used in KeeAgent:
 
     E:\Temp\msys_cyglockfile
 
@@ -216,30 +233,28 @@ To run:
 While using a secure key management software is already a good idea,
 it sounds even better to integrate the development tools with that key management.
 
-For a secure login to GitHub SSH can and should be used.
+For a secure login to GitHub, SSH can and should be used.
 
 With the process described in the previous sections, that is already working,
 but every time git accesses GitHub (via git clone/pull/push/...), a login-window pops up and asks for the credentials.
 
-To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass.info/) via [`KeeAgent`](https://lechnology.com/software/keeagent/).
-
-Follow this very fine description (all steps except those regarding Git-Bash, those tools should be already installed by now):
+To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass.info/) via [`KeeAgent`](https://lechnology.com/software/keeagent/) follow this very fine description (all steps except those regarding Git-Bash, those tools should be already installed by now):
 [`Mendhak's keepass-and-keeagent-setup`](https://code.mendhak.com/keepass-and-keeagent-setup/)
 
 #### In Short:
-* install Git in Msys2 as depiceted in the sections above
+* install Git in Msys2 as depicted in the sections above
 * transfer your SSH public Key to GitHub
 * install [`KeePass2`](https://keepass.info/) (tested here: Version 2.44)
 * install the KeePass2-Plugin [`KeeAgent`](https://lechnology.com/software/keeagent/) (Version 0.11.1.0, by David Lechner)
 * load and activate the ssh keys into KeePas2
 * load the Keys into KeeAgent
 * Let KeeAgent create (at least) the 'cygwin compatible **socket file**'
-* take note of the socket file's path and filename (in **windows style**, could be somthing like: E:\Temp\msys_cyglockfile)
-* in an Msys2 startup script like .bash_profile: set and export a shell environment varible named **SSH_AUTH_SOCK** with the **unix-style** path to the socket file like this:
+* take note of the socket file's path and filename (in **windows style**, could be something like: E:\Temp\msys_cyglockfile)
+* in an Msys2 startup script like .bash_profile: set and export a shell environment variable named **SSH_AUTH_SOCK** with the **unix-style** path to the socket file like this:
 ```export SSH_AUTH_SOCK="/c/Temp7cyglockfile"```
 
-Now Git actions involving the GitHub server (like push and pull) should not ask for credentials again.
-But setting this up was a bit shaky first, it did not work right away, so some tinkering around for some time was neccessary.
+Now Git actions involving the GitHub server (like push and pull) should not ask for credentials again.   
+Note: Setting this up was a bit shaky first, it did not work right away, so some tinkering around for some time was necessary. It may be the same at your side.
 
 Some additional configuration-Info can be found here:
 [`git-for-windows-where-to-find-my-private-rsa-key`](https://serverfault.com/questions/194567/how-do-i-tell-git-for-windows-where-to-find-my-private-rsa-key)
@@ -255,7 +270,7 @@ Originally it was intended not to use TortoiseGit from the start, because one of
 There is a small problem integrating Notepad++: in usual configuration NP++ opens a new tab for a new text document,
 which will happen every time when Git asks for, say, a commit description.
 
-Then Git waits for the editor to be colsed, which is not what we want in our development flow.
+Then Git waits for the editor to be closed, which is not what we want in our development flow.
 
 Here is a description on how to integrate Notepad++ with Git in MSys2:
 
@@ -282,10 +297,10 @@ Set the script _npp_git.sh_ as the editor in the global config of Git by enterin
 
     git config --global core.editor npp_git.sh
 
-Next time something is commited via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be losed without bothering the Notepad++-instance where the source code is written.
+Next time something is committed via Git in the Msys2-Shell, an additional instance of Notepad++ should be opened, where the commit description can be entered and which can be closed without bothering the Notepad++-instance where the source code is written.
 
 ## Coding in Rust with UltraEdit
-If you happen to have UltraEdit, it can be used for Git much in a similiar way like Notepad++.
+If you happen to have UltraEdit, it can be used for Git much in a similar way like Notepad++.
 There are several configuration settings which relate to session handling, 
 and thus how to open the Git commit comment in a separate editor-session.      
 One is called 'Maintain separate process for each file opened from external application' 
@@ -300,20 +315,20 @@ The following content for wrapper shell-script works in UltraEdit64 Versions 27:
 One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
 UltraEdit defines the syntax coloring in word-files, for Rust such a file is named rust.uew.
 The currently available wordfile defines the single apostrophe (') as one of the string delimiters.
-This leads to a funny coloring when the Rust-code is using labled loops, which also use the single apostrophe.   
+This leads to a funny coloring when the Rust-code is using labeled loops, which also use the single apostrophe.   
 
 Workaround: when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
-the coloring looks much better, at least around labled loops.
+the coloring looks much better, at least around labeled loops.
 
       
 # Convenient build and run aliases
-In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the diffent build and run variants Conveniently.
+In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the different build and run variants Conveniently.
 Currently, they do simple calls to cargo, but that may change.
 A set of this build- and run-scripts are meant to be located in every project's bin folder, thus the method of building and running a project
 is always the same, regardless if it is an C or C++ or, like this time, a Rust project.
 To execute these local scripts, a set of aliases is used.
-The reson behind this is, that then these scripts do not have to be found through the PATH-variable
-(which is not possible to do right when working on several projects in parrallel), instead the scripts are because they are always in the same way relative to the current projects base-directory,
+The reason behind this is, that then these scripts do not have to be found through the PATH-variable
+(which is not possible to do right when working on several projects in parallel), instead the scripts are because they are always in the same way relative to the current projects base-directory,
 and thus can be reached via the aliases.
 
 The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.
@@ -335,7 +350,7 @@ The more _rusty_ naming would be:
     alias crt="./bin/run_test.sh"
     alias crr="./bin/run_release.sh"
 
-These scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
+The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
 If it is not installed yet, this can be done in the MSys2-Shell via:
 
 	 rustup component add clippy
@@ -346,13 +361,14 @@ To investigate:
 
 # Logging
 To investigate:
-* Whats's the Rust aproach to logging?
+* What's the Rust approach to logging?
 * Is there a way to use the plixx-logging-libs?
 
 # Project structure
-* Very small main.rs with only minimal logic
-* nearly everything goes into libs to make the functions unit-testable
-* integration testing (when beginning network stuff)
+* Very small main.rs with parameter checking and only minimal logic
+* nearly everything goes into module-files to make the functions unit-testable
+* for simplicity, we start using a 'central-core' module to bind the parts and layers together
+* integration testing will be set up early (when beginning with the network stuff)
 
 # GitHub Continuous Integration with Rust
 This is not needed to build Shardoverse locally, only describes what is done here to get the build CI running with GitHub.
@@ -362,12 +378,12 @@ This is not needed to build Shardoverse locally, only describes what is done her
 ## SomeNotes on AppVeyor
 First idea was to make a very simple and minimal CI-Setup, using only the appveyor.yml file and defining all stages there.
 This worked until the integration of SDL2_gfx was tried, which could be downloaded and uncompressed, but then a whole C-buildstage would be necessary for SDL2_gfx alone.
-Setting this up in the crude mixture of weird powersehll and windows-cmd commands was no fun at all. At last it was decided to
-put the logic for install, build and test stages in separate windows-cmd scripts and install the neccessary libs through Msys2 using pacman, which works quite well.
+Setting this up in the crude mixture of weird powershell and windows-cmd commands was no fun at all. At last it was decided to
+put the logic for install, build and test stages in separate windows-cmd scripts and install the necessary libs through Msys2 using pacman, which works quite well.
 
 ## SomeNotes on TravisCI
-The same as for AppVeyor apllies, most code moved into scripts. In this case these are bash-scripts, which is fine.
-That YAML-stuff is more weirdly in the way than helpfull.
+The same as for AppVeyor applies, most code moved into scripts. In this case these are bash-scripts, which is fine.
+That YAML-stuff is more weirdly in the way than helpful.
 Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets handy.
 
 
