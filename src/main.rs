@@ -87,6 +87,12 @@ if !args.is_empty()
         }
     } 
 
+
+    for number in (1..4).rev() {
+        println!("{}!", number);
+    }
+    println!("LIFTOFF!!!");
+
 match config::load()
     {
     Ok(_)      => {},

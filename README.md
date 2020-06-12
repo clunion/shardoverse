@@ -74,6 +74,8 @@ It is surely not necessary to follow every detail of these principles, but the i
 | [`git`](https://https://git-scm.com/)                           | subversion would have done since this is just for learning, but let's do it right from the start.                                          |
 | [`GitHub`](https://github.com/)                                 | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too.                                        |
 | [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independent. |
+| [`AreWeIDEyet`](https://areweideyet.com/)                       | Not yet. This learning project focusses on the programming itself. An IDE will (much) later be introduced, probably VisualStudioCode. More info on IDEs for Rust can be found here: [whats-the-best-ide-for-developing-in-rust](https://medium.com/cloud-native-the-gathering/whats-the-best-ide-for-developing-in-rust-5087d46006f5). |
+
 
 
 ## In Consideration
@@ -229,6 +231,7 @@ To run:
 
     cargo run --release
 
+------------------
 ## Some notes regarding SSH Tools
 While using a secure key management software is already a good idea,
 it sounds even better to integrate the development tools with that key management.
@@ -302,22 +305,23 @@ Next time something is committed via Git in the Msys2-Shell, an additional insta
 ## Coding in Rust with UltraEdit
 If you happen to have UltraEdit, it can be used for Git much in a similar way like Notepad++.
 There are several configuration settings which relate to session handling, 
-and thus how to open the Git commit comment in a separate editor-session.      
+and thus how to open the Git commit comment in a separate editor-session.   
 One is called 'Maintain separate process for each file opened from external application' 
 and can be found at Menu:Advanced/Configuration/Application layout/Miscellaneous.  
-Some more description about this can be found here:
 
-The following content for wrapper shell-script works in UltraEdit64 Versions 27:   
+Some more description about this can be found here: [how-to-open-different-windows-of-ultraedit](http://forums.ultraedit.com/how-to-open-different-windows-of-ultraedit-with-fi-t17820.html)
+
+The following content for wrapper shell-script works in UltraEdit64 **Versions 27**:   
 
     #!/bin/sh   
     "C:\Program Files\IDM Computer Solutions\UltraEdit\uedit64.exe" $*   
 
-One additional remark regarding the syntax coloring of Rust-code in UltraEdit:
+One additional remark regarding the **syntax coloring of Rust-code in UltraEdit**:
 UltraEdit defines the syntax coloring in word-files, for Rust such a file is named rust.uew.
 The currently available wordfile defines the single apostrophe (') as one of the string delimiters.
 This leads to a funny coloring when the Rust-code is using labeled loops, which also use the single apostrophe.   
 
-Workaround: when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
+**Workaround:** when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
 the coloring looks much better, at least around labeled loops.
 
       
@@ -447,6 +451,10 @@ The following assets are considered to be used, if their creators/owners do not 
 
 * ./assets/videos   
 
+
+# May be interesting to read
+
+* [`Zero-to-Game`](https://www.zerotoga.me/dev/findingzero) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 
 
 # Maintainer

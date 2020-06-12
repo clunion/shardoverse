@@ -38,8 +38,16 @@ use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod n
 //--- ENUMS: -----------------------------------------------------------------------------------------------------------------
 //--- none ---
 
-//--- STRUCTS: ---------------------------------------------------------------------------------------------------------------
-//--- none ---
+//--- STRUCT DEFINITIONS: ----------------------------------------------------------------------------------------------------
+struct Window
+{
+    title: String,
+    pos_x:  u32,
+    pos_y:  u32,
+    height: u32,
+    width:  u32,
+    active: bool,
+}
 
 //--- GLOBAL VARS: -----------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -47,16 +55,15 @@ use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod n
  
 /*
 ## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   <function name>
-## TYPE:       <type of function: local, call-back, ...>
+## FUNCTION:   load
+## TYPE:       local
 ## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  <list of parameters>
-## RETURNS:    <list of return values and their meaning>
+## PARAMETER:  path and filename of an image-file to be used as a cursor
+## RETURNS:    status code
+##             io:_error
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## DESCRIPTION:
-## <textual description of the function, stating:
-##  1.: the purpose of this function (goal, WHAT shall be achieved with it)
-##  2.: the way this function works (HOW its works)> 
+## loads the given image as a cursor into the context
 ## ---------------------------------------------------------------------------------------------------------------------------
 ## VERSION:    DATE:       AUTHOR: CHANGES:
 ## 0.1         2020-MM-DD  CLu     initial version
