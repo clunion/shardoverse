@@ -34,13 +34,16 @@ use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod n
 
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
-const NAME_OF_INI_FILE:  &str = "shardoverse.ini";
+const NAME_OF_INI_FILE:      &str = "shardoverse.ini";
 
-const DEFAULT_TITLE:  &str = "Shardoverse (default)";
-const DEFAULT_POS_X:   u16 = 100;
-const DEFAULT_POS_Y:   u16 = 100;
+#[allow(dead_code)]
+const NAME_OF_INI_FILE4TEST: &str = "shardoverse_test.ini";
+
+const DEFAULT_TITLE : &str = "Shardoverse (default)";
+const DEFAULT_POS_X :  u16 = 100;
+const DEFAULT_POS_Y :  u16 = 100;
+const DEFAULT_WIDTH :  u16 = 800;
 const DEFAULT_HEIGHT:  u16 = 600;
-const DEFAULT_WIDTH:   u16 = 800;
 const DEFAULT_ACTIVE: bool = true;
 
 
@@ -90,7 +93,7 @@ impl Default for WindowConfig
 ## FUNCTION:   load
 ## TYPE:       local
 ## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  -- <none>
+## PARAMETER:  -- ini_filename_p  - Name of the INI-file to load the config from
 ## RETURNS:    -- status flag: true = succesfull, flase = failed
 ##             or if failed: error info 
 ## ---------------------------------------------------------------------------------------------------------------------------
@@ -104,7 +107,7 @@ impl Default for WindowConfig
 ##  everything
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn load() -> Result<WindowConfig, io::Error>  
+pub fn load(ini_filename_p: &str) -> Result<WindowConfig, io::Error>  
 {
 println!("config::load() called");
 
@@ -121,7 +124,7 @@ println!("default active     {:?}", win_config.active);
 
 
 // reading content of ini-file: ---------------------
-let mut conf = Ini::load_from_file(NAME_OF_INI_FILE).unwrap();
+let mut conf = Ini::load_from_file(ini_filename_p).unwrap();
 
 // print all key-value data from the config ini-file:
 println!("\nAll values in ini file:");
@@ -161,7 +164,8 @@ Ok(win_config)
 ## FUNCTION:   save
 ## TYPE:       common function
 ## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  -- <none>
+## PARAMETER:  -- ini_filename_p  - Name of the INI-file to store the config in
+##                win_config_p    - structz holding the current config to be stored
 ## RETURNS:    -- status flag: true = succesfull, flase = failed
 ##             or if failed: error info 
 ## ---------------------------------------------------------------------------------------------------------------------------
@@ -175,16 +179,16 @@ Ok(win_config)
 ##  everything
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn save(win_config: WindowConfig) -> Result<bool, io::Error> 
+pub fn save(ini_filename_p: &str, win_config_p: WindowConfig) -> Result<bool, io::Error> 
 {
 println!("config::save() called");
 
-println!("config::save() got title : {}", win_config.title ); 
-println!("config::save() got pos_x : {}", win_config.pos_x );
-println!("config::save() got pos_y : {}", win_config.pos_y );
-println!("config::save() got width : {}", win_config.width );
-println!("config::save() got height: {}", win_config.height);
-println!("config::save() got active: {}", win_config.active);
+println!("config::save() got title : {}", win_config_p.title ); 
+println!("config::save() got pos_x : {}", win_config_p.pos_x );
+println!("config::save() got pos_y : {}", win_config_p.pos_y );
+println!("config::save() got width : {}", win_config_p.width );
+println!("config::save() got height: {}", win_config_p.height);
+println!("config::save() got active: {}", win_config_p.active);
 
 let mut conf = Ini::new();
 
@@ -192,15 +196,15 @@ conf.with_section(None::<String>)
     .set("encoding", "utf-8");
 
 conf.with_section(Some("window"))
-    .set("title",  win_config.title )
-    .set("pos_x",  win_config.pos_x .to_string() )
-    .set("pos_y",  win_config.pos_y .to_string() )
-    .set("width",  win_config.width .to_string() )
-    .set("height", win_config.height.to_string() )
-    .set("active", win_config.active.to_string() )
+    .set("title",  win_config_p.title )
+    .set("pos_x",  win_config_p.pos_x .to_string() )
+    .set("pos_y",  win_config_p.pos_y .to_string() )
+    .set("width",  win_config_p.width .to_string() )
+    .set("height", win_config_p.height.to_string() )
+    .set("active", win_config_p.active.to_string() )
     ;
 
-conf.write_to_file(NAME_OF_INI_FILE).unwrap();
+conf.write_to_file(ini_filename_p).unwrap();
 
 Ok(true)
 }
@@ -232,7 +236,7 @@ println!("init() called");
 
 let win_config: WindowConfig;
 
-match load()
+match load(NAME_OF_INI_FILE)
     {
     Ok(config) => { win_config = config; },
     Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
@@ -279,7 +283,7 @@ pub fn exit(win_config: WindowConfig) -> Result<bool, io::Error>
 {
 println!("exit() called");
 
-match save(win_config)
+match save(NAME_OF_INI_FILE,win_config)
     {
     Ok(_)      => {},
     Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
@@ -288,22 +292,20 @@ match save(win_config)
 Ok(true)
 }
 
-
+  /*
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  ## TESTMODULE: for config  
+  ## TYPE:       unit test functions
+  ## ---------------------------------------------------------------------------------------------------------------------------
+  */
 #[cfg(test)]
 mod tests 
 {
-  // importing names from outer (for mod tests) scope:
-  use super::*;
-  
-  /*
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  ## FUNCTION:   test_init()
-  ## TYPE:       unit test function
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  ## PARAMETER:  -
-  ## RETURNS:    -
-  ## ---------------------------------------------------------------------------------------------------------------------------
-  */
+  use super::*;            // importing names from outer (for mod tests) scope:
+  use crate::config::WindowConfig;
+  use std::fs;
+ 
+//----------------------------------------------------------------
   #[test]
   fn test_init() 
   {
@@ -311,73 +313,65 @@ mod tests
     assert!(result.is_ok());
   }
 
-    use std::fs::File;
-    use std::io::Write;
-    use crate::config::Config;
-    use super::*;
-    use std::{env, fs};
+//----------------------------------------------------------------
+  #[test]
+  fn test_load() 
+  {
+    let conf = load(NAME_OF_INI_FILE);  // load is non-destructive, thus the normal ini-file is used for load-testing.
+    assert!(conf.is_ok());
+  }
 
-    #[test]
-    fn new_value() {
-        let default = Config::default();
-        assert_ne!("http://127.0.0.1", default.url);
+//----------------------------------------------------------------
+  #[test]
+  fn default_values() {
+      let defaults = WindowConfig::default();
 
-        let simple = r#"
-        url=http://127.0.0.1
-        "#;
+      assert_eq!(defaults.title , DEFAULT_TITLE );
+      assert_eq!(defaults.pos_x , DEFAULT_POS_X );
+      assert_eq!(defaults.pos_y , DEFAULT_POS_Y );
+      assert_eq!(defaults.width , DEFAULT_WIDTH );
+      assert_eq!(defaults.height, DEFAULT_HEIGHT);
+      assert_eq!(defaults.active, DEFAULT_ACTIVE);
+  }
 
-        let config = Config::from(simple.as_bytes()).unwrap();
+//----------------------------------------------------------------
+  #[test]
+  fn set_and_check_all_values() 
+  {
+  let test_conf2write: WindowConfig = WindowConfig 
+    {
+    title : "test window title".to_string(),
+    pos_x : 1 ,
+    pos_y : 2 ,
+    width : 3 ,
+    height: 4 ,
+    active: false ,
+    };
 
-        assert_eq!("http://127.0.0.1", config.url);
-    }
+    match save(NAME_OF_INI_FILE4TEST,test_conf2write)
+        {
+        Ok(_)  => {},
+        Err(_) => { assert!(false) },
+        }
 
-    #[test]
-    fn all_values() {
-        let default = Config::default();
-        assert_ne!("http://127.0.0.1", default.url);
+  let mut test_conf2load: WindowConfig = WindowConfig::default();
+  
+  match load(NAME_OF_INI_FILE4TEST)
+      {
+      Ok(config) => { test_conf2load = config; },
+      Err(_)     => { assert!(false) },
+      }
 
-        let simple = r#"
-        url=http://127.0.0.1
-        limit=5
-        command=echo
-        keys=abcdefghij
-        "#;
+  fs::remove_file(NAME_OF_INI_FILE4TEST).unwrap();
 
-        let config = Config::from(simple.as_bytes()).unwrap();
+  assert_eq!(test_conf2load.title , "test window title");
+  assert_eq!(test_conf2load.pos_x , 1);
+  assert_eq!(test_conf2load.pos_y , 2);
+  assert_eq!(test_conf2load.width , 3);
+  assert_eq!(test_conf2load.height, 4);
+  assert_eq!(test_conf2load.active, false);
 
-        assert_eq!("http://127.0.0.1", config.url);
-        assert_eq!(5, config.limit);
-        assert_eq!("echo", config.command);
-        assert_eq!(Alphabet::from("abcdefghij"), config.keys);
-    }
-
-    #[test]
-    fn default_values() {
-        let default = Config::default();
-
-        let simple = r#"
-        url=http://127.0.0.1
-        "#;
-
-        let config = Config::from(simple.as_bytes()).unwrap();
-
-        assert_eq!(default.keys, config.keys);
-        assert_eq!(default.command, config.command);
-        assert_eq!(default.limit, config.limit);
-    }
-
-    #[test]
-    fn from_file() {
-        let path = env::temp_dir().join("config");
-        let mut file = File::create(path.clone()).unwrap();
-        file.write_all(b"url=http://127.0.0.1").unwrap();
-
-        let config = Config::from(File::open(path.clone()).unwrap()).unwrap();
-
-        assert_eq!("http://127.0.0.1", config.url);
-
-        fs::remove_file(path).unwrap();
-    }
+  }
 
 } // End of: mod test
 

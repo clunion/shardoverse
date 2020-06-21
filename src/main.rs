@@ -122,6 +122,5 @@ match config::exit(win_config)
     Err(error) => { println!("Error de-initialising: {:?}", error); return Err(error); },
     }
 
-
 Ok(())
 }
