@@ -22,22 +22,24 @@
 
 */
 
-//--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
+//--- CRATES EXTERNAL: -------------------------------------------------------------------------------------------------------
 extern crate sdl2;
 
-//--- MODULES: ---------------------------------------------------------------------------------------------------------------
+//--- MODULES EXTERNAL: ------------------------------------------------------------------------------------------------------
 use std::env;
 use std::io;
 use std::path::Path;
 
+
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
 mod modules;                              // <dirname>
-use crate::modules::*;                    // <dirname>::*
+use crate::modules::*;                    // create::<dirname>::*
 
 mod central_core;                         // <filename>
-use crate::central_core::*;               // <filename>::*
+use crate::central_core::*;               // create::<filename>::*
 
-
+use crate::modules::config::WindowConfig;
+ 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
 //--- none ---
 
@@ -77,35 +79,32 @@ fn main() -> Result<(), io::Error>
 {
 let args: Vec<String> = env::args().collect();
 let mut i :i32 = 0;
+let win_config: WindowConfig;
 
+// check for command line arguments:
 if !args.is_empty()
     {
     for arg in &args
         {
-        println!("Parameter[{}] {:?}",i, &arg);
+        println!("Command line argument(s)[{}] {:?}",i, &arg);
         i+=1;
         }
     } 
 
 
-    for number in (1..4).rev() {
-        println!("{}!", number);
-    }
-    println!("LIFTOFF!!!");
-
-match config::load()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
-    }
-
-
+// load configuration, states and assets, initialise everything:
 match config::init()
     {
-    Ok(_)      => {},
-    Err(error) => { println!("Error initialising: {:?}", error); return Err(error); },
+    Ok(config)  => { win_config = config; },
+    Err(error)  => { println!("Error initialising: {:?}", error); return Err(error); },
     }
 
+println!("init returned title : {}", win_config.title ); 
+println!("init returned pos_x : {}", win_config.pos_x );
+println!("init returned pos_y : {}", win_config.pos_y );
+println!("init returned width : {}", win_config.width );
+println!("init returned height: {}", win_config.height);
+println!("init returned active: {}", win_config.active);
 
 
 // Hand over control to central core:
@@ -116,18 +115,13 @@ match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
     }
 
 
-
-match config::exit()
+// save configuration and states, de-initialise everything:
+match config::exit(win_config)
     {
     Ok(_)      => {},
     Err(error) => { println!("Error de-initialising: {:?}", error); return Err(error); },
     }
 
-match config::save()
-    {
-    Ok(_)      => {},
-    Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
-    }
 
 Ok(())
 }

@@ -231,6 +231,20 @@ To run:
 
     cargo run --release
 
+
+## Basic Usage
+
+Since there is no game yet, the usage is simple.
+
+After starting shardoverse the program can be left by closing the window.   
+
+| Key    | Action                               |
+|--------|--------------------------------------|
+| ESC    | Exit program                         |
+| Q      | Exit program                         |
+| P      | Paint colored pixels in main window  |
+
+
 ------------------
 ## Some notes regarding SSH Tools
 While using a secure key management software is already a good idea,
@@ -452,7 +466,7 @@ The following assets are considered to be used, if their creators/owners do not 
 * ./assets/videos   
 
 
-# May be interesting to read
+# Worth reading
 
 * [`Zero-to-Game`](https://www.zerotoga.me/dev/findingzero) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 

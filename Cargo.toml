@@ -16,6 +16,7 @@ path = "src/main.rs"
 
 [dependencies]
 rand = "0.7.2"
+rust-ini = "0.15.3"
 
 [dependencies.sdl2]
   version = "0.32.1"
