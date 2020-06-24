@@ -80,8 +80,8 @@ pub fn run<'a>(win_config_p: &'a mut WindowConfig, png: &Path) -> Result<&'a Win
 let mut lastx = 0;
 let mut lasty = 0;
 let mut tick  = 0;
-let mut win_position : (i32,i32) = (199,188);
-let mut win_size     : (u32,u32) = (400,200);
+// let mut win_position : (i32,i32) = (199,188);
+// let mut win_size     : (u32,u32) = (400,600);
 
 println!("Values in win_config_p:");
 println!("title      {:?}", win_config_p.title);
@@ -159,15 +159,15 @@ let mut events = sdl_context.event_pump()
     tick += 1;
     std::thread::sleep(Duration::from_millis(100));
 
+    win_config_p.title  = "xxxx".to_string();  // todo: move outside of loop!
+    win_config_p.pos_x  = win_position.0;      // todo: move outside of loop!
+    win_config_p.pos_y  = win_position.1;      // todo: move outside of loop!
+    win_config_p.width  = win_size.0;          // todo: move outside of loop!
+    win_config_p.height = win_size.1;          // todo: move outside of loop!
+    win_config_p.active = true;                // todo: move outside of loop!
+
     } // end of: loop main
 
-
-win_config_p.title  = "xxxx".to_string();
-win_config_p.pos_x  = win_position.0;
-win_config_p.pos_y  = win_position.1;
-win_config_p.width  = win_size.0;
-win_config_p.height = win_size.1;
-win_config_p.active = true;
 
 println!("Values in win_config_p before return:");
 println!("title      {:?}", win_config_p.title);
@@ -199,7 +199,8 @@ mod tests
   #[test]
   fn test_run() 
   {
-    let result = run(Path::new("non_existant_file"));
+    let mut win_config = WindowConfig::default();
+    let result = run(&mut win_config, Path::new("non_existant_file"));
     assert!(!result.is_ok());
   }
 }
