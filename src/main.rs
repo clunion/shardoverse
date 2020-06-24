@@ -79,7 +79,7 @@ fn main() -> Result<(), io::Error>
 {
 let args: Vec<String> = env::args().collect();
 let mut i :i32 = 0;
-let win_config: WindowConfig;
+let mut win_config: WindowConfig;
 
 // check for command line arguments:
 if !args.is_empty()
@@ -91,7 +91,6 @@ if !args.is_empty()
         }
     } 
 
-
 // load configuration, states and assets, initialise everything:
 match config::init()
     {
@@ -99,18 +98,10 @@ match config::init()
     Err(error)  => { println!("Error initialising: {:?}", error); return Err(error); },
     }
 
-println!("init returned title : {}", win_config.title ); 
-println!("init returned pos_x : {}", win_config.pos_x );
-println!("init returned pos_y : {}", win_config.pos_y );
-println!("init returned width : {}", win_config.width );
-println!("init returned height: {}", win_config.height);
-println!("init returned active: {}", win_config.active);
-
-
 // Hand over control to central core:
-match run(Path::new("assets/cursors/pointers_part_5/glove3.png"))
+match run(&mut win_config,Path::new("assets/cursors/pointers_part_5/glove3.png"))
     {
-    Ok(_)      => {},
+    Ok(_win_config) => {},
     Err(error) => { println!("Error initialising: {:?}", error); }, //return Err(error); },
     }
 

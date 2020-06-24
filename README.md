@@ -10,12 +10,12 @@
 ## What is this?
 A learning project to get into the coding of:
 
-	A Roguelike
-	Peer-to-Peer Multi Player
-	Role Playing Game
-	written in Rust.
+* __A Roguelike__   
+* __Peer-to-Peer Multi Player__   
+* __Role Playing Game__   
+* __written in Rust.__   
 
-When it gets near completion a  `fortress building` scenario might get added.
+When it gets near completion a  __fortress building__ scenario might get added.
 
 
 ## Idea and story
@@ -393,13 +393,13 @@ This is not needed to build Shardoverse locally, only describes what is done her
 * follow the templates provided by and described on [`trust`](https://github.com/japaric/trust)
 * this requires accounts at [`Travis CI`](https://travis-ci.org/) and [`AppVeyor`](https://www.appveyor.com/), for both free accounts for open source projects are available.
 
-## SomeNotes on AppVeyor
+## Some Notes on AppVeyor
 First idea was to make a very simple and minimal CI-Setup, using only the appveyor.yml file and defining all stages there.
 This worked until the integration of SDL2_gfx was tried, which could be downloaded and uncompressed, but then a whole C-buildstage would be necessary for SDL2_gfx alone.
 Setting this up in the crude mixture of weird powershell and windows-cmd commands was no fun at all. At last it was decided to
 put the logic for install, build and test stages in separate windows-cmd scripts and install the necessary libs through Msys2 using pacman, which works quite well.
 
-## SomeNotes on TravisCI
+## Some Notes on TravisCI
 The same as for AppVeyor applies, most code moved into scripts. In this case these are bash-scripts, which is fine.
 That YAML-stuff is more weirdly in the way than helpful.
 Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets handy.
@@ -466,9 +466,9 @@ The following assets are considered to be used, if their creators/owners do not 
 * ./assets/videos   
 
 
-# Worth reading
+# Worth Reading
 
-* [`Zero-to-Game`](https://www.zerotoga.me/dev/findingzero) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
+* [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 
 
 # Maintainer

@@ -42,11 +42,10 @@ use sdl2::surface::Surface;
 //--- MODULES LOCAL: ---------------------------------------------------------------------------------------------------------
 use crate::modules::pixel_draw;        // <dirname>::<filename>
 
+use crate::modules::config::WindowConfig;
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
-const INITIAL_WINDOW_WIDTH:  u32 = 1024;
-const INITIAL_WINDOW_HEIGHT: u32 =  768;
-
+//--- none ---
 
 //--- TYPES: -----------------------------------------------------------------------------------------------------------------
 //--- none ---
@@ -77,82 +76,108 @@ const INITIAL_WINDOW_HEIGHT: u32 =  768;
 ## TODO:
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn run(png: &Path) -> Result<(), String> {
-    let mut lastx = 0;
-    let mut lasty = 0;
-    let mut tick = 0;
+pub fn run<'a>(win_config_p: &'a mut WindowConfig, png: &Path) -> Result<&'a WindowConfig, String> {
+let mut lastx = 0;
+let mut lasty = 0;
+let mut tick  = 0;
+let mut win_position : (i32,i32) = (199,188);
+let mut win_size     : (u32,u32) = (400,200);
 
-    let sdl_context = sdl2::init()?;
-    let video_subsys = sdl_context.video()?;
-    
-    let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
-    
-    let window = video_subsys.window("Shardoverse", INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-                 .position_centered()
-                 .resizable()
-                 .opengl()
+println!("Values in win_config_p:");
+println!("title      {:?}", win_config_p.title);
+println!("win_pos_x  {:?}", win_config_p.pos_x);
+println!("win_pos_y  {:?}", win_config_p.pos_y);
+println!("win_width  {:?}", win_config_p.width);
+println!("win_height {:?}", win_config_p.height);
+println!("active     {:?}", win_config_p.active);
+
+let sdl_context = sdl2::init()?;
+let video_subsys = sdl_context.video()?;
+
+let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
+
+let window = video_subsys.window("Shardoverse", win_config_p.width, win_config_p.height)
+             .position(win_config_p.pos_x, win_config_p.pos_y)
+             .resizable()
+             .opengl()
+             .build()
+             .map_err(|e| e.to_string())?;
+
+let mut canvas = window.into_canvas()
+                 .present_vsync()
                  .build()
                  .map_err(|e| e.to_string())?;
 
-    let mut canvas = window.into_canvas()
-                     .present_vsync()
-                     .build()
-                     .map_err(|e| e.to_string())?;
+let surface = Surface::from_file(png)
+             .map_err(|err| format!("failed to load cursor image: {}", err))?;
 
-    let surface = Surface::from_file(png)
-                 .map_err(|err| format!("failed to load cursor image: {}", err))?;
+let cursor = Cursor::from_surface(surface, 0, 0)
+            .map_err(|err| format!("failed to load cursor: {}", err))?;
 
-    let cursor = Cursor::from_surface(surface, 0, 0)
-                .map_err(|err| format!("failed to load cursor: {}", err))?;
+cursor.set();
 
-    cursor.set();
-    
-    canvas.set_draw_color(Color::RGBA( 50, 50, 50, 255));
-    canvas.clear();
-    canvas.present();
+canvas.set_draw_color(Color::RGBA( 50, 50, 50, 255));
+canvas.clear();
+canvas.present();
 
-    let mut events = sdl_context.event_pump()
-                    .map_err(|e| e)?;
+let mut events = sdl_context.event_pump()
+                .map_err(|e| e)?;
 
-    'main: loop 
+'main: loop 
+    {
+    for event in events.poll_iter() 
         {
-        for event in events.poll_iter() 
+        match event 
             {
-            match event 
-                {
-                Event::Quit {..}                            => break 'main,
-                Event::KeyDown {keycode: Some(keycode), ..} => {
-                                                               if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
-                                                               else if keycode == Keycode::Q      { println!("Q");    break 'main }
-                                                               else if keycode == Keycode::P      { println!("P");    pixel_draw::formula_fill(&mut canvas); }
-                                                               }
-                                                               
-                Event::MouseButtonDown {x, y, ..} =>           {
-                                                               let color = pixels::Color::RGB(x as u8, y as u8, 255);
-                                                               let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
-                                                               lastx     = x as i16;
-                                                               lasty     = y as i16;
-                                                               println!("mouse btn down at ({},{})", x, y);
-                                                               canvas.present();
-                                                               }
-                _ => {}
-                }
+            Event::Quit {..}                            => break 'main,
+            Event::KeyDown {keycode: Some(keycode), ..} => {
+                                                           if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
+                                                           else if keycode == Keycode::Q      { println!("Q");    break 'main }
+                                                           else if keycode == Keycode::P      { println!("P");    pixel_draw::formula_fill(&mut canvas); }
+                                                           }
+                                                           
+            Event::MouseButtonDown {x, y, ..} =>           {
+                                                           let color = pixels::Color::RGB(x as u8, y as u8, 255);
+                                                           let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
+                                                           lastx     = x as i16;
+                                                           lasty     = y as i16;
+                                                           println!("mouse btn down at ({},{})", x, y);
+                                                           canvas.present();
+                                                           }
+            _ => {}
             }
+        }
 
 
-        // Update the window title:
-        let window       = canvas.window_mut();
-        let win_position = window.position();
-        let win_size     = window.size();
-        let win_title    = format!("Window - pos({}x{}), size({}x{}): {}", win_position.0, win_position.1, win_size.0, win_size.1, tick);
-        window.set_title(&win_title).map_err(|e| e.to_string())?;
+    // Update the window title:
+    let window       = canvas.window_mut();
+    let win_position = window.position();
+    let win_size     = window.size();
+    let win_title    = format!("Window - pos({}x{}), size({}x{}): {}", win_position.0, win_position.1, win_size.0, win_size.1, tick);
+    window.set_title(&win_title).map_err(|e| e.to_string())?;
 
-        tick += 1;
-        std::thread::sleep(Duration::from_millis(100));
+    tick += 1;
+    std::thread::sleep(Duration::from_millis(100));
 
     } // end of: loop main
 
-    Ok(())
+
+win_config_p.title  = "xxxx".to_string();
+win_config_p.pos_x  = win_position.0;
+win_config_p.pos_y  = win_position.1;
+win_config_p.width  = win_size.0;
+win_config_p.height = win_size.1;
+win_config_p.active = true;
+
+println!("Values in win_config_p before return:");
+println!("title      {:?}", win_config_p.title);
+println!("win_pos_x  {:?}", win_config_p.pos_x);
+println!("win_pos_y  {:?}", win_config_p.pos_y);
+println!("win_width  {:?}", win_config_p.width);
+println!("win_height {:?}", win_config_p.height);
+println!("active     {:?}", win_config_p.active);
+
+Ok(win_config_p)
 }
 
 

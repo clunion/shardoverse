@@ -40,10 +40,10 @@ const NAME_OF_INI_FILE:      &str = "shardoverse.ini";
 const NAME_OF_INI_FILE4TEST: &str = "shardoverse_test.ini";
 
 const DEFAULT_TITLE : &str = "Shardoverse (default)";
-const DEFAULT_POS_X :  u16 = 100;
-const DEFAULT_POS_Y :  u16 = 100;
-const DEFAULT_WIDTH :  u16 = 800;
-const DEFAULT_HEIGHT:  u16 = 600;
+const DEFAULT_POS_X :  i32 = 100;
+const DEFAULT_POS_Y :  i32 = 100;
+const DEFAULT_WIDTH :  u32 = 800;
+const DEFAULT_HEIGHT:  u32 = 600;
 const DEFAULT_ACTIVE: bool = true;
 
 
@@ -59,10 +59,10 @@ const DEFAULT_ACTIVE: bool = true;
 pub struct WindowConfig
 {
     pub title:  String,
-    pub pos_x:  u16,
-    pub pos_y:  u16,
-    pub height: u16,
-    pub width:  u16,
+    pub pos_x:  i32,
+    pub pos_y:  i32,
+    pub height: u32,
+    pub width:  u32,
     pub active: bool,
 }
 
@@ -119,7 +119,7 @@ println!("default title      {:?}", win_config.title);
 println!("default win_pos_x  {:?}", win_config.pos_x);
 println!("default win_pos_y  {:?}", win_config.pos_y);
 println!("default win_width  {:?}", win_config.width);
-println!("default win_pos_x  {:?}", win_config.pos_x);
+println!("default win_height {:?}", win_config.height);
 println!("default active     {:?}", win_config.active);
 
 
@@ -242,12 +242,12 @@ match load(NAME_OF_INI_FILE)
     Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
     }
 
-println!("load config gave title : {}", win_config.title ); 
-println!("load config gave pos_x : {}", win_config.pos_x );
-println!("load config gave pos_y : {}", win_config.pos_y );
-println!("load config gave width : {}", win_config.width );
-println!("load config gave height: {}", win_config.height);
-println!("load config gave active: {}", win_config.active);
+println!("load config found title : {}", win_config.title ); 
+println!("load config found pos_x : {}", win_config.pos_x );
+println!("load config found pos_y : {}", win_config.pos_y );
+println!("load config found width : {}", win_config.width );
+println!("load config found height: {}", win_config.height);
+println!("load config found active: {}", win_config.active);
 
 match cursors::load()
     {
