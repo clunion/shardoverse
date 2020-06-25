@@ -159,7 +159,7 @@ let mut events = sdl_context.event_pump()
     tick += 1;
     std::thread::sleep(Duration::from_millis(100));
 
-    win_config_p.title  = "xxxx".to_string();  // todo: move outside of loop!
+    win_config_p.title  = win_title;           // todo: move outside of loop!
     win_config_p.pos_x  = win_position.0;      // todo: move outside of loop!
     win_config_p.pos_y  = win_position.1;      // todo: move outside of loop!
     win_config_p.width  = win_size.0;          // todo: move outside of loop!
