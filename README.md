@@ -89,7 +89,7 @@ It is surely not necessary to follow every detail of these principles, but the i
 ## Setting up the development environment
 
 ### Install MSYS2 + MinGW64
-As described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)
+From here: [`Msys2.org`](https://www.msys2.org/), as described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)
 (and possibly this may help:  [`unix-linux-environment-windows`](https://www.booleanworld.com/get-unix-linux-environment-windows-msys2/) )
 
 Now there should be an Icon on the desktop to start the MSys2-Shell.
