@@ -34,7 +34,7 @@ use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod n
 
 
 //--- CONSTANTS: -------------------------------------------------------------------------------------------------------------
-const NAME_OF_INI_FILE:      &str = "shardoverse.ini";
+pub const NAME_OF_INI_FILE:  &str = "shardoverse.ini";
 
 #[allow(dead_code)]
 const NAME_OF_INI_FILE4TEST: &str = "shardoverse_test.ini";
@@ -214,7 +214,7 @@ Ok(true)
 ## FUNCTION:   init
 ## TYPE:       initializing function, meant to be called exactly once at startup of the program
 ## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  -- <none>
+## PARAMETER:  -- ini_filename_p
 ## RETURNS:    -- status flag: true = succesfull, flase = failed
 ##             or if failed: error info 
 ## ---------------------------------------------------------------------------------------------------------------------------
@@ -230,13 +230,13 @@ Ok(true)
 ##  everything
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn init() -> Result<WindowConfig, io::Error> 
+pub fn init(ini_filename_p: &str) -> Result<WindowConfig, io::Error> 
 {
 println!("init() called");
 
 let win_config: WindowConfig;
 
-match load(NAME_OF_INI_FILE)
+match load(ini_filename_p)
     {
     Ok(config) => { win_config = config; },
     Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
@@ -279,11 +279,11 @@ Ok(win_config)
 ##  everything
 ## ---------------------------------------------------------------------------------------------------------------------------
 */
-pub fn exit(win_config: WindowConfig) -> Result<bool, io::Error> 
+pub fn exit(ini_filename_p: &str, win_config: WindowConfig) -> Result<bool, io::Error> 
 {
 println!("exit() called");
 
-match save(NAME_OF_INI_FILE,win_config)
+match save(ini_filename_p,win_config)
     {
     Ok(_)      => {},
     Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
@@ -309,7 +309,7 @@ mod tests
   #[test]
   fn test_init() 
   {
-    let result = init();
+    let result = init(NAME_OF_INI_FILE);
     assert!(result.is_ok());
   }
 

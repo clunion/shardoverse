@@ -15,8 +15,9 @@ name = "shardoverse"
 path = "src/main.rs"
 
 [dependencies]
-rand = "0.7.2"
-rust-ini = "0.15.3"
+rand = "0.7.2" 
+rust-ini = "0.15.3" 
+clap = "~2.27.0" 
 
 [dependencies.sdl2]
   version = "0.32.1"

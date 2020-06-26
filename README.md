@@ -447,7 +447,7 @@ The following assets are considered to be used, if their creators/owners do not 
 
 * ./assets/graphics/2D/tiles   
 
-    [`DungeonCrawlStoneSoupFull by many`](https://github.com/crawl/tiles/tree/master/releases)   
+    [`DungeonCrawlStoneSoupFull by many`](https://opengameart.org/content/dungeon-crawl-32x32-tiles) also [`here`](https://github.com/crawl/tiles/tree/master/releases).   
 
 *   ./assets graphics/2D-isometric/tiles   
 
