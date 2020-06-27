@@ -54,9 +54,9 @@ and such things.
 ## Software Design Principles
 Design principles for a small learning project, for a small computer game? Yes, definitely.
 * [`KISS - Keep It Simple, Stupid!`](https://en.wikipedia.org/wiki/KISS_principle) (preferred interpretation: Keep it simple and smart)
-* [`TDD - Test Driven Design`](https://en.wikipedia.org/wiki/Test-driven_development) 
+* [`TDD - Test Driven Design`](https://en.wikipedia.org/wiki/Test-driven_development) (Test first, Test much, Integrate early, ...)
 * [`Secure by design`](https://en.wikipedia.org/wiki/Secure_by_design) (at least for everything regarding the networking)
-* [`SOLID`](https://en.wikipedia.org/wiki/SOLID)
+* [`SOLID`](https://en.wikipedia.org/wiki/SOLID) (Well, a bit much, but good to have at least one in the team who knows what it means.)
 
 Even though this is just a small game project it is regarded as a good idea to have at least some principles in mind when designing the architecture of the program.
 It is surely not necessary to follow every detail of these principles, but the intent of most principles should always be clear.
@@ -121,11 +121,10 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
 
 
 ### Also add ssh-pageant:
-This is necessary to get the automated/transparent SSH-Key login to GitHub working,
-it needs additionally a running Putty-Pageant or Keepass-KeeAdent, see further below.
+This is necessary to get the automated/transparent SSH-Key login to GitHub working.
+(It may additionally need a running Putty-Pageant or Keepass-KeeAdent, see further below)
 
     pacman -S ssh-pageant
-(seems to work, but not sure yet)
 
 Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
 
@@ -161,7 +160,7 @@ This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_pro
 
     export LIBRARY_PATH=/mingw64/lib
 
-On Linux systems, the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
+On Unix-like systems (Linux, BSD, Apple-Darwin(?), ...), the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
 
     export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 
@@ -212,9 +211,9 @@ add the location of the Rust binaries to the PATH-variable (now in the Unix nota
 > And listen to the Game-Music!
 
 ## Clone the git repository of Shardoverse
-In the MSys2-Shell
-navigate to your intended base development directory,
-then clone the files from GitHub by issuing:
+In the MSys2-Shell:   
+* navigate to your intended base development directory,   
+* then clone the files from GitHub by issuing:   
 
     git clone https://github.com/clunion/shardoverse
 
@@ -236,7 +235,7 @@ To run:
 
 Since there is no game yet, the usage is simple.
 
-After starting shardoverse the program can be left by closing the window.   
+After starting shardoverse, the program can be left by closing the window.   
 
 | Key    | Action                               |
 |--------|--------------------------------------|
@@ -246,6 +245,8 @@ After starting shardoverse the program can be left by closing the window.
 
 
 ------------------
+
+
 ## Some notes regarding SSH Tools
 While using a secure key management software is already a good idea,
 it sounds even better to integrate the development tools with that key management.
@@ -338,7 +339,7 @@ This leads to a funny coloring when the Rust-code is using labeled loops, which 
 **Workaround:** when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
 the coloring looks much better, at least around labeled loops.
 
-      
+
 # Convenient build and run aliases
 In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the different build and run variants Conveniently.
 Currently, they do simple calls to cargo, but that may change.
@@ -372,6 +373,21 @@ The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the
 If it is not installed yet, this can be done in the MSys2-Shell via:
 
 	 rustup component add clippy
+
+# Time to use some reading material
+### Books on Rust itself
+ * [`The Rust Programming Language`](https://doc.rust-lang.org/book/) Here we start: The source of truth regarding Rust, for learning step by step, or in a selective manner. It is probably a good idea to read at least this book completely prior to naming oneself a new Rustacean.
+ * [`Rust By Example`](https://doc.rust-lang.org/stable/rust-by-example/) Concise, many topics to delve into, and well prepared examples showing working solutions.
+
+### Rust and the Rust-Ecosystem
+ * [`Rust Cookbook`](https://rust-lang-nursery.github.io/rust-cookbook/intro.html) This is a unusual kind of book, in the way it is presented as a community effort on GitHub. It is also focusses on examples, this time for many important crates in the Rust ecosystem.
+ 
+### Cargo: The the Rust Package-Manager which also Builds, Runs and Tests our code
+ * [`The Cargo Book`](https://doc.rust-lang.org/cargo/) 
+ 
+### Roguelike programming in Rust 
+ * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/chapter_0.html) 
+       
 
 # Debugging
 To investigate:
@@ -447,7 +463,7 @@ The following assets are considered to be used, if their creators/owners do not 
 
 * ./assets/graphics/2D/tiles   
 
-    [`DungeonCrawlStoneSoupFull by many`](https://opengameart.org/content/dungeon-crawl-32x32-tiles) also [`here`](https://github.com/crawl/tiles/tree/master/releases).   
+    [`DungeonCrawlStoneSoupFull by many`](https://opengameart.org/content/dungeon-crawl-32x32-tiles), can also be found [`here`](https://github.com/crawl/tiles).   
 
 *   ./assets graphics/2D-isometric/tiles   
 
@@ -470,6 +486,7 @@ The following assets are considered to be used, if their creators/owners do not 
 
 * [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 
+* [`New Rustacean`](https://newrustacean.com/) - A well made podcast about learning Rust.
 
 # Maintainer
 * [@clunion](https://github.com/clunion)
