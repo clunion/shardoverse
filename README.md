@@ -122,7 +122,7 @@ as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for
 
 ### Also add ssh-pageant:
 This is necessary to get the automated/transparent SSH-Key login to GitHub working.
-(It may additionally need a running Putty-Pageant or Keepass-KeeAdent, see further below)
+(It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
 
     pacman -S ssh-pageant
 
@@ -381,9 +381,8 @@ If it is not installed yet, this can be done in the MSys2-Shell via:
 
 ### Rust and the Rust-Ecosystem
  * [`Rust Cookbook`](https://rust-lang-nursery.github.io/rust-cookbook/intro.html) This is a unusual kind of book, in the way it is presented as a community effort on GitHub. It is also focusses on examples, this time for many important crates in the Rust ecosystem.
- 
-### Cargo: The the Rust Package-Manager which also Builds, Runs and Tests our code
- * [`The Cargo Book`](https://doc.rust-lang.org/cargo/) 
+ * [`The rustdoc book`](https://doc.rust-lang.org/rustdoc/) How to docu-comment the code, so rustdoc can generate some standardized documentation
+ * [`The Cargo Book`](https://doc.rust-lang.org/cargo/)  The Rust Package-Manager which also builds, runs and tests our code
  
 ### Roguelike programming in Rust 
  * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/chapter_0.html) 

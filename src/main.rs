@@ -1,26 +1,43 @@
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-## PROJECT:             Shardoverse
-## HOME:      https://github.com/clunion/shardoverse
-## ---------------------------------------------------------------------------------------------------------------------------
-## FILE:     main.rs
-## SYNOPSIS: main, start and entry point of the program
-## ---------------------------------------------------------------------------------------------------------------------------
-## DESCRIPTION:
-## A Roguelike Peer-to-Peer Multi Player Dungeon Explorer and Fortres Builder (?) Game written in Rust
-##----------------------------------------------------------------------------------------------------------------------------
-## LICENSE:
-## Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).
-## MIT-License, see LICENSE.md file 
-## ---------------------------------------------------------------------------------------------------------------------------
-## VERSION:  DATE:       AUTHOR: CHANGES:
-## 0.1       2020-04-04  CLu     creation
-## ---------------------------------------------------------------------------------------------------------------------------
-## TODO:
-##    - everything
-## ---------------------------------------------------------------------------------------------------------------------------
-
-*/
+//! ___________________________________________________________________________________________________________________________
+//! **`PROJECT:    `** Shardoverse    
+//! **`HOME:       `** [Shardoverse on GitHub](https://github.com/clunion/shardoverse)    
+//! **`SYNOPSIS:   `** A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust    
+//! ___________________________________________________________________________________________________________________________
+//! **`FILE:       `** main.rs 🦀   
+//! **`DESCRIPTION:`**   
+//! The one and only start and entry point of the program.   
+//! ___________________________________________________________________________________________________________________________
+//! **`LICENSE:    `**   
+//! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   
+//! MIT-License, see LICENSE.md file    
+//! ___________________________________________________________________________________________________________________________
+//! VERSION: | DATE:      | AUTHOR:   | CHANGES:   
+//! :---     | :---       | :---:     | :---   
+//! 0.1      | 2020-04-04 | CLunion   | creation   
+//! 1.1      | 2020-06-## | CLunion   | changed comment style to markdown for rustdoc   
+//! ___________________________________________________________________________________________________________________________
+//!# Examples
+//!```
+//! shardoverse(.exe)
+//!     Starts the program shardoverse. 
+//!     Depending on the operating system the name may differ: on MS-Windows the programfile has the extension '.exe'.
+//!
+//! shardoverse(.exe) --help
+//!     Writes a short help text to the console window, which shows all available commandline parameters and their meaning.
+//!
+//! shardoverse(.exe) --windowreset
+//!     Resets the position and size of the programs window(s) to default values.
+//!
+//! shardoverse(.exe) --configfile=<anExistingConfigFile>
+//!     Loads the configuration from the given configuration file and stores changes made during the run of the program in it.
+//!     The config file stores for example the window size and position, these can be changed manually before the program starts.
+//!     The format of the configuration file follows the INI-File format and is currently very strictly interpreted (comments will be lost)
+//!```
+//! ___________________________________________________________________________________________________________________________
+//! **`TODO:       `**   
+//! * everything (nearly)
+//! ___________________________________________________________________________________________________________________________
+//!    
 
 //--- CRATES EXTERNAL: -------------------------------------------------------------------------------------------------------
 extern crate sdl2;
@@ -57,25 +74,29 @@ use crate::modules::config::WindowConfig;
 //--- none ---
 
 
-/*
-## ---------------------------------------------------------------------------------------------------------------------------
-## FUNCTION:   main
-## TYPE:       program entry point
-## ---------------------------------------------------------------------------------------------------------------------------
-## PARAMETER:  <none>
-## RETURNS:    Result - state (OK)
-##                    - Error
-## ---------------------------------------------------------------------------------------------------------------------------
-## DESCRIPTION:
-## The one and only main: startup and entry point of this program
-## here only the handling of commandline paramaters is done
-## ---------------------------------------------------------------------------------------------------------------------------
-## VERSION:    DATE:       AUTHOR: CHANGES:
-## 1.0         2020        CLu     initial version
-## ---------------------------------------------------------------------------------------------------------------------------
-## TODO:
-## ---------------------------------------------------------------------------------------------------------------------------
-*/
+/// ___________________________________________________________________________________________________________________________
+/// **`FUNCTION:   `**  main   
+/// **`TYPE:       `**  program entry point   
+/// ___________________________________________________________________________________________________________________________
+/// ___________________________________________________________________________________________________________________________
+/// **`PARAMETER:  `** **`<none>     `**    
+/// **`RETURNS:    `** **`Result --> `** - OK(state)   
+/// **`            `** **`       --> `** - Error   
+/// ___________________________________________________________________________________________________________________________
+/// **`DESCRIPTION:`**   
+/// The one and only main: startup and entry point of this program.   
+/// Here the handling of commandline paramaters and calls to initialise und de-initialise are done.   
+/// ___________________________________________________________________________________________________________________________
+/// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
+/// :---    | :---       | :---:     | :---   
+/// 1.0     | 2020-04-## | CLunion   | initial version   
+/// ___________________________________________________________________________________________________________________________
+/// **`TODO:       `**   
+///  * define commandline arguments for all configuration switches and variables    
+///  * add recognition and handling of debug mode   
+///  * add recognition and handling of testing mode   
+/// ___________________________________________________________________________________________________________________________
+
 fn main() -> Result<(), io::Error>
 {
 let args: Vec<String> = env::args().collect();
@@ -97,26 +118,26 @@ if !args.is_empty()
                         .version("0.1")
                         .author("Clunion <Christian.Lunau@gmx.de>")
                         .about("A Roguelike Peer-to-Peer Multi Player Dungeon Explorer.")
-                        .arg(Arg::with_name("configfile")
+                        .arg(Arg::with_name("configfile")                   // <--------------------------------------------
                              .short("c")
                              .long("configfile")
                              .value_name("FILE")
                              .help("Sets a specific config file")
                              .takes_value(true))
-                        .arg(Arg::with_name("windowreset")
+                        .arg(Arg::with_name("windowreset")                  // <--------------------------------------------
                              .short("w")
                              .long("windowreset")
                              .help("resets the window size and position to default values")
                              .takes_value(false))
-                        .arg(Arg::with_name("v")
+                        .arg(Arg::with_name("v")                            // <--------------------------------------------
                              .short("v")
                              .multiple(true)
                              .help("Sets the level of verbosity"))
-                        .subcommand(SubCommand::with_name("test")
+                        .subcommand(SubCommand::with_name("test")           // <--------------------------------------------
                                     .about("controls testing features")
                                     .version("0.1")
                                     .author("Clunion <Christian.Lunau@gmx.de>")
-                                    .arg(Arg::with_name("debug")
+                                    .arg(Arg::with_name("debug")            // <--------------------------------------------
                                         .short("d")
                                         .help("print debug information verbosely")))
                         .get_matches();

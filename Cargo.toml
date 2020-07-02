@@ -1,13 +1,14 @@
 [package]
-name    = "shardoverse"
-version = "0.0.1"
-
-authors = [
-          "Christian Lunau <Christian.Lunau@gmx.de>",
-          "Jaron Lunau <Jaronn.Lunau@gmx.de>",
-          "Julian Lunau <Julian.Lunau@gmx.de>",
-          ]
-edition = "2018"
+name        = "shardoverse"
+license     = "MIT"
+version     = "0.0.1"
+description = "A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust"
+authors     = [
+              "Christian Lunau <Christian.Lunau@gmx.de>",
+              "Jaron Lunau <Jaronn.Lunau@gmx.de>",
+              "Julian Lunau <Julian.Lunau@gmx.de>",
+              ]
+edition     = "2018"
 
 
 [[bin]]
