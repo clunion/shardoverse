@@ -109,15 +109,16 @@ May be it is now the right time to configure this shell/window for your liking.
     pacman -S msys2-devel
 
 ### Install git for Msys2
-as described at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
+as described in 9 steps at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
 
 #### In short:
-- Edit the pacman configuration file of Msys2: pacman.conf
+- Edit the pacman configuration file of Msys2: /etc/**pacman.conf** (probably in windows to be found at C:\msys64\etc\pacman.conf)
 - add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
-- add and accept their signing-keys
-- update Msys2 repeatedly by using ```pacboy update``` until there is nothing more to update
-- install git via:
-    ```pacboy sync git:x git-doc-html:x git-doc-man:x git-extra: curl:x```
+- add and accept their **signing-keys**     
+- sync the new repository via ```pacman -Syyuu```    
+- update Msys2 repeatedly by using ```pacman -Suu``` until there is nothing more to update   
+- install git via:   
+    ```pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra```
 
 
 ### Also add ssh-pageant:

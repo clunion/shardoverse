@@ -46,7 +46,7 @@ use sdl2::surface::Surface;
 //___ MODULES LOCAL: _________________________________________________________________________________________________________
 use crate::modules::pixel_draw;        // <dirname>::<filename>
 
-use crate::modules::config::WindowConfig;
+use crate::modules::config::ShardConfig;
 
 //___ CONSTANTS: _____________________________________________________________________________________________________________
 //___ none ___
@@ -60,8 +60,6 @@ use crate::modules::config::WindowConfig;
 //___ STRUCTS: _______________________________________________________________________________________________________________
 //___ none ___
 
-//___ GLOBAL VARS: ___________________________________________________________________________________________________________
-//___ none ___
 
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  run   
@@ -82,28 +80,28 @@ use crate::modules::config::WindowConfig;
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn run<'a>(win_config_p: &'a mut WindowConfig, png: &Path) -> Result<&'a WindowConfig, String> {
+pub fn run<'a>(shard_config_p: &'a mut ShardConfig, png: &Path) -> Result<&'a ShardConfig, String> {
 let mut lastx = 0;
 let mut lasty = 0;
 let mut tick  = 0;
 // let mut win_position : (i32,i32) = (199,188);
 // let mut win_size     : (u32,u32) = (400,600);
 
-println!("Values in win_config_p:");
-println!("title      {:?}", win_config_p.title);
-println!("win_pos_x  {:?}", win_config_p.pos_x);
-println!("win_pos_y  {:?}", win_config_p.pos_y);
-println!("win_width  {:?}", win_config_p.width);
-println!("win_height {:?}", win_config_p.height);
-println!("active     {:?}", win_config_p.active);
+println!("Values in shard_config_p:");
+println!("title      {:?}", shard_config_p.window.title);
+println!("win_pos_x  {:?}", shard_config_p.window.pos_x);
+println!("win_pos_y  {:?}", shard_config_p.window.pos_y);
+println!("win_width  {:?}", shard_config_p.window.width);
+println!("win_height {:?}", shard_config_p.window.height);
+println!("active     {:?}", shard_config_p.window.active);
 
 let sdl_context = sdl2::init()?;
 let video_subsys = sdl_context.video()?;
 
 let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
 
-let window = video_subsys.window("Shardoverse", win_config_p.width, win_config_p.height)
-             .position(win_config_p.pos_x, win_config_p.pos_y)
+let window = video_subsys.window("Shardoverse", shard_config_p.window.width, shard_config_p.window.height)
+             .position(shard_config_p.window.pos_x, shard_config_p.window.pos_y)
              .resizable()
              .opengl()
              .build()
@@ -165,25 +163,25 @@ let mut events = sdl_context.event_pump()
     tick += 1;
     std::thread::sleep(Duration::from_millis(100));
 
-    win_config_p.title  = win_title;           // todo: move outside of loop!
-    win_config_p.pos_x  = win_position.0;      // todo: move outside of loop!
-    win_config_p.pos_y  = win_position.1;      // todo: move outside of loop!
-    win_config_p.width  = win_size.0;          // todo: move outside of loop!
-    win_config_p.height = win_size.1;          // todo: move outside of loop!
-    win_config_p.active = true;                // todo: move outside of loop!
+    shard_config_p.window.title  = win_title;           // todo: move outside of loop!
+    shard_config_p.window.pos_x  = win_position.0;      // todo: move outside of loop!
+    shard_config_p.window.pos_y  = win_position.1;      // todo: move outside of loop!
+    shard_config_p.window.width  = win_size.0;          // todo: move outside of loop!
+    shard_config_p.window.height = win_size.1;          // todo: move outside of loop!
+    shard_config_p.window.active = true;                // todo: move outside of loop!
 
     } // end of: loop main
 
 
-println!("Values in win_config_p before return:");
-println!("title      {:?}", win_config_p.title);
-println!("win_pos_x  {:?}", win_config_p.pos_x);
-println!("win_pos_y  {:?}", win_config_p.pos_y);
-println!("win_width  {:?}", win_config_p.width);
-println!("win_height {:?}", win_config_p.height);
-println!("active     {:?}", win_config_p.active);
+println!("Values in shard_config_p before return:");
+println!("title      {:?}", shard_config_p.window.title);
+println!("win_pos_x  {:?}", shard_config_p.window.pos_x);
+println!("win_pos_y  {:?}", shard_config_p.window.pos_y);
+println!("win_width  {:?}", shard_config_p.window.width);
+println!("win_height {:?}", shard_config_p.window.height);
+println!("active     {:?}", shard_config_p.window.active);
 
-Ok(win_config_p)
+Ok(shard_config_p)
 }
 
 
@@ -206,8 +204,8 @@ mod tests
   #[test]
   fn test_run() 
   {
-    let mut win_config = WindowConfig::default();
-    let result = run(&mut win_config, Path::new("non_existant_file"));
+    let mut shard_config = ShardConfig::default();
+    let result = run(&mut shard_config, Path::new("non_existent_file"));
     assert!(!result.is_ok());
   }
 }

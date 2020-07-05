@@ -44,10 +44,12 @@ extern crate sdl2;
 extern crate clap;
 
 //___ MODULES EXTERNAL: _______________________________________________________________________________________________________
-use std::env;
+//use std::env;
 use std::io;
 use std::path::Path;
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
+use log::{trace, debug, info, warn, error};
+//use flexi_logger::{Duplicate,Logger};
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 mod modules;                              // <dirname>
@@ -56,6 +58,7 @@ use crate::modules::*;                    // create::<dirname>::*
 mod central_core;                         // <filename>
 use crate::central_core::*;               // create::<filename>::*
 
+use crate::modules::config::ShardConfig;
 use crate::modules::config::WindowConfig;
  
 //___ CONSTANTS: ______________________________________________________________________________________________________________
@@ -68,9 +71,6 @@ use crate::modules::config::WindowConfig;
 //___ none ___
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
-//___ none ___
-
-//___ GLOBAL VARS: ____________________________________________________________________________________________________________
 //___ none ___
 
 
@@ -99,98 +99,112 @@ use crate::modules::config::WindowConfig;
 
 fn main() -> Result<(), io::Error>
 {
-let args: Vec<String> = env::args().collect();
-let mut i :i32 = 0;
-let mut win_config: WindowConfig;
+//let args: Vec<String> = env::args().collect();
+//let mut i :i32 = 0;
+let mut shard_config: ShardConfig = ShardConfig::default();
 
-// check for command line arguments:
-if !args.is_empty()
-    {
-    for arg in &args
-        {
-        println!("Command line argument(s)[{}] {:?}",i, &arg);
-        i+=1;
-        }
-    } 
+flexi_logger::Logger::with_env()
+            .start()
+            .unwrap();
+
+
+trace!("this is a trace message");
+debug!("this is a debug {}", "message");
+info!("this is an info"); 
+warn!( "this is a warn message");
+error!("this is printed by default");
+
+
 
 // use clap to parse the command line:
-  let cmd_line = App::new("Shardoverse")
-                        .version("0.1")
-                        .author("Clunion <Christian.Lunau@gmx.de>")
-                        .about("A Roguelike Peer-to-Peer Multi Player Dungeon Explorer.")
-                        .arg(Arg::with_name("configfile")                   // <--------------------------------------------
-                             .short("c")
-                             .long("configfile")
-                             .value_name("FILE")
-                             .help("Sets a specific config file")
-                             .takes_value(true))
-                        .arg(Arg::with_name("windowreset")                  // <--------------------------------------------
-                             .short("w")
-                             .long("windowreset")
-                             .help("resets the window size and position to default values")
-                             .takes_value(false))
-                        .arg(Arg::with_name("v")                            // <--------------------------------------------
-                             .short("v")
-                             .multiple(true)
-                             .help("Sets the level of verbosity"))
-                        .subcommand(SubCommand::with_name("test")           // <--------------------------------------------
-                                    .about("controls testing features")
-                                    .version("0.1")
-                                    .author("Clunion <Christian.Lunau@gmx.de>")
-                                    .arg(Arg::with_name("debug")            // <--------------------------------------------
-                                        .short("d")
-                                        .help("print debug information verbosely")))
-                        .get_matches();
+let cmd_line = App::new("Shardoverse")
+                   .version("0.1")
+                   .author("Clunion <Christian.Lunau@gmx.de>")
+                   .about("A Roguelike Peer-to-Peer Multi Player Dungeon Explorer.")
+                   .arg(Arg::with_name("configfile")                   // <--CONFIG-File-------------------------------
+                       .short("c")
+                       .long("configfile")
+                       .value_name("FILE")
+                       .help("Sets a specific config file.")
+                       .takes_value(true))
+                   .arg(Arg::with_name("window-reset")                 // <--WINDOW-RESET -----------------------------
+                       .short("w")
+                       .long("windowreset")
+                       .help("Resets the window size and position to default values.")
+                       .takes_value(false))
+                   .arg(Arg::with_name("verbosity")                    // <--VERBOSITY --------------------------------
+                       .short("v")
+                       .multiple(true)
+                       .help("Sets the level of verbosity, more vs, more chatter."))
+                   .arg(Arg::with_name("test-mode")                    // <--TEST-MODE---------------------------------
+                       .help("Lets the program run in testing mode.")
+                       .short("t")
+                       .long("test")
+                       .takes_value(false))
+                   .arg(Arg::with_name("debug-mode")                   // <--DEBUG-MODE--------------------------------
+                       .short("d")
+                       .long("debug")
+                       .help("Lets the program run in debug mode.")
+                       .takes_value(false))
+                   .arg(Arg::with_name("training-mode")                // <--TRAINING-MODE-----------------------------
+                       .short("r")
+                       .long("train")
+                       .help("Lets the program run in training mode.")
+                       .takes_value(false))
+                   .get_matches();
 
-  // Gets a name for config-file if supplied by user, or defaults to config::NAME_OF_INI_FILE
-  let config_filename = cmd_line.value_of("configfile").unwrap_or(config::NAME_OF_INI_FILE);
-  println!("Value for config-file: {}", config_filename);
+// Get the name of a config-file, if supplied by user, or defaults to config::NAME_OF_INI_FILE
+let config_filename = cmd_line.value_of("configfile").unwrap_or(config::NAME_OF_INI_FILE);
+shard_config.file = config_filename.to_string();
+info!("config-file: {}", shard_config.file);
 
-  // Vary the output based on how many times the user used the "verbose" flag
-  // (i.e. 'myprog -v -v -v' or 'myprog -vvv' vs 'myprog -v'
-  match cmd_line.occurrences_of("v") 
-      {
-      0 => println!("No verbose info"),
-      1 => println!("Some verbose info"),
-      2 => println!("Tons of verbose info"),
-      3 => println!("Don't be crazy"),
-      _ => println!("Maximum verbosity"),
-      }
+// Vary the output based on how many times the user used the "verbose" flag
+// (i.e. 'myprog -v -v -v' or 'myprog -vvv' vs 'myprog -v'
+match cmd_line.occurrences_of("verbosity") 
+    {
+    0 => {shard_config.verbosity = 0; info!("Verbosity={}, No verbose info"     ,shard_config.verbosity); }, 
+    1 => {shard_config.verbosity = 1; info!("Verbosity={}, Some verbose info"   ,shard_config.verbosity); },
+    2 => {shard_config.verbosity = 2; info!("Verbosity={}, Tons of verbose info",shard_config.verbosity); },
+    3 => {shard_config.verbosity = 3; info!("Verbosity={}, Don't be crazy"      ,shard_config.verbosity); },
+    _ => {shard_config.verbosity = 9; info!("Verbosity={}, Maximum verbosity"   ,shard_config.verbosity); },
+    }
 
-  // You can handle information about subcommands by requesting their matches by name
-  // (as below), requesting just the name used, or both at the same time
-  if let Some(cmd_line) = cmd_line.subcommand_matches("test") 
-      {
-      if cmd_line.is_present("debug") { println!("Debug Mode enabled"); } 
-      }
+// You can handle information about subcommands by requesting their matches by name
+// (as below), requesting just the name used, or both at the same time
+if cmd_line.is_present("test-mode")     {shard_config.test        = true; info!("Test Mode enabled")    ; }
+if cmd_line.is_present("debug-mode")    {shard_config.debug       = true; info!("Debug Mode enabled")   ; } 
+if cmd_line.is_present("training-mode") {shard_config.training    = true; info!("Training Mode enabled"); }
+if cmd_line.is_present("windowreset")   {shard_config.windowreset = true; info!("Window reset detected"); }
+
 
 
 // load configuration, states and assets, initialise everything:
 match config::init(config_filename)
     {
-    Ok(config)  => { win_config = config; },
-    Err(error)  => { println!("Error initialising: {:?}", error); return Err(error); },
+    Ok(config)  => { shard_config = config; },
+    Err(error)  => { error!("Error initialising: {:?}", error); return Err(error); },
     }
 
-if  cmd_line.is_present("windowreset")
+if  shard_config.windowreset
     {
-    println!("windowreset detected"); 
-    win_config = WindowConfig::default();
+    info!("windowreset will be done"); 
+    shard_config.window = WindowConfig::default();
     };
 
+
 // Hand over control to central core:
-match run(&mut win_config,Path::new("assets/cursors/pointers_part_5/glove3.png"))
+match run(&mut shard_config,Path::new("assets/cursors/pointers_part_5/glove3.png"))
     {
-    Ok(_win_config) => {},
-    Err(error) => { println!("Error initialising: {:?}", error); }, //return Err(error); },
+    Ok(_shard_config) => {},
+    Err(error) => { error!("Error initialising: {:?}", error); }, //return Err(error); },
     }
 
 
 // save configuration and states, de-initialise everything:
-match config::exit(config_filename, win_config)
+match config::exit(config_filename, shard_config)
     {
     Ok(_)      => {},
-    Err(error) => { println!("Error de-initialising: {:?}", error); return Err(error); },
+    Err(error) => { error!("Error de-initialising: {:?}", error); return Err(error); },
     }
 
 Ok(())

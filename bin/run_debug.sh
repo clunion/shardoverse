@@ -1,3 +1,5 @@
 ### shortcut for Rust's cargo run of the target:
+
+export RUST_LOG=trace
 # cargo run --verbose -- --windowreset
-cargo run
+cargo run -- --debug

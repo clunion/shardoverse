@@ -65,8 +65,17 @@ pub struct WindowConfig
     pub active: bool,
 }
 
-//___ GLOBAL VARS: ____________________________________________________________________________________________________________
-//___ none ___
+#[derive(Debug)]
+pub struct ShardConfig
+{
+    pub verbosity:   u8,
+    pub debug:       bool,
+    pub test:        bool,
+    pub training:    bool,
+    pub windowreset: bool,
+    pub file:        String,
+    pub window:      WindowConfig,
+}
 
 
 //___ METHODS: ________________________________________________________________________________________________________________
@@ -82,6 +91,23 @@ impl Default for WindowConfig
         height: DEFAULT_HEIGHT,
         width:  DEFAULT_WIDTH,
         active: DEFAULT_ACTIVE,
+        }
+    }
+}
+
+impl Default for ShardConfig 
+{
+    fn default() -> Self 
+    {
+        ShardConfig 
+        {
+        verbosity:   0,
+        debug:       false,
+        test:        false,
+        training:    false,
+        windowreset: false,
+        file:        NAME_OF_INI_FILE.to_owned(),
+        window:      WindowConfig::default(),
         }
     }
 }
@@ -106,20 +132,20 @@ impl Default for WindowConfig
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn load(ini_filename_p: &str) -> Result<WindowConfig, io::Error>  
+pub fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>  
 {
 println!("config::load() called");
 
 // create config struct with default values: ---------
-let mut win_config = WindowConfig::default();
+let mut shard_config = ShardConfig::default();
 
 println!("Values in local default struct:");
-println!("default title      {:?}", win_config.title);
-println!("default win_pos_x  {:?}", win_config.pos_x);
-println!("default win_pos_y  {:?}", win_config.pos_y);
-println!("default win_width  {:?}", win_config.width);
-println!("default win_height {:?}", win_config.height);
-println!("default active     {:?}", win_config.active);
+println!("default title      {:?}", shard_config.window.title);
+println!("default win_pos_x  {:?}", shard_config.window.pos_x);
+println!("default win_pos_y  {:?}", shard_config.window.pos_y);
+println!("default win_width  {:?}", shard_config.window.width);
+println!("default win_height {:?}", shard_config.window.height);
+println!("default active     {:?}", shard_config.window.active);
 
 
 // reading content of ini-file: ---------------------
@@ -137,24 +163,24 @@ for (key, value) in &conf
 let     _section_global  = conf.delete(None::<String>).unwrap();
 let mut  section_window  = conf.delete(Some("window")).unwrap();
 
-if let Some(mut value)  = section_window.remove("title")  { win_config.title  = value .drain(..).collect(); }
-if let Some(pos_x )     = section_window.remove("pos_x")  { win_config.pos_x  = pos_x .parse().unwrap() }
-if let Some(pos_y )     = section_window.remove("pos_y")  { win_config.pos_y  = pos_y .parse().unwrap() }
-if let Some(width )     = section_window.remove("width")  { win_config.width  = width .parse().unwrap() }
-if let Some(height)     = section_window.remove("height") { win_config.height = height.parse().unwrap() }
-if let Some(active)     = section_window.remove("active") { win_config.active = active.parse().unwrap() }
+if let Some(mut value)  = section_window.remove("title")  { shard_config.window.title  = value .drain(..).collect(); }
+if let Some(pos_x )     = section_window.remove("pos_x")  { shard_config.window.pos_x  = pos_x .parse().unwrap() }
+if let Some(pos_y )     = section_window.remove("pos_y")  { shard_config.window.pos_y  = pos_y .parse().unwrap() }
+if let Some(width )     = section_window.remove("width")  { shard_config.window.width  = width .parse().unwrap() }
+if let Some(height)     = section_window.remove("height") { shard_config.window.height = height.parse().unwrap() }
+if let Some(active)     = section_window.remove("active") { shard_config.window.active = active.parse().unwrap() }
 
 println!("Values read into struct:");
-println!("win_pos_x  {:?}", win_config.title);
-println!("win_pos_x  {:?}", win_config.pos_x);
-println!("win_pos_y  {:?}", win_config.pos_y);
-println!("win_width  {:?}", win_config.width);
-println!("win_height {:?}", win_config.height);
-println!("win_active {:?}", win_config.active);
+println!("win_pos_x  {:?}", shard_config.window.title);
+println!("win_pos_x  {:?}", shard_config.window.pos_x);
+println!("win_pos_y  {:?}", shard_config.window.pos_y);
+println!("win_width  {:?}", shard_config.window.width);
+println!("win_height {:?}", shard_config.window.height);
+println!("win_active {:?}", shard_config.window.active);
 
 //  putting ini-files content into struct:
 
-Ok(win_config)
+Ok(shard_config)
 }
 
 
@@ -163,7 +189,7 @@ Ok(win_config)
 /// **`TYPE:       `**  local, common function   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p `** Name of the INI-file to store the config in   
-/// **`            `** **` win_config_p   `** struct holding the current config to be stored   
+/// **`            `** **` shard_config_p `** struct holding the current config to be stored   
 /// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = succesfull, flase = failed)   
 /// **`            `** **`     or -->     `** Error   
 /// ___________________________________________________________________________________________________________________________
@@ -178,16 +204,16 @@ Ok(win_config)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn save(ini_filename_p: &str, win_config_p: WindowConfig) -> Result<bool, io::Error> 
+pub fn save(ini_filename_p: &str, shard_config_p: ShardConfig) -> Result<bool, io::Error> 
 {
 println!("config::save() called");
 
-println!("config::save() got title : {}", win_config_p.title ); 
-println!("config::save() got pos_x : {}", win_config_p.pos_x );
-println!("config::save() got pos_y : {}", win_config_p.pos_y );
-println!("config::save() got width : {}", win_config_p.width );
-println!("config::save() got height: {}", win_config_p.height);
-println!("config::save() got active: {}", win_config_p.active);
+println!("config::save() got title : {}", shard_config_p.window.title ); 
+println!("config::save() got pos_x : {}", shard_config_p.window.pos_x );
+println!("config::save() got pos_y : {}", shard_config_p.window.pos_y );
+println!("config::save() got width : {}", shard_config_p.window.width );
+println!("config::save() got height: {}", shard_config_p.window.height);
+println!("config::save() got active: {}", shard_config_p.window.active);
 
 let mut conf = Ini::new();
 
@@ -195,12 +221,12 @@ conf.with_section(None::<String>)
     .set("encoding", "utf-8");
 
 conf.with_section(Some("window"))
-    .set("title",  win_config_p.title )
-    .set("pos_x",  win_config_p.pos_x .to_string() )
-    .set("pos_y",  win_config_p.pos_y .to_string() )
-    .set("width",  win_config_p.width .to_string() )
-    .set("height", win_config_p.height.to_string() )
-    .set("active", win_config_p.active.to_string() )
+    .set("title",  shard_config_p.window.title )
+    .set("pos_x",  shard_config_p.window.pos_x .to_string() )
+    .set("pos_y",  shard_config_p.window.pos_y .to_string() )
+    .set("width",  shard_config_p.window.width .to_string() )
+    .set("height", shard_config_p.window.height.to_string() )
+    .set("active", shard_config_p.window.active.to_string() )
     ;
 
 conf.write_to_file(ini_filename_p).unwrap();
@@ -229,24 +255,24 @@ Ok(true)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn init(ini_filename_p: &str) -> Result<WindowConfig, io::Error> 
+pub fn init(ini_filename_p: &str) -> Result<ShardConfig, io::Error> 
 {
 println!("init() called");
 
-let win_config: WindowConfig;
+let shard_config: ShardConfig;
 
 match load(ini_filename_p)
     {
-    Ok(config) => { win_config = config; },
+    Ok(config) => { shard_config = config; },
     Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
     }
 
-println!("load config found title : {}", win_config.title ); 
-println!("load config found pos_x : {}", win_config.pos_x );
-println!("load config found pos_y : {}", win_config.pos_y );
-println!("load config found width : {}", win_config.width );
-println!("load config found height: {}", win_config.height);
-println!("load config found active: {}", win_config.active);
+println!("load config found title : {}", shard_config.window.title ); 
+println!("load config found pos_x : {}", shard_config.window.pos_x );
+println!("load config found pos_y : {}", shard_config.window.pos_y );
+println!("load config found width : {}", shard_config.window.width );
+println!("load config found height: {}", shard_config.window.height);
+println!("load config found active: {}", shard_config.window.active);
 
 match cursors::load()
     {
@@ -254,7 +280,7 @@ match cursors::load()
     Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
     }
     
-Ok(win_config)
+Ok(shard_config)
 }
 
 /// ___________________________________________________________________________________________________________________________
@@ -262,7 +288,7 @@ Ok(win_config)
 /// **`TYPE:       `** de-initializing function, meant to be called exactly once at teardown of the program   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p `** Name of the INI-file to store the config in   
-/// **`            `** **` win_config_p   `** struct holding the current config to be stored   
+/// **`            `** **` shard_config_p `** struct holding the current config to be stored   
 /// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = succesfull, false = failed)   
 /// **`            `** **`     or -->     `** Error   
 /// ___________________________________________________________________________________________________________________________
@@ -277,11 +303,11 @@ Ok(win_config)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn exit(ini_filename_p: &str, win_config: WindowConfig) -> Result<bool, io::Error> 
+pub fn exit(ini_filename_p: &str, shard_config: ShardConfig) -> Result<bool, io::Error> 
 {
 println!("exit() called");
 
-match save(ini_filename_p,win_config)
+match save(ini_filename_p,shard_config)
     {
     Ok(_)      => {},
     Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
@@ -354,7 +380,7 @@ mod tests
   #[test]
   fn set_and_check_all_values() 
   {
-  let test_conf2write: WindowConfig = WindowConfig 
+  let test_win_conf2write: WindowConfig = WindowConfig 
     {
     title : "test window title".to_string(),
     pos_x : 1 ,
@@ -364,13 +390,24 @@ mod tests
     active: false ,
     };
 
+  let test_conf2write: ShardConfig = ShardConfig 
+    {
+    verbosity:   2,
+    debug:       true,
+    test:        true,
+    training:    true,
+    windowreset: true,
+    file:        "test ini filename".to_string(),
+    window:      test_win_conf2write ,
+    };
+
     match save(NAME_OF_INI_FILE4TEST,test_conf2write)
         {
         Ok(_)  => {},
         Err(_) => { assert!(false) },
         }
 
-  let mut test_conf2load: WindowConfig = WindowConfig::default();
+  let mut test_conf2load: ShardConfig = ShardConfig::default();
   
   match load(NAME_OF_INI_FILE4TEST)
       {
@@ -380,12 +417,19 @@ mod tests
 
   fs::remove_file(NAME_OF_INI_FILE4TEST).unwrap();
 
-  assert_eq!(test_conf2load.title , "test window title");
-  assert_eq!(test_conf2load.pos_x , 1);
-  assert_eq!(test_conf2load.pos_y , 2);
-  assert_eq!(test_conf2load.width , 3);
-  assert_eq!(test_conf2load.height, 4);
-  assert_eq!(test_conf2load.active, false);
+  assert_eq!(test_conf2load.verbosity    , 0);                             // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.debug        , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.test         , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.training     , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.windowreset  , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.file         , NAME_OF_INI_FILE.to_string());  // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+
+  assert_eq!(test_conf2load.window.title , "test window title");
+  assert_eq!(test_conf2load.window.pos_x , 1);
+  assert_eq!(test_conf2load.window.pos_y , 2);
+  assert_eq!(test_conf2load.window.width , 3);
+  assert_eq!(test_conf2load.window.height, 4);
+  assert_eq!(test_conf2load.window.active, false);
 
   }
 
