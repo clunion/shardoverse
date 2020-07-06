@@ -28,6 +28,9 @@ use ini::Ini;
 
 use std::io;
 
+#[allow(unused_imports)]
+use log::{trace, debug, info, warn, error};
+
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod name>
 
@@ -134,28 +137,28 @@ impl Default for ShardConfig
 
 pub fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>  
 {
-println!("config::load() called");
+debug!("config::load() called");
 
 // create config struct with default values: ---------
 let mut shard_config = ShardConfig::default();
 
-println!("Values in local default struct:");
-println!("default title      {:?}", shard_config.window.title);
-println!("default win_pos_x  {:?}", shard_config.window.pos_x);
-println!("default win_pos_y  {:?}", shard_config.window.pos_y);
-println!("default win_width  {:?}", shard_config.window.width);
-println!("default win_height {:?}", shard_config.window.height);
-println!("default active     {:?}", shard_config.window.active);
+debug!("Values in local default struct:");
+debug!("default title      {:?}", shard_config.window.title);
+debug!("default win_pos_x  {:?}", shard_config.window.pos_x);
+debug!("default win_pos_y  {:?}", shard_config.window.pos_y);
+debug!("default win_width  {:?}", shard_config.window.width);
+debug!("default win_height {:?}", shard_config.window.height);
+debug!("default active     {:?}", shard_config.window.active);
 
 
 // reading content of ini-file: ---------------------
 let mut conf = Ini::load_from_file(ini_filename_p).unwrap();
 
 // print all key-value data from the config ini-file:
-println!("\nAll values in ini file:");
+debug!("\nAll values in ini file:");
 for (key, value) in &conf 
     {
-    println!("{:#?}:{:?}\n", key, value);
+    debug!("{:#?}:{:?}\n", key, value);
     }
 
 //  transfering ini-file content to local struct:
@@ -170,13 +173,13 @@ if let Some(width )     = section_window.remove("width")  { shard_config.window.
 if let Some(height)     = section_window.remove("height") { shard_config.window.height = height.parse().unwrap() }
 if let Some(active)     = section_window.remove("active") { shard_config.window.active = active.parse().unwrap() }
 
-println!("Values read into struct:");
-println!("win_pos_x  {:?}", shard_config.window.title);
-println!("win_pos_x  {:?}", shard_config.window.pos_x);
-println!("win_pos_y  {:?}", shard_config.window.pos_y);
-println!("win_width  {:?}", shard_config.window.width);
-println!("win_height {:?}", shard_config.window.height);
-println!("win_active {:?}", shard_config.window.active);
+debug!("Values read into struct:");
+debug!("win_pos_x  {:?}", shard_config.window.title);
+debug!("win_pos_x  {:?}", shard_config.window.pos_x);
+debug!("win_pos_y  {:?}", shard_config.window.pos_y);
+debug!("win_width  {:?}", shard_config.window.width);
+debug!("win_height {:?}", shard_config.window.height);
+debug!("win_active {:?}", shard_config.window.active);
 
 //  putting ini-files content into struct:
 
@@ -206,14 +209,14 @@ Ok(shard_config)
 
 pub fn save(ini_filename_p: &str, shard_config_p: ShardConfig) -> Result<bool, io::Error> 
 {
-println!("config::save() called");
+debug!("config::save() called");
 
-println!("config::save() got title : {}", shard_config_p.window.title ); 
-println!("config::save() got pos_x : {}", shard_config_p.window.pos_x );
-println!("config::save() got pos_y : {}", shard_config_p.window.pos_y );
-println!("config::save() got width : {}", shard_config_p.window.width );
-println!("config::save() got height: {}", shard_config_p.window.height);
-println!("config::save() got active: {}", shard_config_p.window.active);
+debug!("config::save() got title : {}", shard_config_p.window.title ); 
+debug!("config::save() got pos_x : {}", shard_config_p.window.pos_x );
+debug!("config::save() got pos_y : {}", shard_config_p.window.pos_y );
+debug!("config::save() got width : {}", shard_config_p.window.width );
+debug!("config::save() got height: {}", shard_config_p.window.height);
+debug!("config::save() got active: {}", shard_config_p.window.active);
 
 let mut conf = Ini::new();
 
@@ -257,27 +260,27 @@ Ok(true)
 
 pub fn init(ini_filename_p: &str) -> Result<ShardConfig, io::Error> 
 {
-println!("init() called");
+debug!("init() called");
 
 let shard_config: ShardConfig;
 
 match load(ini_filename_p)
     {
     Ok(config) => { shard_config = config; },
-    Err(error) => { println!("Error loading config: {:?}", error); return Err(error); },
+    Err(error) => { error!("Error loading config: {:?}", error); return Err(error); },
     }
 
-println!("load config found title : {}", shard_config.window.title ); 
-println!("load config found pos_x : {}", shard_config.window.pos_x );
-println!("load config found pos_y : {}", shard_config.window.pos_y );
-println!("load config found width : {}", shard_config.window.width );
-println!("load config found height: {}", shard_config.window.height);
-println!("load config found active: {}", shard_config.window.active);
+debug!("load config found title : {}", shard_config.window.title ); 
+debug!("load config found pos_x : {}", shard_config.window.pos_x );
+debug!("load config found pos_y : {}", shard_config.window.pos_y );
+debug!("load config found width : {}", shard_config.window.width );
+debug!("load config found height: {}", shard_config.window.height);
+debug!("load config found active: {}", shard_config.window.active);
 
 match cursors::load()
     {
     Ok(_)      => {},
-    Err(error) => { println!("Error loading cursors: {:?}", error); return Err(error); },
+    Err(error) => { error!("Error loading cursors: {:?}", error); return Err(error); },
     }
     
 Ok(shard_config)
@@ -305,12 +308,12 @@ Ok(shard_config)
 
 pub fn exit(ini_filename_p: &str, shard_config: ShardConfig) -> Result<bool, io::Error> 
 {
-println!("exit() called");
+debug!("exit() called");
 
 match save(ini_filename_p,shard_config)
     {
     Ok(_)      => {},
-    Err(error) => { println!("Error saving config: {:?}", error); return Err(error); },
+    Err(error) => { error!("Error saving config: {:?}", error); return Err(error); },
     }
 
 Ok(true)

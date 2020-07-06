@@ -24,6 +24,8 @@
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
 //use std::io;
+#[allow(unused_imports)]
+use log::{trace, debug, info, warn, error};
 
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::pixels::*;
@@ -75,11 +77,11 @@ let     height: i16;
 
 match canvas_p.output_size()
     {
-    Ok((w,h))  => {width=w as i16; height=h as i16; },
-    Err(error) => { println!("Error getting canvas size: {}", error); return false},
+    Ok((w,h))  => { width=w as i16; height=h as i16; },
+    Err(error) => { error!("Error getting canvas size: {}", error); return false },
     }
 
-println!("canvas size: width={}, height={}",width,height);
+debug!("canvas size: width={}, height={}",width,height);
 
 let     stretch_factor_x: f64 = width  as f64 / 256.0;
 let     stretch_factor_y: f64 = height as f64 / 256.0 ;
@@ -113,7 +115,7 @@ for y in 1..height
         match canvas_p.pixel(x, y, color)
             {
             Ok(_)      => { },
-            Err(error) => { println!("Error, draw pixel x='{}' y={}: {}", x, y, error); return false},
+            Err(error) => { error!("Error, draw pixel x='{}' y={}: {}", x, y, error); return false},
             };
         }
     }

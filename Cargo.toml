@@ -19,8 +19,8 @@ path = "src/main.rs"
 rand = "0.7.2" 
 rust-ini = "0.15.3" 
 clap = "~2.27.0" 
-log = "0.4"
-flexi_logger = "0.15"
+log = { version = "0.4", features = ["max_level_trace", "release_max_level_warn"] }
+flexi_logger = { version = "0.15", features = ["colors" ] }
 
 [dependencies.sdl2]
   version = "0.32.1"

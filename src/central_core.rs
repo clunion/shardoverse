@@ -33,6 +33,9 @@
 use std::path::Path;
 use std::time::Duration;
 
+#[allow(unused_imports)]
+use log::{trace, debug, info, warn, error};
+
 use sdl2::event::Event;
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::image::{LoadSurface, InitFlag};
@@ -84,16 +87,14 @@ pub fn run<'a>(shard_config_p: &'a mut ShardConfig, png: &Path) -> Result<&'a Sh
 let mut lastx = 0;
 let mut lasty = 0;
 let mut tick  = 0;
-// let mut win_position : (i32,i32) = (199,188);
-// let mut win_size     : (u32,u32) = (400,600);
 
-println!("Values in shard_config_p:");
-println!("title      {:?}", shard_config_p.window.title);
-println!("win_pos_x  {:?}", shard_config_p.window.pos_x);
-println!("win_pos_y  {:?}", shard_config_p.window.pos_y);
-println!("win_width  {:?}", shard_config_p.window.width);
-println!("win_height {:?}", shard_config_p.window.height);
-println!("active     {:?}", shard_config_p.window.active);
+debug!("Values in shard_config_p:");
+debug!("title      {:?}", shard_config_p.window.title);
+debug!("win_pos_x  {:?}", shard_config_p.window.pos_x);
+debug!("win_pos_y  {:?}", shard_config_p.window.pos_y);
+debug!("win_width  {:?}", shard_config_p.window.width);
+debug!("win_height {:?}", shard_config_p.window.height);
+debug!("active     {:?}", shard_config_p.window.active);
 
 let sdl_context = sdl2::init()?;
 let video_subsys = sdl_context.video()?;
@@ -135,9 +136,9 @@ let mut events = sdl_context.event_pump()
             {
             Event::Quit {..}                            => break 'main,
             Event::KeyDown {keycode: Some(keycode), ..} => {
-                                                           if      keycode == Keycode::Escape { println!("Esc");  break 'main } 
-                                                           else if keycode == Keycode::Q      { println!("Q");    break 'main }
-                                                           else if keycode == Keycode::P      { println!("P");    pixel_draw::formula_fill(&mut canvas); }
+                                                           if      keycode == Keycode::Escape { info!("Esc");  break 'main } 
+                                                           else if keycode == Keycode::Q      { info!("Q");    break 'main }
+                                                           else if keycode == Keycode::P      { info!("P");    pixel_draw::formula_fill(&mut canvas); }
                                                            }
                                                            
             Event::MouseButtonDown {x, y, ..} =>           {
@@ -145,7 +146,7 @@ let mut events = sdl_context.event_pump()
                                                            let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
                                                            lastx     = x as i16;
                                                            lasty     = y as i16;
-                                                           println!("mouse btn down at ({},{})", x, y);
+                                                           info!("mouse btn down at ({},{})", x, y);
                                                            canvas.present();
                                                            }
             _ => {}
@@ -173,13 +174,13 @@ let mut events = sdl_context.event_pump()
     } // end of: loop main
 
 
-println!("Values in shard_config_p before return:");
-println!("title      {:?}", shard_config_p.window.title);
-println!("win_pos_x  {:?}", shard_config_p.window.pos_x);
-println!("win_pos_y  {:?}", shard_config_p.window.pos_y);
-println!("win_width  {:?}", shard_config_p.window.width);
-println!("win_height {:?}", shard_config_p.window.height);
-println!("active     {:?}", shard_config_p.window.active);
+debug!("Values in shard_config_p before return:");
+debug!("title      {:?}", shard_config_p.window.title);
+debug!("win_pos_x  {:?}", shard_config_p.window.pos_x);
+debug!("win_pos_y  {:?}", shard_config_p.window.pos_y);
+debug!("win_width  {:?}", shard_config_p.window.width);
+debug!("win_height {:?}", shard_config_p.window.height);
+debug!("active     {:?}", shard_config_p.window.active);
 
 Ok(shard_config_p)
 }

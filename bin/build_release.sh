@@ -1,5 +1,6 @@
 ### shortcuts for Rust's cargo-Build-processes:
-cargo clippy --release  2>&1 | tee log/build_release.log
+cargo clippy --release  2>&1 | tee    log/build_release.log
+cargo build  --release  2>&1 | tee -a log/build_release.log
 
 filename=.\\target\\release\\shardoverse.exe
 file_size_byte=0

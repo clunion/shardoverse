@@ -24,6 +24,9 @@
 
 use std::io;
 
+#[allow(unused_imports)]
+use log::{trace, debug, info, warn, error};
+
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 //___ none ___
 
@@ -74,7 +77,7 @@ use super::*;
 
    pub fn load() -> Result<(), io::Error> 
    {
-   println!("load() called");
+   debug!("cursors::load() called");
    Ok(())
    }
 

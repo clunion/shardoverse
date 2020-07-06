@@ -1,5 +1,6 @@
 ### shortcuts for Rust's cargo-Build-processes:
-cargo clippy            2>&1 | tee log/build_debug.log
+cargo clippy            2>&1 | tee    log/build_debug.log
+cargo build             2>&1 | tee -a log/build_debug.log
 
 filename=.\\target\\debug\\shardoverse.exe
 file_size_byte=0

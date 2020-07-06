@@ -49,7 +49,8 @@ use std::io;
 use std::path::Path;
 use clap::{Arg, App};
 use log::{trace, debug, info, warn, error};
-//use flexi_logger::{Duplicate,Logger};
+use flexi_logger::{Logger, colored_opt_format, detailed_format, Duplicate};
+
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 mod modules;                              // <dirname>
@@ -103,16 +104,24 @@ fn main() -> Result<(), io::Error>
 //let mut i :i32 = 0;
 let mut shard_config: ShardConfig = ShardConfig::default();
 
-flexi_logger::Logger::with_env()
+// flexi_logger::Logger::with_env()
+//             .start()
+//             .unwrap();
+
+Logger::with_env_or_str("myprog=debug, mylib=warn")
+            .log_to_file()
+            .duplicate_to_stderr(Duplicate::Warn)
+            .directory("log")
+            .format_for_stderr(colored_opt_format)
+            .format_for_files(detailed_format)
             .start()
-            .unwrap();
+            .unwrap_or_else(|e| panic!("Logger initialization failed with {}", e));
 
-
-trace!("this is a trace message");
-debug!("this is a debug {}", "message");
-info!("this is an info"); 
-warn!( "this is a warn message");
-error!("this is printed by default");
+trace!("this is a  trace message");
+debug!("this is a  debug {}", "message");
+info!( "this is an info"); 
+warn!( "this is a  warn message");
+error!("this is an error");
 
 
 

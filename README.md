@@ -89,12 +89,13 @@ It is surely not necessary to follow every detail of these principles, but the i
 ## Setting up the development environment
 
 ### Install MSYS2 + MinGW64
-From here: [`Msys2.org`](https://www.msys2.org/), as described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)
+From here: [`Msys2.org`](https://www.msys2.org/), as described here:  [`MSys2-install`](https://www.msys2.org/wiki/MSYS2-installation/)   
 (and possibly this may help:  [`unix-linux-environment-windows`](https://www.booleanworld.com/get-unix-linux-environment-windows-msys2/) )
 
-Now there should be an Icon on the desktop to start the MSys2-Shell.
-For the further steps, open this shell.
-May be it is now the right time to configure this shell/window for your liking.
+Now there should be an Icon on the desktop to start the MSys2-Shell.   
+For the further steps, open this shell.   
+   
+Perhaps it is now the right time to configure this shell/window for your liking.
 
 ### Updating the Msys2- and MinGW64-Packages and -Repositories
     pacman -Syuu
@@ -107,40 +108,6 @@ May be it is now the right time to configure this shell/window for your liking.
 ### Add several necessary development tools
     pacman -S base-devel
     pacman -S msys2-devel
-
-### Install git for Msys2
-as described in 9 steps at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
-
-#### In short:
-- Edit the pacman configuration file of Msys2: /etc/**pacman.conf** (probably in windows to be found at C:\msys64\etc\pacman.conf)
-- add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
-- add and accept their **signing-keys**     
-- sync the new repository via ```pacman -Syyuu```    
-- update Msys2 repeatedly by using ```pacman -Suu``` until there is nothing more to update   
-- install git via:   
-    ```pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra```
-
-
-### Also add ssh-pageant:
-This is necessary to get the automated/transparent SSH-Key login to GitHub working.
-(It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
-
-    pacman -S ssh-pageant
-
-Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
-
-Make sure to use the same Socket-File in the setup of ssh-pageant (within the Msys2-Shell)
-and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).
-
-Here, a file with Path and name like this is used:
-
-    /e/Temp/msys_cyglockfile
-
-Currently, the variant using the cygwin compatible socket seems to work with Msys2.
-If not, try the other (msysgit) variant.   
-File path and name used in KeeAgent:
-
-    E:\Temp\msys_cyglockfile
 
 ### Just for fun, we'll not really need this:
     pacman -S mingw-w64-x86_64-vulkan-devel
@@ -155,18 +122,7 @@ File path and name used in KeeAgent:
     pacman -S mingw-w64-x86_64-SDL2_mixer
     pacman -S mingw-w64-x86_64-SDL2_gfx
 
-#### Tell Rust where to find the SDL2-Libraries!
-In the MSys2 environment on MS-Windows, Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
-This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_profile or the like) to the correct path containing the SDL2-Libs. The path might be /mingw64/lib, then set the variable this way:
-
-    export LIBRARY_PATH=/mingw64/lib
-
-On Unix-like systems (Linux, BSD, Apple-Darwin(?), ...), the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
-
-    export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
-
-
-### Generate the manpages for the installed Msys2-Tools
+#### Generate the manpages for the installed Msys2-Tools
     /usr/bin/mandb --quiet
 
 ------------------
@@ -198,29 +154,119 @@ after that start the installation with: [return]
 
     select 1) Proceed with installation (default)
 
-Now it's time to configure the environment within the shell.
+Now it's time to configure the windows-environment and the environment within the shell.
 
 ### Configure the environment within the MSys2-Shell
 
-In one of the dot-files which get executed at start of the shell (in login-mode), maybe in .bash_profile,
-add the location of the Rust binaries to the PATH-variable (now in the Unix notation):
+In one of the dot-files which get executed at start of the shell (in login-mode), perhaps in the *.bash_profile*, add the location of the Rust binaries to the PATH-variable (now in the Unix notation):
 
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
-------------------
-> An example for a similar environment is the small but nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
-> And listen to the Game-Music!
+#### Tell Rust where to find the SDL2-Libraries!
+In the MSys2 environment on MS-Windows, Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
+This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_profile or the like) to the correct path containing the SDL2-Libs. The path might be /mingw64/lib, then set the variable this way:
+
+    export LIBRARY_PATH=/mingw64/lib
+
+On Unix-like systems (Linux, BSD, Apple-Darwin(?), ...), the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
+
+    export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+
+# Convenient build and run aliases
+In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the different build and run variants Conveniently.   
+Currently, they do simple calls to cargo, but that may change.   
+A set of this build- and run-scripts are meant to be located in every project's bin folder, thus the method of building and running a project is always the same, regardless if it is an C or C++ or, like this time, a Rust project.   
+To execute these local scripts, a set of aliases is used.   
+The reason behind this is, that these scripts then do not have to be found through the PATH-variable (which is not possible to do right when working on several projects in parallel), instead the scripts are found because they are always relative to the current project's base-directory in the same way, and thus can be reached via these aliases.
+
+The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.
+
+The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' into them, so i am not really willing to change that.
+
+    alias md="./bin/build_debug.sh"
+    alias mr="./bin/build_release.sh"
+    alias sd="./bin/run_debug.sh"
+    alias sr="./bin/run_release.sh"
+    alias st="./bin/run_test.sh"
+    alias sdt="./bin/run_debug_tool.sh"
+
+The more _rusty_ naming would be:
+
+    alias cbd="./bin/build_debug.sh"
+    alias cbr="./bin/build_release.sh"
+    alias crd="./bin/run_debug.sh"
+    alias crt="./bin/run_test.sh"
+    alias crr="./bin/run_release.sh"
+
+    alias gcp="./bin/git_commit-push.sh"
+
+The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
+If it is not installed yet, this can be done in the MSys2-Shell via:
+
+	 rustup component add clippy
+
+# Reading Material --> start here
+Now Rust compiler and some tools and libraries should be ready to use.
+To get into Rust itself, the following resoources can be used.
+While the Rust Programming language ithe *THE BOOK* and is written in a way that encourages to read it from start to end, it is also possible to just read the fist chapters, and then start picking topics what and when they are needed.   
+
+### Books on Rust itself
+ * [`The Rust Programming Language`](https://doc.rust-lang.org/book/) Here we start: The source of truth regarding Rust, for learning step by step, or in a selective manner. It is probably a good idea to read at least this book completely prior to naming oneself a new Rustacean.
+ * [`Rust By Example`](https://doc.rust-lang.org/stable/rust-by-example/) Concise, many topics to delve into, and well prepared examples showing working solutions.
+
+### Rust and the Rust-Ecosystem
+ * [`Rust Cookbook`](https://rust-lang-nursery.github.io/rust-cookbook/intro.html) This is a unusual kind of book, in the way it is presented as a community effort on GitHub. It is also focusses on examples, this time for many important crates in the Rust ecosystem.
+ * [`The rustdoc book`](https://doc.rust-lang.org/rustdoc/) How to docu-comment the code, so that rustdoc can generate some standardized documentation.
+ * [`The Cargo Book`](https://doc.rust-lang.org/cargo/)  The Rust Package-Manager which also builds, runs and tests our code
+ 
+### Roguelike programming in Rust 
+ * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/chapter_0.html) 
+       
+
+### Install git for Msys2
+Git is used for version control, to coordinate the different contributors working in parallel, as a base for continous integration and, later, for publishing the results.   
+Git can be set up as described in 9 steps at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
+
+#### In short:
+- Edit the pacman configuration file of Msys2: /etc/**pacman.conf** (probably in windows to be found at C:\msys64\etc\pacman.conf)
+- add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
+- add and accept their **signing-keys**     
+- sync the new repository via ```pacman -Syyuu```    
+- update Msys2 repeatedly by using ```pacman -Suu``` until there is nothing more to update   
+- install git via:   
+    ```pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra```
+
+### Also add ssh-pageant:
+This is necessary to get the automated/transparent SSH-Key login to GitHub working.
+(It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
+
+    pacman -S ssh-pageant
+
+Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
+
+Make sure to use the same Socket-File in the setup of ssh-pageant (within the Msys2-Shell)
+and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).
+
+Here, a file with Path and name like this is used:
+
+    /e/Temp/msys_cyglockfile
+
+Currently, the variant using the cygwin compatible socket seems to work with Msys2.
+If not, try the other (msysgit) variant.   
+File path and name used in KeeAgent:
+
+    E:\Temp\msys_cyglockfile
 
 ## Clone the git repository of Shardoverse
 In the MSys2-Shell:   
-* navigate to your intended base development directory,   
-* then clone the files from GitHub by issuing:   
-
-    git clone https://github.com/clunion/shardoverse
-
+ * navigate to your intended base development directory,   
+ * then clone the files from GitHub by issuing:   
+   
+    git clone https://github.com/clunion/shardoverse   
+   
 That creates a new sub directory named ```shardoverse``` with all the necessary files in it.
 
-## Build and Run
+## Build and Run Shardoverse
 
 To build:
 
@@ -244,6 +290,10 @@ After starting shardoverse, the program can be left by closing the window.
 | Q      | Exit program                         |
 | P      | Paint colored pixels in main window  |
 
+
+------------------
+> An example for a similar environment is the small and nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
+> And listen to the Game-Music!
 
 ------------------
 
@@ -341,62 +391,20 @@ This leads to a funny coloring when the Rust-code is using labeled loops, which 
 the coloring looks much better, at least around labeled loops.
 
 
-# Convenient build and run aliases
-In the `bin` directory of the shardoverse repository is a set of scripts which may be used to start the different build and run variants Conveniently.
-Currently, they do simple calls to cargo, but that may change.
-A set of this build- and run-scripts are meant to be located in every project's bin folder, thus the method of building and running a project
-is always the same, regardless if it is an C or C++ or, like this time, a Rust project.
-To execute these local scripts, a set of aliases is used.
-The reason behind this is, that then these scripts do not have to be found through the PATH-variable
-(which is not possible to do right when working on several projects in parallel), instead the scripts are because they are always in the same way relative to the current projects base-directory,
-and thus can be reached via the aliases.
 
-The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.
+# Logging
+For logging the standard crate [```log```](https://github.com/rust-lang/log) is used in combination with crate [```flexi_logger```](https://github.com/emabee/flexi_logger) as a backend.   
 
-The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' in them, so i am not really willing to change that.
+In the current configuration, detailed logfiles are written into the directory ```log```.   
+Additionally, colored error and warning-messages are wirtten to the console.   
 
-    alias md="./bin/build_debug.sh"
-    alias mr="./bin/build_release.sh"
-    alias sd="./bin/run_debug.sh"
-    alias sr="./bin/run_release.sh"
-    alias st="./bin/run_test.sh"
-    alias sdt="./bin/run_debug_tool.sh"
-
-The more _rusty_ naming would be:
-
-    alias cbd="./bin/build_debug.sh"
-    alias cbr="./bin/build_release.sh"
-    alias crd="./bin/run_debug.sh"
-    alias crt="./bin/run_test.sh"
-    alias crr="./bin/run_release.sh"
-
-The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
-If it is not installed yet, this can be done in the MSys2-Shell via:
-
-	 rustup component add clippy
-
-# Time to use some reading material
-### Books on Rust itself
- * [`The Rust Programming Language`](https://doc.rust-lang.org/book/) Here we start: The source of truth regarding Rust, for learning step by step, or in a selective manner. It is probably a good idea to read at least this book completely prior to naming oneself a new Rustacean.
- * [`Rust By Example`](https://doc.rust-lang.org/stable/rust-by-example/) Concise, many topics to delve into, and well prepared examples showing working solutions.
-
-### Rust and the Rust-Ecosystem
- * [`Rust Cookbook`](https://rust-lang-nursery.github.io/rust-cookbook/intro.html) This is a unusual kind of book, in the way it is presented as a community effort on GitHub. It is also focusses on examples, this time for many important crates in the Rust ecosystem.
- * [`The rustdoc book`](https://doc.rust-lang.org/rustdoc/) How to docu-comment the code, so rustdoc can generate some standardized documentation
- * [`The Cargo Book`](https://doc.rust-lang.org/cargo/)  The Rust Package-Manager which also builds, runs and tests our code
- 
-### Roguelike programming in Rust 
- * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/chapter_0.html) 
-       
+In the release variant of shardoverse, only errors and warnings are   
+included in the executable, all else are 'compiled out' by cargo options.
 
 # Debugging
 To investigate:
 * ways to debug in this setup
 
-# Logging
-To investigate:
-* What's the Rust approach to logging?
-* Is there a way to use the plixx-logging-libs?
 
 # Project structure
 * Very small main.rs with parameter checking and only minimal logic
