@@ -155,10 +155,10 @@ debug!("default active     {:?}", shard_config.window.active);
 let mut conf = Ini::load_from_file(ini_filename_p).unwrap();
 
 // print all key-value data from the config ini-file:
-debug!("\nAll values in ini file:");
+debug!("All values in ini file:");
 for (key, value) in &conf 
     {
-    debug!("{:#?}:{:?}\n", key, value);
+    debug!("{:?}:{:?}", key, value);
     }
 
 //  transfering ini-file content to local struct:

@@ -1,6 +1,22 @@
 ### shortcuts for Rust's cargo-Build-processes:
-cargo clippy            2>&1 | tee    log/build_debug.log
-cargo build             2>&1 | tee -a log/build_debug.log
+
+printf "lint via clippy:\n"
+#cargo clippy            2>&1 | tee    log/build_debug.log
+if ! cargo clippy; then
+    echo cargo clippy returned error: $?
+    exit
+else
+    echo cargo clippy lint: OK
+fi 
+
+printf "\n\nbuild via cargo:\n"
+#cargo build             2>&1 | tee -a log/build_debug.log
+if ! cargo build; then
+    echo cargo build returned error: $?
+    exit
+else
+    echo cargo build: OK
+fi 
 
 filename=.\\target\\debug\\shardoverse.exe
 file_size_byte=0

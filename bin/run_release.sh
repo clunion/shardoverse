@@ -1,3 +1,3 @@
 ### shortcut for Rust's cargo run of the target:
-export RUST_LOG=warn
+export RUST_LOG=trace
  cargo run --release

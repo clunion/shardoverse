@@ -137,7 +137,6 @@ let mut events = sdl_context.event_pump()
             Event::Quit {..}                            => break 'main,
             Event::KeyDown {keycode: Some(keycode), ..} => {
                                                            if      keycode == Keycode::Escape { info!("Esc");  break 'main } 
-                                                           else if keycode == Keycode::Q      { info!("Q");    break 'main }
                                                            else if keycode == Keycode::P      { info!("P");    pixel_draw::formula_fill(&mut canvas); }
                                                            }
                                                            

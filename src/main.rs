@@ -47,10 +47,16 @@ extern crate clap;
 //use std::env;
 use std::io;
 use std::path::Path;
-use clap::{Arg, App};
-use log::{trace, debug, info, warn, error};
-use flexi_logger::{Logger, colored_opt_format, detailed_format, Duplicate};
 
+use clap::{Arg, App};
+
+use log::{trace, debug, info, warn, error};
+use flexi_logger::{Logger, Duplicate, Record, DeferredNow, Cleanup, Criterion, Naming};
+use yansi::{Color, Style};
+
+//use crate::DeferredNow;
+//use self::DeferredNow;
+//use log::Record;
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 mod modules;                              // <dirname>
@@ -74,6 +80,73 @@ use crate::modules::config::WindowConfig;
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
 
+pub fn basename(path: &str) -> &str 
+{
+let mut pieces = path.rsplitn(2, |c| c == '/' || c == '\\');
+match pieces.next() 
+    {
+    Some(p) => p.into(),
+    None => path.into(),
+    }
+}
+
+
+/// A logline-formatter that produces log lines with timestamp and file location, like
+/// <br>
+/// ```[2016-01-13 15:25:01.640870 +01:00] INFO [src/foo/bar:26] Task successfully read from conf.json```
+/// <br>
+pub fn shard_log_console_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
+{
+let level = record.level();
+let shard_style: Style;
+
+let  error_style: Style = Style::new(Color::Red).bold().italic();  // todo: move to a one-time initializer or change into static
+let   warn_style: Style = Style::new(Color::Yellow).bold()      ;  // todo: move to a one-time initializer or change into static
+let   info_style: Style = Style::new(Color::Cyan)               ;  // todo: move to a one-time initializer or change into static
+let  debug_style: Style = Style::new(Color::Default)            ;  // todo: move to a one-time initializer or change into static
+let  trace_style: Style = Style::new(Color::Blue).dimmed()      ;  // todo: move to a one-time initializer or change into static
+
+match level 
+    {
+    log::Level::Error => {shard_style = error_style;},
+    log::Level::Warn  => {shard_style =  warn_style;},
+    log::Level::Info  => {shard_style =  info_style;},
+    log::Level::Debug => {shard_style = debug_style;},
+    log::Level::Trace => {shard_style = trace_style;},
+    };
+
+write!( w, 
+        "{} {:>5}{:>18}[{:4}] {}",
+        now.now().format("%H:%M:%S"),
+        shard_style.paint(record.level()),
+//      record.file().unwrap_or("<unnamed>"),   // <-- shorten with basename here
+        basename(record.file().unwrap_or("<unnamed>")),   // <-- shorten with basename here
+        record.line().unwrap_or(0),
+        &record.args()
+      )
+}
+
+/// A logline-formatter that produces log lines like
+/// <br>
+/// ```[2016-01-13 15:25:01.640870 +01:00] INFO [foo::bar] src/foo/bar.rs:26: Task successfully read from conf.json```
+/// <br>
+/// i.e. with timestamp, module path and file location.
+///
+/// # Errors
+///
+/// See `std::write`
+pub fn shard_log_file_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
+{
+write!( w,
+        "{} {:5}:{:>32}[{:4}]: {}",
+        now.now().format("%Y-%m-%d %H:%M:%S%.6f %:z"),
+        record.level(),
+ //     record.module_path().unwrap_or("<unnamed>"),
+        record.file().unwrap_or("<unnamed>"),
+        record.line().unwrap_or(0),
+        &record.args()
+      )
+}
 
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  main   
@@ -93,27 +166,23 @@ use crate::modules::config::WindowConfig;
 /// 1.0     | 2020-04-## | Clunion   | initial version   
 /// ___________________________________________________________________________________________________________________________
 /// **`TODO:       `**   
-///  * define commandline arguments for all configuration switches and variables    
-///  * add recognition and handling of debug mode   
+///  * define command line arguments for all configuration switches and variables    
+///  * add recognition and handling of debug mode (compile switch/definition?)   
 ///  * add recognition and handling of testing mode   
 /// ___________________________________________________________________________________________________________________________
 
 fn main() -> Result<(), io::Error>
 {
-//let args: Vec<String> = env::args().collect();
-//let mut i :i32 = 0;
 let mut shard_config: ShardConfig = ShardConfig::default();
 
-// flexi_logger::Logger::with_env()
-//             .start()
-//             .unwrap();
-
-Logger::with_env_or_str("myprog=debug, mylib=warn")
+//initialise flexi_logger:
+Logger::with_env_or_str("myprog=trace, mylib=trace")
             .log_to_file()
-            .duplicate_to_stderr(Duplicate::Warn)
+            .rotate(Criterion::Size(100_000), Naming::Timestamps, Cleanup::KeepLogAndZipFiles(4,10))
+            .duplicate_to_stderr(Duplicate::Trace)
             .directory("log")
-            .format_for_stderr(colored_opt_format)
-            .format_for_files(detailed_format)
+            .format_for_stderr(shard_log_console_line_format)
+            .format_for_files( shard_log_file_line_format)     
             .start()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {}", e));
 
@@ -123,9 +192,7 @@ info!( "this is an info");
 warn!( "this is a  warn message");
 error!("this is an error");
 
-
-
-// use clap to parse the command line:
+// parse the command line using clap:
 let cmd_line = App::new("Shardoverse")
                    .version("0.1")
                    .author("Clunion <Christian.Lunau@gmx.de>")

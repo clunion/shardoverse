@@ -396,9 +396,10 @@ the coloring looks much better, at least around labeled loops.
 For logging the standard crate [```log```](https://github.com/rust-lang/log) is used in combination with crate [```flexi_logger```](https://github.com/emabee/flexi_logger) as a backend.   
 
 In the current configuration, detailed logfiles are written into the directory ```log```.   
-Additionally, colored error and warning-messages are wirtten to the console.   
+Additionally, colored error and warning-messages are wirtten to the console,    
+using a custom log formatter.   
 
-In the release variant of shardoverse, only errors and warnings are   
+In the release variant of Shardoverse, only errors and warnings are   
 included in the executable, all else are 'compiled out' by cargo options.
 
 # Debugging
