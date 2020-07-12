@@ -26,6 +26,8 @@
 
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
+pub mod shard_tool;   // <filename>
+pub mod shard_log;    // <filename>
 pub mod assets;       // <filename>
 pub mod config;       // <filename>
 pub mod pixel_draw;   // <filename>

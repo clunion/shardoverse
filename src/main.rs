@@ -51,22 +51,16 @@ use std::path::Path;
 use clap::{Arg, App};
 
 use log::{trace, debug, info, warn, error};
-use flexi_logger::{Logger, Duplicate, Record, DeferredNow, Cleanup, Criterion, Naming};
-use yansi::{Color, Style};
-
-//use crate::DeferredNow;
-//use self::DeferredNow;
-//use log::Record;
+use flexi_logger::{Logger, Duplicate, Cleanup, Criterion, Naming};
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 mod modules;                              // <dirname>
-use crate::modules::*;                    // create::<dirname>::*
+use crate::modules::*;                    // crate::<dirname>::*
+use crate::modules::config::*;            // crate::<dirname>::<filename>::*
 
 mod central_core;                         // <filename>
-use crate::central_core::*;               // create::<filename>::*
+use crate::central_core::*;               // crate::<filename>::*
 
-use crate::modules::config::ShardConfig;
-use crate::modules::config::WindowConfig;
  
 //___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
@@ -79,74 +73,6 @@ use crate::modules::config::WindowConfig;
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
-
-pub fn basename(path: &str) -> &str 
-{
-let mut pieces = path.rsplitn(2, |c| c == '/' || c == '\\');
-match pieces.next() 
-    {
-    Some(p) => p.into(),
-    None => path.into(),
-    }
-}
-
-
-/// A logline-formatter that produces log lines with timestamp and file location, like
-/// <br>
-/// ```[2016-01-13 15:25:01.640870 +01:00] INFO [src/foo/bar:26] Task successfully read from conf.json```
-/// <br>
-pub fn shard_log_console_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
-{
-let level = record.level();
-let shard_style: Style;
-
-let  error_style: Style = Style::new(Color::Red).bold().italic();  // todo: move to a one-time initializer or change into static
-let   warn_style: Style = Style::new(Color::Yellow).bold()      ;  // todo: move to a one-time initializer or change into static
-let   info_style: Style = Style::new(Color::Cyan)               ;  // todo: move to a one-time initializer or change into static
-let  debug_style: Style = Style::new(Color::Default)            ;  // todo: move to a one-time initializer or change into static
-let  trace_style: Style = Style::new(Color::Blue).dimmed()      ;  // todo: move to a one-time initializer or change into static
-
-match level 
-    {
-    log::Level::Error => {shard_style = error_style;},
-    log::Level::Warn  => {shard_style =  warn_style;},
-    log::Level::Info  => {shard_style =  info_style;},
-    log::Level::Debug => {shard_style = debug_style;},
-    log::Level::Trace => {shard_style = trace_style;},
-    };
-
-write!( w, 
-        "{} {:>5}{:>18}[{:4}] {}",
-        now.now().format("%H:%M:%S"),
-        shard_style.paint(record.level()),
-//      record.file().unwrap_or("<unnamed>"),   // <-- shorten with basename here
-        basename(record.file().unwrap_or("<unnamed>")),   // <-- shorten with basename here
-        record.line().unwrap_or(0),
-        &record.args()
-      )
-}
-
-/// A logline-formatter that produces log lines like
-/// <br>
-/// ```[2016-01-13 15:25:01.640870 +01:00] INFO [foo::bar] src/foo/bar.rs:26: Task successfully read from conf.json```
-/// <br>
-/// i.e. with timestamp, module path and file location.
-///
-/// # Errors
-///
-/// See `std::write`
-pub fn shard_log_file_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
-{
-write!( w,
-        "{} {:5}:{:>32}[{:4}]: {}",
-        now.now().format("%Y-%m-%d %H:%M:%S%.6f %:z"),
-        record.level(),
- //     record.module_path().unwrap_or("<unnamed>"),
-        record.file().unwrap_or("<unnamed>"),
-        record.line().unwrap_or(0),
-        &record.args()
-      )
-}
 
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  main   
@@ -176,13 +102,13 @@ fn main() -> Result<(), io::Error>
 let mut shard_config: ShardConfig = ShardConfig::default();
 
 //initialise flexi_logger:
-Logger::with_env_or_str("myprog=trace, mylib=trace")
+Logger::with_env_or_str("main=warn, mylib=trace")
             .log_to_file()
             .rotate(Criterion::Size(100_000), Naming::Timestamps, Cleanup::KeepLogAndZipFiles(4,10))
             .duplicate_to_stderr(Duplicate::Trace)
             .directory("log")
-            .format_for_stderr(shard_log_console_line_format)
-            .format_for_files( shard_log_file_line_format)     
+            .format_for_stderr(shard_log::console_line_format)
+            .format_for_files( shard_log::file_line_format)     
             .start()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {}", e));
 
