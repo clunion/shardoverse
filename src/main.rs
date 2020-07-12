@@ -101,8 +101,10 @@ fn main() -> Result<(), io::Error>
 {
 let mut shard_config: ShardConfig = ShardConfig::default();
 
-//initialise flexi_logger:
-Logger::with_env_or_str("main=warn, mylib=trace")
+//initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
+match Logger::with_env_or_str("info, shardoverse::modules::config=debug")
+            .check_parser_error()
+            .unwrap_or_else(|e| panic!("Logger initialization failed with {}", e))
             .log_to_file()
             .rotate(Criterion::Size(100_000), Naming::Timestamps, Cleanup::KeepLogAndZipFiles(4,10))
             .duplicate_to_stderr(Duplicate::Trace)
@@ -110,7 +112,10 @@ Logger::with_env_or_str("main=warn, mylib=trace")
             .format_for_stderr(shard_log::console_line_format)
             .format_for_files( shard_log::file_line_format)     
             .start()
-            .unwrap_or_else(|e| panic!("Logger initialization failed with {}", e));
+    {
+    Ok(_)      => {},
+    Err(error) => { println!("ERROR initialising flexi_logger: {:?}", error); }, // return Err(error); },
+    }
 
 trace!("this is a  trace message");
 debug!("this is a  debug {}", "message");

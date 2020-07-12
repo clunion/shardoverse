@@ -20,8 +20,9 @@ rand = "0.7.2"
 rust-ini = "0.15.3" 
 clap = "~2.27.0" 
 log = { version = "0.4", features = ["max_level_trace", "release_max_level_warn"] }
-flexi_logger = { version = "0.15" , features = ["ziplogs"]}
-yansi = "*"
+# flexi_logger = { version = "0.15" , features = ["ziplogs", "textfilter"]}
+flexi_logger = { version = "0.15" , features = ["ziplogs", "textfilter"]}
+yansi = "0.5"
 
 [dependencies.sdl2]
   version = "0.32.1"
