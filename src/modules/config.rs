@@ -141,6 +141,7 @@ debug!("config::load() called");
 
 // create config struct with default values: ---------
 let mut shard_config = ShardConfig::default();
+let mut       conf: ini::Ini;
 
 debug!("Values in local default struct:");
 debug!("default title      {:?}", shard_config.window.title);
@@ -152,7 +153,11 @@ debug!("default active     {:?}", shard_config.window.active);
 
 
 // reading content of ini-file: ---------------------
-let mut conf = Ini::load_from_file(ini_filename_p).unwrap();
+match Ini::load_from_file(ini_filename_p)
+    {
+    Ok(config) => { conf = config; },
+    Err(error) => { warn!("could not read config file {}: {:?}. DEFAULT VALUES will be used!",ini_filename_p, error); return Ok(shard_config);} // return Err(error); },
+    }
 
 // print all key-value data from the config ini-file:
 debug!("All values in ini file:");

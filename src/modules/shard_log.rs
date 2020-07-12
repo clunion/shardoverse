@@ -70,10 +70,10 @@ let level = record.level();
 let shard_style: Style;
 
 let  error_style: Style = Style::new(Color::Red).bold().italic();  // todo: move to a one-time initializer or change into static
-let   warn_style: Style = Style::new(Color::Yellow).bold()      ;  // todo: move to a one-time initializer or change into static
+let   warn_style: Style = Style::new(Color::Yellow).italic()    ;  // todo: move to a one-time initializer or change into static
 let   info_style: Style = Style::new(Color::Cyan)               ;  // todo: move to a one-time initializer or change into static
 let  debug_style: Style = Style::new(Color::Default)            ;  // todo: move to a one-time initializer or change into static
-let  trace_style: Style = Style::new(Color::Blue).dimmed()      ;  // todo: move to a one-time initializer or change into static
+let  trace_style: Style = Style::new(Color::Blue)               ;  // todo: move to a one-time initializer or change into static
 
 match level 
     {
