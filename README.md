@@ -206,9 +206,10 @@ If it is not installed yet, this can be done in the MSys2-Shell via:
 	 rustup component add clippy
 
 # Reading Material --> start here
-Now Rust compiler and some tools and libraries should be ready to use.
-To get into Rust itself, the following resoources can be used.
-While the Rust Programming language ithe *THE BOOK* and is written in a way that encourages to read it from start to end, it is also possible to just read the fist chapters, and then start picking topics what and when they are needed.   
+Now Rust compiler and some tools and libraries should be ready to use.   
+To get into Rust itself, the following resoources can be used.   
+
+While *The Rust Programming Language* is the **THE BOOK** and is written in a way that encourages to read it from start to end, it is also possible to just read the first few chapters, and then start picking topics when they are needed.   
 
 ### Books on Rust itself
  * [`The Rust Programming Language`](https://doc.rust-lang.org/book/) Here we start: The source of truth regarding Rust, for learning step by step, or in a selective manner. It is probably a good idea to read at least this book completely prior to naming oneself a new Rustacean.
@@ -287,7 +288,6 @@ After starting shardoverse, the program can be left by closing the window.
 | Key    | Action                               |
 |--------|--------------------------------------|
 | ESC    | Exit program                         |
-| Q      | Exit program                         |
 | P      | Paint colored pixels in main window  |
 
 
@@ -396,19 +396,24 @@ the coloring looks much better, at least around labeled loops.
 For logging the standard crate [```log```](https://github.com/rust-lang/log) is used in combination with crate [```flexi_logger```](https://github.com/emabee/flexi_logger) as a backend.   
 
 In the current configuration, detailed logfiles are written into the directory ```log```.   
-Additionally, colored error and warning-messages are wirtten to the console,    
-using a custom log formatter.   
+Additionally, colored error and warning-messages are wirtten to the console, using a custom log formatter.   
+
+The common log-level can also be changed at runtime by setting the environment variable RUST_LANG.   
+
+For the code currently in the work, the log level is set to debug, so only for thet code file(s) there is output at debug-level.   
 
 In the release variant of Shardoverse, only errors and warnings are   
 included in the executable, all else are 'compiled out' by cargo options.
 
 # Debugging
+An introduction to debugging Rust programs can be found here: [`Where We're Going, We Don't Need Println!`](https://www.joshmatthews.net/debugging-workshop/)
+
 To investigate:
-* ways to debug in this setup
+* more ways to debug in this setup
 
 
 # Project structure
-* Very small main.rs with parameter checking and only minimal logic
+* Very small main.rs with parameter checking, initialisation of the logging and only minimal logic
 * nearly everything goes into module-files to make the functions unit-testable
 * for simplicity, we start using a 'central-core' module to bind the parts and layers together
 * integration testing will be set up early (when beginning with the network stuff)

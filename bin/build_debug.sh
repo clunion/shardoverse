@@ -1,6 +1,6 @@
 ### shortcuts for Rust's cargo-Build-processes:
 
-printf "lint via clippy:\n"
+printf "cargo clippy lint:\n"
 #cargo clippy            2>&1 | tee    log/build_debug.log
 if ! cargo clippy; then
     echo cargo clippy returned error: $?
@@ -9,7 +9,7 @@ else
     echo cargo clippy lint: OK
 fi 
 
-printf "\n\nbuild via cargo:\n"
+printf "\n\ncargo build:\n"
 #cargo build             2>&1 | tee -a log/build_debug.log
 if ! cargo build; then
     echo cargo build returned error: $?
