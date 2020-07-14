@@ -188,7 +188,6 @@ The naming of the scripts here is changed to the terms used by Rust (build and r
     alias sd="./bin/run_debug.sh"
     alias sr="./bin/run_release.sh"
     alias st="./bin/run_test.sh"
-    alias sdt="./bin/run_debug_tool.sh"
 
 The more _rusty_ naming would be:
 
@@ -198,14 +197,22 @@ The more _rusty_ naming would be:
     alias crt="./bin/run_test.sh"
     alias crr="./bin/run_release.sh"
 
+    alias sdt="./bin/start_debug_tool.sh"
+    alias sdtt="./bin/start_debug_tool_tests.sh"
+    alias sdti="./bin/start_debug_tool_integration.sh"
+ 
     alias gcp="./bin/git_commit-push.sh"
+
+Currently, the start_debug_tool[*] scripts start _gdb_ as the debug tool.    
+start_debug_tool_tests.sh feeds the unit-tests-executable into the throat of gdb,
+start_debug_tool_integration.sh uses the integration-test-executable.   
 
 The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
 If it is not installed yet, this can be done in the MSys2-Shell via:
 
 	 rustup component add clippy
 
-# Reading Material --> start here
+# Reading Material <-- start here
 Now Rust compiler and some tools and libraries should be ready to use.   
 To get into Rust itself, the following resoources can be used.   
 
@@ -385,7 +392,7 @@ The following content for wrapper shell-script works in UltraEdit64 **Versions 2
 One additional remark regarding the **syntax coloring of Rust-code in UltraEdit**:
 UltraEdit defines the syntax coloring in word-files, for Rust such a file is named rust.uew.
 The currently available wordfile defines the single apostrophe (') as one of the string delimiters.
-This leads to a funny coloring when the Rust-code is using labeled loops, which also use the single apostrophe.   
+This leads to a funny coloring when the Rust-code is using labeled loops or lifetimes, which also use the single apostrophe.   
 
 **Workaround:** when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
 the coloring looks much better, at least around labeled loops.
@@ -495,13 +502,31 @@ The following assets are considered to be used, if their creators/owners do not 
 
 * ./assets/videos   
 
+## Sources for Resources
+Some more tilesets can be found here: 
+2D Top-Down:   
+    [`reddit roguelikedev wiki tilesets`](https://old.reddit.com/r/roguelikedev/wiki/tilesets)   
+    [`opengameart: roguelike`](https://opengameart.org/art-search-advanced?field_art_tags_tid=roguelike)   
+    [`itch.io: top-down+tileset`](https://itch.io/search?q=top-down+tileset)   
 
-# Worth Reading
+2.5D Isometric:    
+    [`Reiner's Tilesets`](https://www.reinerstilesets.de/)
 
+
+# Worth to digest, honorable to participate
 * [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
-
 * [`New Rustacean`](https://newrustacean.com/) - A well made podcast about learning Rust.
+* [`Rust Sokoban/`](https://sokoban.iolivia.me/) - A compact course of writing a sokoban game in Rust. Straightly delving into the game, getting quickly to the fun of it.   
 
-# Maintainer
+## Rust game development community
+* [`Rust gamedev news/`](https://rust-gamedev.github.io/) - A monthly newsletter 
+* [`Game Development in Rust server`](https://discord.gg/yNtPTb2) - The Discord server for Rust game development   
+* [`r/rustgamedev`](http://reddit.com/r/rust_gamedev) - Subreddit of and for Rust game development   
+* [`@rust_gamedev`](https://twitter.com/rust_gamedev) - Twitter chanel   
+    
+And a more global entry point is    
+* [`Are we game yet?`](https://arewegameyet.rs/) 
+
+# Maintainer of Shardoverse
 * [@clunion](https://github.com/clunion)
 
