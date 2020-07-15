@@ -18,10 +18,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-gfx-dev 
     - uses: actions-rs/cargo@v1
+    - name: Build on Ubuntu
       with:
         command: build
 
     - uses: actions-rs/cargo@v1
+    - name: Run Tests on Ubuntu
       with:
         command: test
       
@@ -33,6 +35,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: install_dependencies
       run: | 
+        brew install rustup
+        rustup-init -y --default-toolchain stable        
         wget https://www.libsdl.org/release/SDL2-2.0.12.tar.gz -O sdl2.tar.gz
         tar xzf sdl2.tar.gz
         pushd SDL2-* && ./configure && make && sudo make install && popd
@@ -48,16 +52,17 @@ jobs:
         wget --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz 
         tar xzf sdl2_gfx.tar.gz
         pushd SDL2_gfx-*/ && ./configure && make && sudo make install && popd
-        brew install SDL2
-        brew install rustup
-        rustup-init -y --default-toolchain stable        
     - name: Build
       run: |
         export PATH="$HOME/.cargo/bin:$PATH"
+        export LD_LIBRARY_PATH="/usr/local/lib/:$LD_LIBRARY_PATH"
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
         cargo build
     - name: Test
       run: |
         export PATH="$HOME/.cargo/bin:$PATH"
+        export LD_LIBRARY_PATH="/usr/local/lib/:$LD_LIBRARY_PATH"
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
         cargo test
       
   test_Windows:
