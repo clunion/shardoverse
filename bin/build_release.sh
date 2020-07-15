@@ -1,21 +1,20 @@
 ### shortcuts for Rust's cargo-Build-processes:
 
-printf "cargo clippy lint:\n"
-#cargo clippy --release  2>&1 | tee    log/build_release.log
+printf "##>>>>> cargo clippy lint:\n"
 if ! cargo clippy --release ; then
-    echo cargo clippy returned error: $?
+    printf "cargo clippy returned error: " $? "\n\n"
     exit
 else
-    echo cargo clippy lint: OK
+    printf "##<<<<< cargo clippy lint: OK\n\n"
 fi 
 
-printf "\n\ncargo build:\n"
+printf "##>>>>> cargo build:\n"
 #cargo build  --release  2>&1 | tee -a log/build_release.log
 if ! cargo build --release ; then
-    echo cargo build returned error: $?
+    printf "##<<<<< cargo build returned error: "$? "\n"
     exit
 else
-    echo cargo build: OK
+    printf "##<<<<< cargo build: OK \n"
 fi 
 
 filename=.\\target\\release\\shardoverse.exe
@@ -28,5 +27,4 @@ then
     file_size_kb=`du -k "$filename" | cut -f1`
 fi
 
-# file_size_hr=`du -h "$filename" | cut -f1`  # -h is a non POSIX GNU-extension
-printf "\n    Size of target binary: %s Byte (%s KB)\n" $file_size_byte $file_size_kb
+printf "    Size of target binary: %s Byte (%s KB)\n" $file_size_byte $file_size_kb

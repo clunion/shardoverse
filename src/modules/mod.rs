@@ -25,12 +25,30 @@
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
 
+// activate additional WARNINGS:
+#![ warn
+(
+   anonymous_parameters          ,
+   missing_copy_implementations  ,
+   missing_debug_implementations ,
+   missing_docs                  ,
+   nonstandard_style             ,
+   rust_2018_idioms              ,
+   single_use_lifetimes          ,
+   trivial_casts                 ,
+   trivial_numeric_casts         ,
+   unreachable_pub               ,
+   unused_extern_crates          ,
+   unused_qualifications         ,
+   variant_size_differences      ,
+)]
+
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
-pub mod shard_tool;   // <filename>
-pub mod shard_log;    // <filename>
-pub mod assets;       // <filename>
-pub mod config;       // <filename>
-pub mod pixel_draw;   // <filename>
+pub(crate) mod shard_tool;   // <filename>
+pub(crate) mod shard_log;    // <filename>
+pub(crate) mod assets;       // <filename>
+pub(crate) mod config;       // <filename>
+pub(crate) mod pixel_draw;   // <filename>
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
@@ -43,4 +61,3 @@ pub mod pixel_draw;   // <filename>
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
-

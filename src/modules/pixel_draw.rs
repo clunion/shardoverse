@@ -68,7 +68,7 @@ use sdl2::video::{Window};
 ///  * nothing   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn formula_fill(canvas_p: &mut Canvas<Window>) -> bool
+pub(crate) fn formula_fill(canvas_p: &mut Canvas<Window>) -> bool
 {
 let retval: bool = true;
 

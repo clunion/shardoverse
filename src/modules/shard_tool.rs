@@ -61,7 +61,7 @@ use std::path::MAIN_SEPARATOR;
 /// **`TODO:       `**   
 /// * nothing    
 /// ___________________________________________________________________________________________________________________________
-pub fn basename(path: &str) -> &str 
+pub(crate) fn basename(path: &str) -> &str 
 {
 let mut pieces = path.rsplitn(2, MAIN_SEPARATOR);
 match pieces.next() 

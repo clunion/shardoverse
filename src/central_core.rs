@@ -83,7 +83,8 @@ use crate::modules::config::ShardConfig;
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn run<'a>(shard_config_p: &'a mut ShardConfig, png: &Path) -> Result<&'a ShardConfig, String> {
+pub(crate) fn run<'a>(shard_config_p: &'a mut ShardConfig, png: &Path) -> Result<&'a ShardConfig, String> 
+{
 let mut lastx = 0;
 let mut lasty = 0;
 let mut tick  = 0;

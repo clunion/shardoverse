@@ -50,7 +50,7 @@ use log::{trace, debug, info, warn, error};
 /// **`DESCRIPTION:`**   
 ///  Contains all functions for handling cursors   
 /// ___________________________________________________________________________________________________________________________
-pub mod cursors
+pub(crate) mod cursors
 {
 use super::*;
 
@@ -75,7 +75,7 @@ use super::*;
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-   pub fn load() -> Result<(), io::Error> 
+   pub(crate) fn load() -> Result<(), io::Error> 
    {
    debug!("cursors::load() called");
    Ok(())

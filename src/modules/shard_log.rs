@@ -64,7 +64,7 @@ use crate::modules::*;      // crate::<dirname>::*
 /// **`TODO:       `**   
 /// * move the definition of the styles to a one-time initialiser or change into static or a macro...   
 /// ___________________________________________________________________________________________________________________________
-pub fn console_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
+pub(crate) fn console_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
 {
 let level = record.level();
 let shard_style: Style;
@@ -118,7 +118,7 @@ write!( w,
 /// **`TODO:       `**   
 /// * nothing   
 /// ___________________________________________________________________________________________________________________________
-pub fn file_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
+pub(crate) fn file_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
 {
 write!( w,
         "{} {:5}:{:>32}[{:4}]: {}",

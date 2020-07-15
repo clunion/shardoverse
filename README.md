@@ -209,9 +209,8 @@ start_debug_tool_integration.sh uses the integration-test-executable.
 
 The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
 If it is not installed yet, this can be done in the MSys2-Shell via:
-
-	 rustup component add clippy
-
+    rustup component add clippy   
+   
 # Reading Material <-- start here
 Now Rust compiler and some tools and libraries should be ready to use.   
 To get into Rust itself, the following resoources can be used.   
@@ -516,7 +515,8 @@ Some more tilesets can be found here:
 # Worth to digest, honorable to participate
 * [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 * [`New Rustacean`](https://newrustacean.com/) - A well made podcast about learning Rust.
-* [`Rust Sokoban/`](https://sokoban.iolivia.me/) - A compact course of writing a sokoban game in Rust. Straightly delving into the game, getting quickly to the fun of it.   
+* [`Rust Sokoban`](https://sokoban.iolivia.me/) - A compact course of writing a sokoban game in Rust. Straightly delving into the game, getting quickly to the fun of it.   
+* [`Crate publishing guidelines and tips`](https://blog.wnut.pw/2020/03/12/crate-publishing-guidelines-and-tips/#take-a-look-at-the-api-guidelines) - Many useful hints about improving code qulity before pblishing code.   
 
 ## Rust game development community
 * [`Rust gamedev news/`](https://rust-gamedev.github.io/) - A monthly newsletter 
@@ -524,7 +524,7 @@ Some more tilesets can be found here:
 * [`r/rustgamedev`](http://reddit.com/r/rust_gamedev) - Subreddit of and for Rust game development   
 * [`@rust_gamedev`](https://twitter.com/rust_gamedev) - Twitter chanel   
     
-And a more global entry point is    
+#### And a more global entry point is:    
 * [`Are we game yet?`](https://arewegameyet.rs/) 
 
 # Maintainer of Shardoverse

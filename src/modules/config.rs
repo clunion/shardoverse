@@ -23,10 +23,10 @@
 //___ MODULES EXTERNAL: _______________________________________________________________________________________________________
 // Extern crate declarations only in main.rs (to be reevaluated later)
 
-extern crate ini;
-use ini::Ini;
-
 use std::io;
+
+// extern crate ini;
+use ini::Ini;
 
 #[allow(unused_imports)]
 use log::{trace, debug, info, warn, error};
@@ -36,7 +36,7 @@ use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod n
 
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
-pub const NAME_OF_INI_FILE:  &str = "shardoverse.ini";
+pub(crate) const NAME_OF_INI_FILE:  &str = "shardoverse.ini";
 
 #[allow(dead_code)]
 const NAME_OF_INI_FILE4TEST: &str = "shardoverse_test.ini";
@@ -58,26 +58,26 @@ const DEFAULT_ACTIVE: bool = true;
 //___ STRUCT DEFINITIONS: _____________________________________________________________________________________________________
 
 #[derive(Debug)]
-pub struct WindowConfig
+pub(crate) struct WindowConfig
 {
-    pub title:  String,
-    pub pos_x:  i32,
-    pub pos_y:  i32,
-    pub height: u32,
-    pub width:  u32,
-    pub active: bool,
+    pub(crate) title:  String,
+    pub(crate) pos_x:  i32,
+    pub(crate) pos_y:  i32,
+    pub(crate) height: u32,
+    pub(crate) width:  u32,
+    pub(crate) active: bool,
 }
 
 #[derive(Debug)]
-pub struct ShardConfig
+pub(crate) struct ShardConfig
 {
-    pub verbosity:   u8,
-    pub debug:       bool,
-    pub test:        bool,
-    pub training:    bool,
-    pub windowreset: bool,
-    pub file:        String,
-    pub window:      WindowConfig,
+    pub(crate) verbosity:   u8,
+    pub(crate) debug:       bool,
+    pub(crate) test:        bool,
+    pub(crate) training:    bool,
+    pub(crate) windowreset: bool,
+    pub(crate) file:        String,
+    pub(crate) window:      WindowConfig,
 }
 
 
@@ -135,13 +135,13 @@ impl Default for ShardConfig
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>  
+pub(crate) fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>  
 {
 debug!("config::load() called");
 
 // create config struct with default values: ---------
 let mut shard_config = ShardConfig::default();
-let mut       conf: ini::Ini;
+let mut       conf: Ini;
 
 debug!("Values in local default struct:");
 debug!("default title      {:?}", shard_config.window.title);
@@ -212,7 +212,7 @@ Ok(shard_config)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn save(ini_filename_p: &str, shard_config_p: ShardConfig) -> Result<bool, io::Error> 
+pub(crate) fn save(ini_filename_p: &str, shard_config_p: ShardConfig) -> Result<bool, io::Error> 
 {
 debug!("config::save() called");
 
@@ -263,7 +263,7 @@ Ok(true)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn init(ini_filename_p: &str) -> Result<ShardConfig, io::Error> 
+pub(crate) fn init(ini_filename_p: &str) -> Result<ShardConfig, io::Error> 
 {
 debug!("init() called");
 
@@ -311,7 +311,7 @@ Ok(shard_config)
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub fn exit(ini_filename_p: &str, shard_config: ShardConfig) -> Result<bool, io::Error> 
+pub(crate) fn exit(ini_filename_p: &str, shard_config: ShardConfig) -> Result<bool, io::Error> 
 {
 debug!("exit() called");
 
@@ -408,25 +408,25 @@ mod tests
     match save(NAME_OF_INI_FILE4TEST,test_conf2write)
         {
         Ok(_)  => {},
-        Err(_) => { assert!(false) },
+        Err(errmsg)     => { panic!(errmsg) },
         }
 
-  let mut test_conf2load: ShardConfig = ShardConfig::default();
+  let test_conf2load: ShardConfig;  
   
   match load(NAME_OF_INI_FILE4TEST)
-      {
-      Ok(config) => { test_conf2load = config; },
-      Err(_)     => { assert!(false) },
-      }
-
+        {
+        Ok(config)  => { test_conf2load = config; },
+        Err(errmsg) => { panic!(errmsg) },
+        }
+  
   fs::remove_file(NAME_OF_INI_FILE4TEST).unwrap();
 
-  assert_eq!(test_conf2load.verbosity    , 0);                             // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
-  assert_eq!(test_conf2load.debug        , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
-  assert_eq!(test_conf2load.test         , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
-  assert_eq!(test_conf2load.training     , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
-  assert_eq!(test_conf2load.windowreset  , false);                         // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
-  assert_eq!(test_conf2load.file         , NAME_OF_INI_FILE.to_string());  // default werte, da diese werte derzeit nicht in die Ini-Datzei gespeichert werden!
+  assert_eq!(test_conf2load.verbosity    , 0);                             // default values, since currently these variables are not saved to the config-ini-file!
+  assert_eq!(test_conf2load.debug        , false);                         // default values, since currently these variables are not saved to the config-ini-file!
+  assert_eq!(test_conf2load.test         , false);                         // default values, since currently these variables are not saved to the config-ini-file!
+  assert_eq!(test_conf2load.training     , false);                         // default values, since currently these variables are not saved to the config-ini-file!
+  assert_eq!(test_conf2load.windowreset  , false);                         // default values, since currently these variables are not saved to the config-ini-file!
+  assert_eq!(test_conf2load.file         , NAME_OF_INI_FILE.to_string());  // default values, since currently these variables are not saved to the config-ini-file!
 
   assert_eq!(test_conf2load.window.title , "test window title");
   assert_eq!(test_conf2load.window.pos_x , 1);
