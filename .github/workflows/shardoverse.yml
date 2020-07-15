@@ -12,18 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
     - name: Install SDL2-libs
+    - uses: actions/checkout@v1
       run: |
         sudo apt-get update
         sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-gfx-dev 
-    - uses: actions-rs/cargo@v1
     - name: Build on Ubuntu
+    - uses: actions-rs/cargo@v1
       with:
         command: build
 
-    - uses: actions-rs/cargo@v1
     - name: Run Tests on Ubuntu
+    - uses: actions-rs/cargo@v1
       with:
         command: test
       
