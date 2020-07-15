@@ -24,6 +24,6 @@ flexi_logger = { version = "0.15" , features = ["ziplogs"]}
 yansi = "0.5"
 
 [dependencies.sdl2]
-  version = "0.32.1"
+  version = "0.34.2"
   default-features = false
   features = ["ttf","image","gfx","mixer"]
