@@ -2,7 +2,7 @@
 
 printf "##>>>>> cargo clippy lint:\n"
 if ! cargo clippy --tests --examples --benches --all-features; then
-    printf "cargo clippy returned error: " $? "\n\n"
+    printf "##<<<<< cargo clippy returned error: " $? "\n\n"
     exit
 else
     printf "##<<<<< cargo clippy lint: OK\n\n"
