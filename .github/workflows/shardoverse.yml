@@ -12,17 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install SDL2-libs
     - uses: actions/checkout@v1
+    - name: Install SDL2-libs
       run: |
         sudo apt-get update
         sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-gfx-dev 
-    - name: Build on Ubuntu
     - uses: actions-rs/cargo@v1
       with:
         command: build
 
-    - name: Run Tests on Ubuntu
     - uses: actions-rs/cargo@v1
       with:
         command: test
@@ -61,8 +59,6 @@ jobs:
     - name: Test
       run: |
         export PATH="$HOME/.cargo/bin:$PATH"
-        export LD_LIBRARY_PATH="/usr/local/lib/:$LD_LIBRARY_PATH"
-        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
         cargo test
       
   test_Windows:
