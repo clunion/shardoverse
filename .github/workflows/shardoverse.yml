@@ -1,15 +1,27 @@
 name: shardoverse
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
 
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
+ test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        rust: [stable, nightly]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - uses: actions/checkout@master
 
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
     - name: Install SDL2-libs
       run: |
         sudo apt-get update
