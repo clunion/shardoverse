@@ -7,8 +7,8 @@ on:
       - master
 
 jobs:
-  test_Ubuntu:
 
+  test_Ubuntu:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,6 @@ jobs:
         command: test
       
   test_MacOS:
-
     runs-on: macOS-latest
     
     steps:
@@ -63,10 +62,22 @@ jobs:
       
   test_Windows:
     runs-on: windows-2016
-    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Build
-      run: cargo build
-    - name: Test
-      run: cargo test
+      - uses: actions/checkout@v2
+      - name: Install cargo-vcpkg
+        run: cargo install cargo-vcpkg
+      - name: Install dependencies
+        run: cargo vcpkg build
+      - name: Build SDL2
+        shell: bash
+        env:
+          CI_BUILD_FEATURES: "use-vcpkg static-link gfx image ttf mixer"
+          RUST_TEST_THREADS: 1
+        run: |
+          set -xeuo pipefail
+          rustc --version
+          cargo --version
+          cargo build --features "${CI_BUILD_FEATURES}"
+          cargo build --examples --features "${CI_BUILD_FEATURES}"
+          cargo test --features "${CI_BUILD_FEATURES}"
