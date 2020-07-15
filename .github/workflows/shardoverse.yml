@@ -1,6 +1,10 @@
-name: Shardoverse
+name: shardoverse
 
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test_Ubuntu:
