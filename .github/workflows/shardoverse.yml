@@ -48,7 +48,6 @@ jobs:
         wget --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz 
         tar xzf sdl2_gfx.tar.gz
         pushd SDL2_gfx-*/ && ./configure && make && sudo make install && popd
-      run: | 
         brew install SDL2
         brew install rustup
         rustup-init -y --default-toolchain stable        

@@ -1,5 +1,7 @@
 ![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Shardoverse-title.png)
 
+![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
+
 |CPU     |Operating System              |Rust            | Development Env. | CI System      | Status                                                                                                    |
 |--------|------------------------------|----------------|------------------|----------------|-----------------------------------------------------------------------------------------------------------|
 | x86_64 | Ubuntu-latest                |stable          | gnu              | GitHub Actions | ![shardoverse](https://github.com/clunion/shardoverse/workflows/shardoverse/badge.svg)                    |
@@ -397,8 +399,14 @@ This leads to a funny coloring when the Rust-code is using labeled loops or life
 the coloring looks much better, at least around labeled loops.
 
 
+# Project structure
+* Very small main.rs with parameter checking, initialisation of the logging and only minimal logic
+* nearly everything goes into module-files to make the functions unit-testable
+* for simplicity, we start using a 'central-core' module to bind the parts and layers together
+* integration testing will be set up early (when beginning with the network stuff)
 
-# Logging
+
+## Logging
 For logging the standard crate [```log```](https://github.com/rust-lang/log) is used in combination with crate [```flexi_logger```](https://github.com/emabee/flexi_logger) as a backend.   
 
 In the current configuration, detailed logfiles are written into the directory ```log```.   
@@ -411,20 +419,13 @@ For the code currently in the work, the log level is set to debug, so only for t
 In the release variant of Shardoverse, only errors and warnings are   
 included in the executable, all else are 'compiled out' by cargo options.
 
-# Debugging
+## Debugging
 An introduction to debugging Rust programs can be found here: [`Where We're Going, We Don't Need Println!`](https://www.joshmatthews.net/debugging-workshop/)
 
 To investigate:
 * more ways to debug in this setup
 
-
-# Project structure
-* Very small main.rs with parameter checking, initialisation of the logging and only minimal logic
-* nearly everything goes into module-files to make the functions unit-testable
-* for simplicity, we start using a 'central-core' module to bind the parts and layers together
-* integration testing will be set up early (when beginning with the network stuff)
-
-# GitHub Continuous Integration with Rust
+# Continuous Integration (CI) with Rust
 This is not needed to build Shardoverse locally, only describes what is done here to get the build CI running with GitHub.
 * follow the templates provided by and described on [`trust`](https://github.com/japaric/trust)
 * this requires accounts at [`Travis CI`](https://travis-ci.org/) and [`AppVeyor`](https://www.appveyor.com/), for both free accounts for open source projects are available.
@@ -439,6 +440,29 @@ put the logic for install, build and test stages in separate windows-cmd scripts
 The same as for AppVeyor applies, most code moved into scripts. In this case these are bash-scripts, which is fine.
 That YAML-stuff is more weirdly in the way than helpful.
 Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets handy.
+
+## Code Coverage
+To investigate:
+* Best way to compute th code coverage 
+* how to use [`tarpaulin`](https://github.com/xd009642/tarpaulin)
+
+## Security Auditing
+To investigate:
+* Hint: [`cargo-audit`](https://rustsec.org/) 
+
+## Source Styling
+Ok, this is something of a personal matter, and it is different for nearly everyone.
+The prefered sourcecode formatting for Shardoverse currently can not achieved    
+in the stable Rust build, because some features are considerd unstable in Rust fmt. 
+Perhaps it is possible in nightly Rust builds, but currently a change to nightly is not intended.
+
+## Performance Profiling
+To investigate:
+* How to do performance checking
+* Hint: [`criterion.rs`](https://github.com/bheisler/criterion.rs)     
+* Example for a perfarmance test: [`uhyve`](https://github.com/hermitcore/uhyve)
+* probably needs a [`runner`](https://help.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners) on GitHub to give comparable results.
+
 
 
 # License(s)
