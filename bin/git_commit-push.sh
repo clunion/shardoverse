@@ -10,34 +10,39 @@
 #fi 
 
 #------------------------------------- 
+printf "##>>>>> cargo test:\n"
 if ! cargo test; then
-    echo cargo test returned error: $?
+    printf "##<<<<< cargo test returned error: " $? "\n\n"
     exit
 else
-    echo tests OK
+    printf "##<<<<< cargo build: OK\n"
 fi 
 
 #------------------------------------- 
+printf "##>>>>> cargo doc:\n"
 if ! cargo doc; then
-    echo cargo doc returned error: $?
+    printf "##<<<<< cargo doc returned error: " $? "\n\n"
     exit
 else
+    printf "##<<<<< cargo docs: OK\n"
     echo docs OK
 fi 
 
 #------------------------------------- 
+printf "##>>>>> git commit:\n"
 if ! git commit -a; then
-    echo git commit -a returned error: $?
+    printf "##<<<<< git commit -a returned error: " $? "\n\n"
     exit
 else
-    echo commited OK
+    printf "##<<<<< git commit: OK\n"
 fi 
 
 #------------------------------------- 
+printf "##>>>>> git push:\n"
 if ! git push; then
-    echo git push returned error: $?
+    printf "##<<<<< git push returned error: " $? "\n\n"
     exit
 else
-    echo pushed OK
+    printf "##<<<<< git push: OK\n"
 fi 
 
