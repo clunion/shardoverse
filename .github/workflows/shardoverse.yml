@@ -12,9 +12,14 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - name: Display the path
-        run: echo ${env:PATH}
-        shell: pwsh
+      - name: Stable with rustfmt and clippy
+      uses: actions-rs/toolchain@v1
+      with:
+          profile: minimal
+          toolchain: stable
+          components: rustfmt, clippy
+                                
+
         
 #    - uses: actions/checkout@v1
 #    - name: install_dependencies
