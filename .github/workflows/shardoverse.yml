@@ -7,9 +7,10 @@ jobs:
     name: Rust on MSWindows
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout Shardoverse
+        uses: actions/checkout@v2
 
-      - name: Install Rust
+      - name: Install Rust stable
         uses: actions-rs/toolchain@v1
         with:
             toolchain: stable
@@ -30,20 +31,21 @@ jobs:
       - name: Run cargo build
         run: | 
           echo ${env:PATH}
-          rustc -Vv
+          rustc -V
           cargo -V
           pwd
-          # Install SDL2.
+          echo "pwd = "`pwd`
+          echo "Install SDL2:"
           curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
           Expand-Archive sdl2.zip -DestinationPath sdl2
-          set LIB=%LIB%;C:\projects\rust-belt\sdl2\SDL2-2.0.10\lib\x64
+          set LIB=%LIB%;C:\projects\shardoverse\sdl2\SDL2-2.0.10\lib\x64
           cargo build
           
-      - name: Run tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-        
+#     - name: Run tests
+#       uses: actions-rs/cargo@v1
+#       with:
+#         command: test
+#       
 #    - uses: actions/checkout@v1
 #    - name: install_dependencies
 #      run: | 
