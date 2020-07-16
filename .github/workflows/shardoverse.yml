@@ -25,7 +25,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- -D warnings --tests --examples --benches --all-features
+          args: --tests --examples --benches --all-features
 
 #      - uses: actions-rs/toolchain@v1
 #        with:
