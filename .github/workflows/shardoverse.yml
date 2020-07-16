@@ -22,19 +22,21 @@ jobs:
 #       with:
 #         command: check
         
-      - name: Run clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --tests --examples --benches --all-features
+#     - name: Run clippy
+#       uses: actions-rs/cargo@v1
+#       with:
+#         command: clippy
+#         args: --tests --examples --benches --all-features
 
       - name: Run cargo build
         run: | 
+          $PSVersionTable.PSVersion
           echo ${env:PATH}
           rustc -V
           cargo -V
           pwd
           echo "pwd = "`pwd`
+          dir
           echo "Install SDL2:"
           curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
           Expand-Archive sdl2.zip -DestinationPath sdl2
