@@ -446,7 +446,7 @@ To investigate:
 * Best way to compute th code coverage 
 * how to use [`tarpaulin`](https://github.com/xd009642/tarpaulin)
 
-## Security Auditing
+## Security Safeguarding
 To investigate:
 * Hint: [`cargo-audit`](https://rustsec.org/) 
 
