@@ -29,8 +29,8 @@ jobs:
         cargo -V
       
         # Add GCC to PATH if needed.
-        if "%TARGET%" == "i686-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw32\bin
-        if "%TARGET%" == "x86_64-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw64\bin
+        #if "%TARGET%" == "i686-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw32\bin
+        #if "%TARGET%" == "x86_64-pc-windows-gnu" set PATH=%PATH%;C:\msys64\mingw64\bin
       
         # Install SDL2.
         curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
