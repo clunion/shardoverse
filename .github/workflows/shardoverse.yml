@@ -10,7 +10,6 @@ jobs:
       
   test_Windows:
     runs-on: windows-latest
-       rust: 'nightly'
     
     steps:
       - name: Display the path
