@@ -8,6 +8,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -20,8 +21,8 @@ jobs:
         with:
           command: check
         
-      - uses: actions-rs/cargo@v1
       - name: Run clippy
+        uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -- -D warnings --tests --examples --benches --all-features
