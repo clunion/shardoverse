@@ -1,25 +1,27 @@
-name: shardoverse
+on: [push]
 
-on:
-  push:
-  pull_request:
-    branches:
-      - master
+name: build
 
 jobs:
-      
-  test_Windows:
-    runs-on: windows-latest
-    
+  check:
+    name: Rust project
+    runs-on: ubuntu-latest
     steps:
-      - name: Stable with rustfmt and clippy
-      uses: actions-rs/toolchain@v1
-      with:
-          profile: minimal
-          toolchain: stable
-          components: rustfmt, clippy
-                                
+      - uses: actions/checkout@v2
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            override: true
+            components: rustfmt, clippy
 
+      # `cargo check` command here will use installed `nightly`
+      # as it is set as an "override" for current directory
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
         
 #    - uses: actions/checkout@v1
 #    - name: install_dependencies
