@@ -451,10 +451,11 @@ To investigate:
 * Hint: [`cargo-audit`](https://rustsec.org/) 
 
 ## Source Styling
-Ok, this is something of a personal matter, and it is different for nearly everyone.
-The prefered sourcecode formatting for Shardoverse currently can not achieved    
-in the stable Rust build, because some features are considerd unstable in Rust fmt. 
-Perhaps it is possible in nightly Rust builds, but currently a change to nightly is not intended.
+Ok, this is something of a personal matter, and preferred style/formatting is different for nearly everyone.   
+The prefered sourcecode formatting for Shardoverse currently can not be achieved in the stable Rust build, 
+because some of the preferred formatting options are considerd unstable in Rust fmt.    
+
+Unstable fmt options can be used in nightly Rust builds, but currently a change of Shardoverse to nightly is not intended.   
 
 ## Performance Profiling
 To investigate:
