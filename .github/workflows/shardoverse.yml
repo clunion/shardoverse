@@ -30,6 +30,13 @@ jobs:
       - name: Run cargo build
         run: | 
           echo ${env:PATH}
+          rustc -Vv
+          cargo -V
+          pwd
+          # Install SDL2.
+          curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
+          Expand-Archive sdl2.zip -DestinationPath sdl2
+          set LIB=%LIB%;C:\projects\rust-belt\sdl2\SDL2-2.0.10\lib\x64
           cargo build
           
       - name: Run tests
