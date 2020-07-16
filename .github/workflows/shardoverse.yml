@@ -28,9 +28,9 @@ jobs:
           args: --tests --examples --benches --all-features
 
       - name: Run cargo build
-         run: | 
-             echo ${env:PATH}
-             cargo build
+        run: | 
+          echo ${env:PATH}
+          cargo build
           
       - name: Run tests
         uses: actions-rs/cargo@v1
