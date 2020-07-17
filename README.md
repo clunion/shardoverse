@@ -37,20 +37,19 @@ Goal of this project is to learn:
 * the Rust programming language,
 * a bit of game programming and
 * the network-stuff for peer-to-peer coupling.
-
+   
 We chose to write a little roguelike game and maybe add some extras.
 
 ## Current state
-**The project is not really started yet.**
-
-We did set up most of the development environment to be used (debugging and logging is still missing)
-some tools and libraries are chosen and set to work, 
-several basic assets for graphics and sound are selected.
+**2020-07-17, Now is when it all begins...**   
+Most things of the development environment are set up in a resonable way now, including logging.
+Git, some Contiuous Integration pipelining and the generating of source documentation is working.  
+Several basic assets for graphics and sound are selected.
 
 Currently, we 
-define the project structure (concept of how the functionalities are separated into modules, directories and files)
-apply some design principles to the project structure (thus laying the foundation of the game's software architecture)
-and such things.
+start with creating the first easy data structures (for creatures and items),
+expanding the project structure while applying some design principles.
+Using an Entity Component System (ECS) model is in consideration, perhaps [`Specs or Legion`](https://csherratt.github.io/blog/posts/specs-and-legion/) will be used.
 
 
 ## Software Design Principles
@@ -77,6 +76,7 @@ It is surely not necessary to follow every detail of these principles, but the i
 | [`GitHub`](https://github.com/)                                 | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too.                                        |
 | [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independent. |
 | [`AreWeIDEyet`](https://areweideyet.com/)                       | Not yet. This learning project focusses on the programming itself. An IDE will (much) later be introduced, probably VisualStudioCode. More info on IDEs for Rust can be found here: [whats-the-best-ide-for-developing-in-rust](https://medium.com/cloud-native-the-gathering/whats-the-best-ide-for-developing-in-rust-5087d46006f5). |
+| [`Specs (ECS)`](https://github.com/amethyst/specs)              | Using an [`Entity Component System (ECS)`](https://en.wikipedia.org/wiki/Entity_component_system) seems to be the way to go. There are several available, **Specs** is used in the [`Roguelike-Tutorial`](https://bfnightly.bracketproductions.com/rustbook/), in [`Rust Sokoban`](https://sokoban.iolivia.me/) and (currently) in Amethyst (though [`Amethyst considers changing to Legion`](https://github.com/amethyst/rfcs/issues/22)). |
 
 
 
@@ -86,6 +86,7 @@ It is surely not necessary to follow every detail of these principles, but the i
 |-------------------------------------------------------|------------------------------------------------------------------------------------------|
 | [`amethyst`](https://crates.io/crates/amethyst)       | Hm, data-driven development looks like a good idea, maybe a bit strange to grasp. What is the relation to SDL2? Is Amethyst a replacement for SDL2 or can both be integrated? |
 | [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docs is available! But that may be a bit much, since our goal is to learn how to do it in Rust by ourselves. On the other hand, may be we could integrate some things. |
+| [`Legion (ECS)`](https://github.com/TomGillen/legion) | A newer ECS, aimed for high performance. Looks tempting, currently not as well documented as Specs. So for learning purposes Specs looks better suited. |
 
 
 ## Setting up the development environment
@@ -206,7 +207,7 @@ The more _rusty_ naming would be:
     alias gcp="./bin/git_commit-push.sh"
 
 Currently, the start_debug_tool[*] scripts start _gdb_ as the debug tool.    
-start_debug_tool_tests.sh feeds the unit-tests-executable into the throat of gdb,
+start_debug_tool_tests.sh feeds the unit-tests-executable into the throat of gdb,    
 start_debug_tool_integration.sh uses the integration-test-executable.   
 
 The build scripts use [`clippy`](https://github.com/rust-lang/rust-clippy/), the Rust linter (since the 2018 edition in stable).
@@ -229,8 +230,8 @@ While *The Rust Programming Language* is the **THE BOOK** and is written in a wa
  * [`The Cargo Book`](https://doc.rust-lang.org/cargo/)  The Rust Package-Manager which also builds, runs and tests our code
  
 ### Roguelike programming in Rust 
- * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/chapter_0.html) 
-       
+ * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/) - A great tutorial of how to write a roguelike in Rust, covering every aspect and using modern techniques like Data Driven Deesign and Entity Component Systems!
+
 
 ### Install git for Msys2
 Git is used for version control, to coordinate the different contributors working in parallel, as a base for continous integration and, later, for publishing the results.   
@@ -269,10 +270,10 @@ File path and name used in KeeAgent:
 ## Clone the git repository of Shardoverse
 In the MSys2-Shell:   
  * navigate to your intended base development directory,   
- * then clone the files from GitHub by issuing:   
-   
-    git clone https://github.com/clunion/shardoverse   
-   
+ * then clone the files from GitHub by issuing:    
+
+    git clone https://github.com/clunion/shardoverse
+
 That creates a new sub directory named ```shardoverse``` with all the necessary files in it.
 
 ## Build and Run Shardoverse
@@ -298,6 +299,13 @@ After starting shardoverse, the program can be left by closing the window.
 | ESC    | Exit program                         |
 | P      | Paint colored pixels in main window  |
 
+When the program is started, a (currently empty) window should appear on screen.
+If the window fails to appear, it is probably off-screen. 
+There are two ways to get that fixed:
+* start the executable with the parameter --windowreset. This could be done via:   
+ `cargo run --release -- --windowreset`
+* remove the file `shardoverse.ini`. The window coordinates are then initialised with defaults, which should be on the main screen.
+* it is also possible to change the contenten of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
 
 ------------------
 > An example for a similar environment is the small and nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
@@ -541,7 +549,7 @@ Some more tilesets can be found here:
 * [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 * [`New Rustacean`](https://newrustacean.com/) - A well made podcast about learning Rust.
 * [`Rust Sokoban`](https://sokoban.iolivia.me/) - A compact course of writing a sokoban game in Rust. Straightly delving into the game, getting quickly to the fun of it.   
-* [`Crate publishing guidelines and tips`](https://blog.wnut.pw/2020/03/12/crate-publishing-guidelines-and-tips/#take-a-look-at-the-api-guidelines) - Many useful hints about improving code qulity before pblishing code.   
+* [`Crate publishing guidelines and tips`](https://blog.wnut.pw/2020/03/12/crate-publishing-guidelines-and-tips/#take-a-look-at-the-api-guidelines) - Many useful hints about improving code qulity before publishing code.   
 
 ## Rust game development community
 * [`Rust gamedev news/`](https://rust-gamedev.github.io/) - A monthly newsletter 

@@ -134,7 +134,7 @@ let cmd_line = App::new("Shardoverse")
                        .value_name("FILE")
                        .help("Sets a specific config file.")
                        .takes_value(true))
-                   .arg(Arg::with_name("window-reset")                 // <--WINDOW-RESET -----------------------------
+                   .arg(Arg::with_name("windowreset")                 // <--WINDOW-RESET -----------------------------
                        .short("w")
                        .long("windowreset")
                        .help("Resets the window size and position to default values.")
@@ -162,8 +162,15 @@ let cmd_line = App::new("Shardoverse")
 
 // Get the name of a config-file, if supplied by user, or defaults to config::NAME_OF_INI_FILE
 let config_filename = cmd_line.value_of("configfile").unwrap_or(config::NAME_OF_INI_FILE);
-shard_config.file = config_filename.to_string();
+shard_config.file   = config_filename.to_string();
 info!("config-file: {}", shard_config.file);
+
+// load configuration, states and assets, initialise everything:
+match config::init(config_filename)
+    {
+    Ok(config)  => { shard_config = config; },
+    Err(error)  => { error!("Error initialising: {:?}", error); return Err(error); },
+    }
 
 // Vary the output based on how many times the user used the "verbose" flag
 // (i.e. 'myprog -v -v -v' or 'myprog -vvv' vs 'myprog -v'
@@ -176,31 +183,21 @@ match cmd_line.occurrences_of("verbosity")
     _ => {shard_config.verbosity = 9; info!("Verbosity={}, Maximum verbosity"   ,shard_config.verbosity); },
     }
 
-// You can handle information about subcommands by requesting their matches by name
-// (as below), requesting just the name used, or both at the same time
+// handle the existence of commandline parameters by requesting matches by name:
 if cmd_line.is_present("test-mode")     {shard_config.test        = true; info!("Test Mode enabled")    ; }
 if cmd_line.is_present("debug-mode")    {shard_config.debug       = true; info!("Debug Mode enabled")   ; } 
 if cmd_line.is_present("training-mode") {shard_config.training    = true; info!("Training Mode enabled"); }
 if cmd_line.is_present("windowreset")   {shard_config.windowreset = true; info!("Window reset detected"); }
 
-
-
-// load configuration, states and assets, initialise everything:
-match config::init(config_filename)
-    {
-    Ok(config)  => { shard_config = config; },
-    Err(error)  => { error!("Error initialising: {:?}", error); return Err(error); },
-    }
-
+// resetting the windows coordinates and size:
 if  shard_config.windowreset
     {
     info!("windowreset will be done"); 
     shard_config.window = WindowConfig::default();
     };
 
-
 // Hand over control to central core:
-match run(&mut shard_config,Path::new("assets/cursors/pointers_part_5/glove3.png"))
+match run(&mut shard_config, Path::new("assets/cursors/pointers_part_5/glove3.png"))
     {
     Ok(_shard_config) => {},
     Err(error) => { error!("Error initialising: {:?}", error); }, //return Err(error); },

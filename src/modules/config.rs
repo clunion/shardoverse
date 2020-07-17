@@ -100,19 +100,19 @@ impl Default for WindowConfig
 
 impl Default for ShardConfig 
 {
-   fn default() -> Self 
-   {
-       ShardConfig 
-       {
-       verbosity:   0,
-       debug:       false,
-       test:        false,
-       training:    false,
-       windowreset: false,
-       file:        NAME_OF_INI_FILE.to_owned(),
-       window:      WindowConfig::default(),
-       }
-   }
+    fn default() -> Self 
+    {
+        ShardConfig 
+        {
+        verbosity:   0,
+        debug:       false,
+        test:        false,
+        training:    false,
+        windowreset: false,
+        file:        NAME_OF_INI_FILE.to_owned(),
+        window:      WindowConfig::default(),
+        }
+    }
 }
 
  
