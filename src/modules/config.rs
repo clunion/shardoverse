@@ -32,7 +32,7 @@ use ini::Ini;
 use log::{trace, debug, info, warn, error};
 
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
-use crate::modules::assets::cursors;   // <dirname>::<filename>::<explicit mod name>
+use crate::modules::asset::cursors;   // <dirname>::<filename>::<explicit mod name>
 
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
@@ -100,19 +100,19 @@ impl Default for WindowConfig
 
 impl Default for ShardConfig 
 {
-    fn default() -> Self 
-    {
-        ShardConfig 
-        {
-        verbosity:   0,
-        debug:       false,
-        test:        false,
-        training:    false,
-        windowreset: false,
-        file:        NAME_OF_INI_FILE.to_owned(),
-        window:      WindowConfig::default(),
-        }
-    }
+   fn default() -> Self 
+   {
+       ShardConfig 
+       {
+       verbosity:   0,
+       debug:       false,
+       test:        false,
+       training:    false,
+       windowreset: false,
+       file:        NAME_OF_INI_FILE.to_owned(),
+       window:      WindowConfig::default(),
+       }
+   }
 }
 
  
@@ -154,17 +154,17 @@ debug!("default active     {:?}", shard_config.window.active);
 
 // reading content of ini-file: ---------------------
 match Ini::load_from_file(ini_filename_p)
-    {
-    Ok(config) => { conf = config; },
-    Err(error) => { warn!("could not read config file {}: {:?}. DEFAULT VALUES will be used!",ini_filename_p, error); return Ok(shard_config);} // return Err(error); },
-    }
+  {
+  Ok(config) => { conf = config; },
+  Err(error) => { warn!("could not read config file {}: {:?}. DEFAULT VALUES will be used!",ini_filename_p, error); return Ok(shard_config);} // return Err(error); },
+  }
 
 // print all key-value data from the config ini-file:
 debug!("All values in ini file:");
 for (key, value) in &conf 
-    {
-    debug!("{:?}:{:?}", key, value);
-    }
+  {
+  debug!("{:?}:{:?}", key, value);
+  }
 
 //  transfering ini-file content to local struct:
 //let mut  config          = Window::default();
@@ -270,10 +270,10 @@ debug!("init() called");
 let shard_config: ShardConfig;
 
 match load(ini_filename_p)
-    {
-    Ok(config) => { shard_config = config; },
-    Err(error) => { error!("Error loading config: {:?}", error); return Err(error); },
-    }
+  {
+  Ok(config) => { shard_config = config; },
+  Err(error) => { error!("Error loading config: {:?}", error); return Err(error); },
+  }
 
 debug!("load config found title : {}", shard_config.window.title ); 
 debug!("load config found pos_x : {}", shard_config.window.pos_x );
@@ -283,10 +283,10 @@ debug!("load config found height: {}", shard_config.window.height);
 debug!("load config found active: {}", shard_config.window.active);
 
 match cursors::load()
-    {
-    Ok(_)      => {},
-    Err(error) => { error!("Error loading cursors: {:?}", error); return Err(error); },
-    }
+  {
+  Ok(_)      => {},
+  Err(error) => { error!("Error loading cursors: {:?}", error); return Err(error); },
+  }
     
 Ok(shard_config)
 }
@@ -316,10 +316,10 @@ pub(crate) fn exit(ini_filename_p: &str, shard_config: ShardConfig) -> Result<bo
 debug!("exit() called");
 
 match save(ini_filename_p,shard_config)
-    {
-    Ok(_)      => {},
-    Err(error) => { error!("Error saving config: {:?}", error); return Err(error); },
-    }
+  {
+  Ok(_)      => {},
+  Err(error) => { error!("Error saving config: {:?}", error); return Err(error); },
+  }
 
 Ok(true)
 }
@@ -343,8 +343,8 @@ mod tests
   #[test]
   fn test_init() 
   {
-    let result = init(NAME_OF_INI_FILE);
-    assert!(result.is_ok());
+  let result = init(NAME_OF_INI_FILE);
+  assert!(result.is_ok());
   }
 
   /// ___________________________________________________________________________________________________________________________
@@ -355,8 +355,8 @@ mod tests
   #[test]
   fn test_load() 
   {
-    let conf = load(NAME_OF_INI_FILE);  // load is non-destructive, thus the normal ini-file is used for load-testing.
-    assert!(conf.is_ok());
+  let conf = load(NAME_OF_INI_FILE);  // load is non-destructive, thus the normal ini-file is used for load-testing.
+  assert!(conf.is_ok());
   }
 
   /// ___________________________________________________________________________________________________________________________
@@ -365,15 +365,16 @@ mod tests
   /// **`TESTS:      `** checks if method WindowConfig::default() indeed sets the DEFAULT-VALUES   
   /// ___________________________________________________________________________________________________________________________
   #[test]
-  fn test_default_values() {
-      let defaults = WindowConfig::default();
-
-      assert_eq!(defaults.title , DEFAULT_TITLE );
-      assert_eq!(defaults.pos_x , DEFAULT_POS_X );
-      assert_eq!(defaults.pos_y , DEFAULT_POS_Y );
-      assert_eq!(defaults.width , DEFAULT_WIDTH );
-      assert_eq!(defaults.height, DEFAULT_HEIGHT);
-      assert_eq!(defaults.active, DEFAULT_ACTIVE);
+  fn test_default_values() 
+  {
+  let defaults = WindowConfig::default();
+  
+  assert_eq!(defaults.title , DEFAULT_TITLE );
+  assert_eq!(defaults.pos_x , DEFAULT_POS_X );
+  assert_eq!(defaults.pos_y , DEFAULT_POS_Y );
+  assert_eq!(defaults.width , DEFAULT_WIDTH );
+  assert_eq!(defaults.height, DEFAULT_HEIGHT);
+  assert_eq!(defaults.active, DEFAULT_ACTIVE);
   }
 
   /// ___________________________________________________________________________________________________________________________
@@ -405,19 +406,19 @@ mod tests
     window:      test_win_conf2write ,
     };
 
-    match save(NAME_OF_INI_FILE4TEST,test_conf2write)
-        {
-        Ok(_)  => {},
-        Err(errmsg)     => { panic!(errmsg) },
-        }
+  match save(NAME_OF_INI_FILE4TEST,test_conf2write)
+    {
+    Ok(_)  => {},
+    Err(errmsg)     => { panic!(errmsg) },
+    }
 
   let test_conf2load: ShardConfig;  
   
   match load(NAME_OF_INI_FILE4TEST)
-        {
-        Ok(config)  => { test_conf2load = config; },
-        Err(errmsg) => { panic!(errmsg) },
-        }
+    {
+    Ok(config)  => { test_conf2load = config; },
+    Err(errmsg) => { panic!(errmsg) },
+    }
   
   fs::remove_file(NAME_OF_INI_FILE4TEST).unwrap();
 
@@ -434,7 +435,6 @@ mod tests
   assert_eq!(test_conf2load.window.width , 3);
   assert_eq!(test_conf2load.window.height, 4);
   assert_eq!(test_conf2load.window.active, false);
-
   }
 
 } // End of: mod test

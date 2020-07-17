@@ -33,7 +33,7 @@
    missing_debug_implementations ,
    missing_docs                  ,
    nonstandard_style             ,
-// rust_2018_idioms              ,
+   rust_2018_idioms              ,
    single_use_lifetimes          ,
    trivial_casts                 ,
    trivial_numeric_casts         ,
@@ -46,8 +46,10 @@
 //___ MODULES LOCAL: __________________________________________________________________________________________________________
 pub(crate) mod shard_tool;   // <filename>
 pub(crate) mod shard_log;    // <filename>
-pub(crate) mod assets;       // <filename>
+pub(crate) mod asset;        // <filename>
 pub(crate) mod config;       // <filename>
+pub(crate) mod creature;     // <filename>
+pub(crate) mod item;         // <filename>
 pub(crate) mod pixel_draw;   // <filename>
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________

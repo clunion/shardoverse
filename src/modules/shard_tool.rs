@@ -30,7 +30,24 @@ use std::path::MAIN_SEPARATOR;
 //___ none ___
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
-//___ none ___
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_U8:   u8   = 255;
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_I8:   i8   = -126;
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_U16:  u16  =  64000;
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_I16:  i16  = -32000;
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_U32:  u32  =  4000000001;
+
+#[allow(dead_code)]
+pub(crate) const DEFAULT_VALUE_I32:  i32  = -2000000002;
 
 //___ TYPES: __________________________________________________________________________________________________________________
 //___ none ___

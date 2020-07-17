@@ -3,8 +3,8 @@
 //! **`HOME:       `** [Shardoverse on GitHub](https://github.com/clunion/shardoverse)    
 //! **`SYNOPSIS:   `** A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust    
 //! ___________________________________________________________________________________________________________________________
-//! **`FILE:       `** assets.rs 🦀   
-//! **`DESCRIPTION:`** handling of the assets: preloading, dynamic loading, switching of grafics, sounds and other assets   
+//! **`FILE:       `** asset.rs 🦀   
+//! **`DESCRIPTION:`** handling of the assets: preloading, dynamic loading, switching of graphics, sounds and other assets   
 //! ___________________________________________________________________________________________________________________________
 //! **`LICENSE:    `**   
 //! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   
@@ -85,7 +85,7 @@ use super::*;
 
 
 /// ___________________________________________________________________________________________________________________________
-/// **`TESTMODULE: `** for assets   
+/// **`TESTMODULE: `** for asset   
 /// **`TYPE:       `** unit test functions   
 /// ___________________________________________________________________________________________________________________________
 #[cfg(test)]
@@ -103,8 +103,8 @@ mod tests
   #[test]
   fn test_load() 
   {
-    let result = load();
-    assert!(result.is_ok());
+  let result = load();
+  assert!(result.is_ok());
   }
   
 } // End of: mod test

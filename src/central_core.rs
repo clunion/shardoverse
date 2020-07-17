@@ -47,9 +47,9 @@ use sdl2::surface::Surface;
 
 
 //___ MODULES LOCAL: _________________________________________________________________________________________________________
-use crate::modules::pixel_draw;        // <dirname>::<filename>
-
-use crate::modules::config::ShardConfig;
+use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
+use crate::modules::*;                     // crate::<dirname>::<filename>
+use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<modulename>
 
 //___ CONSTANTS: _____________________________________________________________________________________________________________
 //___ none ___
@@ -73,7 +73,7 @@ use crate::modules::config::ShardConfig;
 /// **`            `** **`     or --> `** - Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
-/// Here it all comes together, this contains the central event loop, ties input to logic to outputup.   
+/// Here it all comes together, this contains the central event loop, ties input to logic to output.   
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -96,6 +96,22 @@ debug!("win_pos_y  {:?}", shard_config_p.window.pos_y);
 debug!("win_width  {:?}", shard_config_p.window.width);
 debug!("win_height {:?}", shard_config_p.window.height);
 debug!("active     {:?}", shard_config_p.window.active);
+
+let default_creature: creature::Creature = creature::Creature::default();
+match creature::display_values(&default_creature)
+    {
+    Ok(_)       => {},
+    Err(error)  => { println!("ERROR displaying default_creature: {:?}", error); }, // return Err(error); },
+    }
+;
+
+let default_item: item::Item = item::Item::default();
+match item::display_values(&default_item)
+    {
+    Ok(_)       => {},
+    Err(error)  => { println!("ERROR displaying default_item: {:?}", error); }, // return Err(error); },
+    }
+;
 
 let sdl_context = sdl2::init()?;
 let video_subsys = sdl_context.video()?;
