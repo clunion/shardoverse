@@ -32,8 +32,11 @@ jobs:
         run: | 
           $PSVersionTable.PSVersion
           echo ${env:PATH}
-          pwd
-          dir
+          echo "pwd: ----------------------------------------------------------------"
+          Get-Location -PSDrive D
+          echo "dir: ----------------------------------------------------------------"
+          cmd /c "dir"
+          echo "check versions:. ----------------------------------------------------"
           rustc -V
           cargo -V
           echo "Install SDL2: -------------------------------------------------------"
@@ -41,7 +44,9 @@ jobs:
           curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
           echo "exec: Expand-Archive sdl2.zip -DestinationPath sdl2 -----------------"
           Expand-Archive sdl2.zip -DestinationPath sdl2
-          dir
+          echo "dir -----------------------------------------------------------------"
+          cmd /c "dir"
+          echo "set LIB -------------------------------------------------------------"
           [System.Environment]::SetEnvironmentVariable('LIB','D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64',[System.EnvironmentVariableTarget]::User)
           echo ${env:LIB}
           echo "cargo build ---------------------------------------------------------"
