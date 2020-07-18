@@ -37,7 +37,8 @@ jobs:
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\logs\chocolatey.log"  
           echo "wget SDL2_gfx: ------------------------------------------------------"
           echo "wget.exe --debug --content-disposition --continue https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz"
-          wget.exe https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz --output-document=sdl2_gfx.tar.gz --debug --continue --content-disposition 
+          echo "wget.exe https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz --output-document=sdl2_gfx.tar.gz --debug --continue --content-disposition" 
+          wget.exe "https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz" --output-document="sdl2_gfx.tar.gz" --debug --verbose
           echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
           tar xzf sdl2_gfx.tar.gz
           echo "curl SDL2: ----------------------------------------------------------"
