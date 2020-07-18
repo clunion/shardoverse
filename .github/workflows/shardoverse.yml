@@ -30,6 +30,7 @@ jobs:
 
 #          echo "wget.exe --debug --content-disposition --continue https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz"
 #          echo "wget.exe https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz --output-document=sdl2_gfx.tar.gz --debug --continue --content-disposition" 
+#          C:\ProgramData\chocolatey\lib\Wget\tools\wget.exe "https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz" --output-document="sdl2_gfx.tar.gz" --debug --verbose
 
       - name: Setup SDL2-libraries
         run: | 
@@ -40,7 +41,8 @@ jobs:
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\logs\chocolatey.log"  
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\lib\Wget\tools"
           echo "wget SDL2_gfx: ------------------------------------------------------"
-          C:\ProgramData\chocolatey\lib\Wget\tools\wget.exe "https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz" --output-document="sdl2_gfx.tar.gz" --debug --verbose
+          echo "exec: curl --fail --silent --show-error --location --output sdl2_gfx.zip https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz"
+          curl --fail --silent --show-error --location --output sdl2_gfx..tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
           echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
           tar xzf sdl2_gfx.tar.gz
           echo "curl SDL2: ----------------------------------------------------------"
