@@ -48,6 +48,7 @@ jobs:
           Expand-Archive sdl2_mixer.zip -DestinationPath sdl2_mixer
           cmd /c "dir /O:GN sdl2_mixer\SDL2_mixer-2.0.4\lib\x64"
           echo "get SDL2_gfx: -------------------------------------------------------"
+          choco install wget -y
           wget --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz
           tar xzf sdl2_gfx.tar.gz
           
