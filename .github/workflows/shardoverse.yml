@@ -28,6 +28,11 @@ jobs:
           command: clippy
           args: --tests --examples --benches --all-features
 
+      - name: wget sdl2_gfx
+        uses: wei/wget@v1
+        with:
+          args: --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz
+
       - name: Setup SDL2-libraries
         run: | 
           $PSVersionTable.PSVersion
@@ -48,7 +53,6 @@ jobs:
           Expand-Archive sdl2_mixer.zip -DestinationPath sdl2_mixer
           cmd /c "dir /O:GN sdl2_mixer\SDL2_mixer-2.0.4\lib\x64"
           curl --fail --silent --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
-          wget --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz 
           tar xzf sdl2_gfx.tar.gz
           
 #         wget https://www.libsdl.org/release/SDL2-2.0.12.tar.gz -O sdl2.tar.gz
