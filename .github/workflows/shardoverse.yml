@@ -17,18 +17,18 @@ jobs:
             override: true
             components: clippy
 
-#     - name: Run cargo check
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: check
+      - name: cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
         
-#     - name: Run clippy
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: clippy
-#         args: --tests --examples --benches --all-features
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --tests --examples --benches --all-features
 
-      - name: Run cargo build
+      - name: Setup SDL2-libraries
         run: | 
           $PSVersionTable.PSVersion
           echo ${env:PATH}
@@ -49,7 +49,11 @@ jobs:
           echo "LIB=$env:LIB"
           $env:LIB="D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
           echo "LIB=$env:LIB"
+
+      - name: cargo build
+        run: | 
           echo "cargo build: --------------------------------------------------------"
+          echo "LIB=$env:LIB"
           cargo build
           echo "cargo done. ---------------------------------------------------------"
           
