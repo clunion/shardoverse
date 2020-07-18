@@ -44,15 +44,14 @@ jobs:
           Expand-Archive sdl2.zip -DestinationPath sdl2
           echo "dir -----------------------------------------------------------------"
           cmd /c "dir /O:GN"
-          cmd /c "dir /O:GN sdl2"
+          cmd /c "dir /O:GN sdl2\SDL2-2.0.10\lib\x64"
           echo "set LIB -------------------------------------------------------------"
-          $env:LIB
+          echo "LIB=$env:LIB"
           $env:LIB="D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
-          $env:LIB
-          echo ${env:LIB}
-          Get-ChildItem -Path Env:\
-          echo "cargo build ---------------------------------------------------------"
+          echo "LIB=$env:LIB"
+          echo "cargo build: --------------------------------------------------------"
           cargo build
+          echo "cargo done. ---------------------------------------------------------"
           
 #     - name: Run tests
 #       uses: actions-rs/cargo@v1
