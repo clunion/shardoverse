@@ -36,7 +36,8 @@ jobs:
           choco install wget -y
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\logs\chocolatey.log"  
           echo "wget SDL2_gfx: ------------------------------------------------------"
-          echo "wget.exe --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz"
+          echo "wget.exe -V"
+          echo "wget.exe --debug --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz"
           wget.exe --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz
           echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
           tar xzf sdl2_gfx.tar.gz
