@@ -299,13 +299,13 @@ After starting shardoverse, the program can be left by closing the window.
 | ESC    | Exit program                         |
 | P      | Paint colored pixels in main window  |
 
-When the program is started, a (currently empty) window should appear on screen.
+When the program is started, a (currently empty) window should appear on screen.   
 If the window fails to appear, it is probably off-screen. 
-There are two ways to get that fixed:
+There are some ways to get that fixed:
 * start the executable with the parameter --windowreset. This could be done via:   
  `cargo run --release -- --windowreset`
-* remove the file `shardoverse.ini`. The window coordinates are then initialised with defaults, which should be on the main screen.
-* it is also possible to change the contenten of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
+* __or:__ remove the file `shardoverse.ini`. The window coordinates are then initialised with defaults, which should be on the main screen.
+* __or:__ it is also possible to change the contenten of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
 
 ------------------
 > An example for a similar environment is the small and nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).
