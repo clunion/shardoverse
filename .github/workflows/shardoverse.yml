@@ -42,7 +42,7 @@ jobs:
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\lib\Wget\tools"
           echo "wget SDL2_gfx: ------------------------------------------------------"
           echo "exec: curl --fail --silent --show-error --location --output sdl2_gfx.zip https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz"
-          curl --fail --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz
+          curl --fail --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 2>&1
           echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
           tar xzf sdl2_gfx.tar.gz
           echo "curl SDL2: ----------------------------------------------------------"
