@@ -10,19 +10,19 @@ jobs:
       - name: checkout Shardoverse
         uses: actions/checkout@v2
 
-      - name: Install Rust stable
+      - name: actions-rs Install Rust stable
         uses: actions-rs/toolchain@v1
         with:
             toolchain: stable
             override: true
             components: clippy
 
-      - name: cargo check
+      - name: actions-rs check
         uses: actions-rs/cargo@v1
         with:
           command: check
         
-      - name: cargo clippy
+      - name: actions-rs clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
@@ -45,23 +45,23 @@ jobs:
           echo "dir -----------------------------------------------------------------"
           cmd /c "dir /O:GN"
           cmd /c "dir /O:GN sdl2\SDL2-2.0.10\lib\x64"
-          echo "set LIB -------------------------------------------------------------"
-          echo "LIB=$env:LIB"
-          $env:LIB="D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
-          echo "LIB=$env:LIB"
 
       - name: cargo build
         run: | 
-          echo "cargo build: --------------------------------------------------------"
+          echo "set LIB -------------------------------------------------------------"
           echo "LIB=$env:LIB"
+          $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
+          echo "LIB=$env:LIB"
+          echo "cargo build: --------------------------------------------------------"
+          echo "cargo build"
           cargo build
-          echo "cargo done. ---------------------------------------------------------"
+          echo "cargo build done. ---------------------------------------------------"
           
-#     - name: Run tests
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: test
-#       
+      - name: Run actions-rs tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+
 #    - uses: actions/checkout@v1
 #    - name: install_dependencies
 #      run: | 
