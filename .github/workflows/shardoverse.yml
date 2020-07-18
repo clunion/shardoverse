@@ -32,10 +32,8 @@ jobs:
         run: | 
           $PSVersionTable.PSVersion
           echo ${env:PATH}
-          echo "pwd: ----------------------------------------------------------------"
-          Get-Location -PSDrive D
           echo "dir: ----------------------------------------------------------------"
-          cmd /c "dir"
+          cmd /c "dir /O:GN"
           echo "check versions:. ----------------------------------------------------"
           rustc -V
           cargo -V
@@ -45,10 +43,14 @@ jobs:
           echo "exec: Expand-Archive sdl2.zip -DestinationPath sdl2 -----------------"
           Expand-Archive sdl2.zip -DestinationPath sdl2
           echo "dir -----------------------------------------------------------------"
-          cmd /c "dir"
+          cmd /c "dir /O:GN"
+          cmd /c "dir /O:GN sdl2"
           echo "set LIB -------------------------------------------------------------"
-          [System.Environment]::SetEnvironmentVariable('LIB','D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64',[System.EnvironmentVariableTarget]::User)
+          $env:LIB
+          $env:LIB="D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
+          $env:LIB
           echo ${env:LIB}
+          Get-ChildItem -Path Env:\
           echo "cargo build ---------------------------------------------------------"
           cargo build
           
