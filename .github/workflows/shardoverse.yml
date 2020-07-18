@@ -38,8 +38,9 @@ jobs:
           echo "choco install wget: -------------------------------------------------"
           choco install wget -y
           cmd /c "dir /O:GN C:\ProgramData\chocolatey\logs\chocolatey.log"  
+          cmd /c "dir /O:GN C:\ProgramData\chocolatey\lib\Wget\tools"
           echo "wget SDL2_gfx: ------------------------------------------------------"
-          cmd /c "wget.exe 'https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz' --output-document=sdl2_gfx.tar.gz --debug --verbose"
+          C:\ProgramData\chocolatey\lib\Wget\tools\wget.exe "https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz" --output-document="sdl2_gfx.tar.gz" --debug --verbose
           echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
           tar xzf sdl2_gfx.tar.gz
           echo "curl SDL2: ----------------------------------------------------------"
