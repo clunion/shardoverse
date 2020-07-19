@@ -26,9 +26,10 @@
 //! ___________________________________________________________________________________________________________________________
 //!    
 
-//___ MODULES EXTERNAL: _______________________________________________________________________________________________________
-// Extern crate declarations only in main.rs (to be reevaluated later)
+//___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
+//___ none ___
 
+//___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
 //use std::io;
 use std::path::Path;
 use std::time::Duration;
@@ -45,8 +46,6 @@ use sdl2::pixels::Color;
 use sdl2::pixels;
 use sdl2::surface::Surface;
 
-
-//___ MODULES LOCAL: _________________________________________________________________________________________________________
 use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
 use crate::modules::*;                     // crate::<dirname>::<filename>
 use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<modulename>

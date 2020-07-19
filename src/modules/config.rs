@@ -20,18 +20,17 @@
 //!    
 
 
-//___ MODULES EXTERNAL: _______________________________________________________________________________________________________
-// Extern crate declarations only in main.rs (to be reevaluated later)
+//___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
+//___ none ___
 
+//___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
 use std::io;
 
-// extern crate ini;
 use ini::Ini;
 
 #[allow(unused_imports)]
 use log::{trace, debug, info, warn, error};
 
-//___ MODULES LOCAL: __________________________________________________________________________________________________________
 use crate::modules::asset::cursors;   // <dirname>::<filename>::<explicit mod name>
 
 

@@ -2,11 +2,11 @@
 
 ![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
 
-|CPU     |Operating System              |Rust            | Development Env. | CI System      | Status                                                                                                    |
-|--------|------------------------------|----------------|------------------|----------------|-----------------------------------------------------------------------------------------------------------|
-| x86_64 | Ubuntu-latest, MacOS-latest  |stable          | gnu              | GitHub Actions | ![shardoverse](https://github.com/clunion/shardoverse/workflows/shardoverse/badge.svg)                    |
-| x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu              | Travis-CI      | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
-| x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64    | AppVeyor       | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
+|CPU     | Operating System             |Rust            | Development Environment| CI System      | Status                                                                                                    |   
+|:-------|:-----------------------------|:--------------:|:----------------------:|:--------------:|:----------------------------------------------------------------------------------------------------------|   
+| x86_64 | Ubuntu-latest, MacOS-latest  |stable          | gnu                    | GitHub Actions | ![shardoverse](https://github.com/clunion/shardoverse/workflows/shardoverse/badge.svg)                    |
+| x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu                    | Travis-CI      | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
+| x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64          | AppVeyor       | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
 
 ## What is this?

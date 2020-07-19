@@ -5,7 +5,7 @@
 //! ___________________________________________________________________________________________________________________________
 //! **`FILE:       `** mod.rs 🦀   
 //! **`DESCRIPTION:`** this file contains the bindings/paths-to-the-sources of project shardoverse   
-//! The mod.rs-file is (at least, seems to be) handled in a special way. We use it solely for providing acces to our own modules.   
+//! The mod.rs-file is (at least, seems to be) handled in a special way. We use it solely for providing access to our own submodules.   
 //! ___________________________________________________________________________________________________________________________
 //! **`LICENSE:    `**   
 //! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   
@@ -20,12 +20,7 @@
 //! ___________________________________________________________________________________________________________________________
 //!    
 
-
-//___ MODULES EXTERNAL: _______________________________________________________________________________________________________
-// Extern crate declarations only in main.rs (to be reevaluated later)
-
-
-// activate additional WARNINGS:
+//___ Activate additional WARNINGS:
 #![ warn
 (
    anonymous_parameters          ,
@@ -43,7 +38,8 @@
    variant_size_differences      ,
 )]
 
-//___ MODULES LOCAL: __________________________________________________________________________________________________________
+
+//___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
 pub(crate) mod shard_tool;   // <filename>
 pub(crate) mod shard_log;    // <filename>
 pub(crate) mod asset;        // <filename>

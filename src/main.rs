@@ -43,7 +43,11 @@
 extern crate sdl2;
 extern crate clap;
 
-//___ MODULES EXTERNAL: _______________________________________________________________________________________________________
+//___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
+mod modules;                              // <dirname>
+mod central_core;                         // <filename>
+
+//___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
 //use std::env;
 use std::io;
 use std::path::Path;
@@ -53,12 +57,8 @@ use clap::{Arg, App};
 use log::{trace, debug, info, warn, error};
 use flexi_logger::{Logger, Duplicate, Cleanup, Criterion, Naming};
 
-//___ MODULES LOCAL: __________________________________________________________________________________________________________
-mod modules;                              // <dirname>
 use crate::modules::*;                    // crate::<dirname>::*
 use crate::modules::config::*;            // crate::<dirname>::<filename>::*
-
-mod central_core;                         // <filename>
 use crate::central_core::*;               // crate::<filename>::*
 
  
@@ -101,7 +101,7 @@ fn main() -> Result<(), io::Error>
 {
 let mut shard_config: ShardConfig = ShardConfig::default();
 
-//initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
+// Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
 match Logger::with_env_or_str("info, shardoverse::modules::config=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
@@ -123,7 +123,7 @@ info!( "this is an info");
 warn!( "this is a  warn message");
 error!("this is an error");
 
-// parse the command line using clap:
+// Parse the command line using clap:
 let cmd_line = App::new("Shardoverse")
                    .version("0.1")
                    .author("Clunion <Christian.Lunau@gmx.de>")
@@ -160,20 +160,19 @@ let cmd_line = App::new("Shardoverse")
                        .takes_value(false))
                    .get_matches();
 
-// Get the name of a config-file, if supplied by user, or defaults to config::NAME_OF_INI_FILE
+// Get the name of a config-file, if supplied on commandline, or defaults to config::NAME_OF_INI_FILE
 let config_filename = cmd_line.value_of("configfile").unwrap_or(config::NAME_OF_INI_FILE);
 shard_config.file   = config_filename.to_string();
 info!("config-file: {}", shard_config.file);
 
-// load configuration, states and assets, initialise everything:
+// Load configuration, states and assets, initialise everything:
 match config::init(config_filename)
     {
     Ok(config)  => { shard_config = config; },
     Err(error)  => { error!("Error initialising: {:?}", error); return Err(error); },
     }
 
-// Vary the output based on how many times the user used the "verbose" flag
-// (i.e. 'myprog -v -v -v' or 'myprog -vvv' vs 'myprog -v'
+// Increase the amount of output based on how many times the user used the "verbose" flag (i.e. 'myprog -v' or 'myprog -vvv' vs 'myprog -v -v -v':
 match cmd_line.occurrences_of("verbosity") 
     {
     0 => {shard_config.verbosity = 0; info!("Verbosity={}, No verbose info"     ,shard_config.verbosity); }, 
@@ -183,13 +182,13 @@ match cmd_line.occurrences_of("verbosity")
     _ => {shard_config.verbosity = 9; info!("Verbosity={}, Maximum verbosity"   ,shard_config.verbosity); },
     }
 
-// handle the existence of commandline parameters by requesting matches by name:
+// Handle the existence of command line parameters by requesting matches by name:
 if cmd_line.is_present("test-mode")     {shard_config.test        = true; info!("Test Mode enabled")    ; }
 if cmd_line.is_present("debug-mode")    {shard_config.debug       = true; info!("Debug Mode enabled")   ; } 
 if cmd_line.is_present("training-mode") {shard_config.training    = true; info!("Training Mode enabled"); }
 if cmd_line.is_present("windowreset")   {shard_config.windowreset = true; info!("Window reset detected"); }
 
-// resetting the windows coordinates and size:
+// Reset the windows coordinates and size:
 if  shard_config.windowreset
     {
     info!("windowreset will be done"); 
@@ -203,8 +202,7 @@ match run(&mut shard_config, Path::new("assets/cursors/pointers_part_5/glove3.pn
     Err(error) => { error!("Error initialising: {:?}", error); }, //return Err(error); },
     }
 
-
-// save configuration and states, de-initialise everything:
+// Save configuration and states, de-initialise everything:
 match config::exit(config_filename, shard_config)
     {
     Ok(_)      => {},
