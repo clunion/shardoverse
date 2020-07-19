@@ -113,6 +113,13 @@ jobs:
           curl --fail --silent --show-error --location --output sdl2_mixer.zip https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip
           Expand-Archive sdl2_mixer.zip -DestinationPath sdl2_mixer
           cmd /c "dir /O:GN sdl2_mixer\SDL2_mixer-2.0.4\lib\x64"
+          echo "curl SDL2_gfx: - (CURRENTLY FAILS!) ---------------------------------"
+          echo "exec: curl --fail --show-error --location --output sdl2_gfx.zip http://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-1.0.4.zip"
+          curl --fail --show-error --location --output sdl2_gfx.zip http://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-1.0.4.zip
+          Expand-Archive sdl2_gfx.zip -DestinationPath sdl2_gfx
+          cmd /c "dir /O:GN"
+          cmd /c "dir /O:GN sdl2_gfx"
+          cmd /c "dir /O:GN sdl2_gfx\SDL2_gfx-1.0.4"
           echo "check some versions:. -----------------------------------------------"
           rustc -V
           cargo -V
@@ -120,6 +127,7 @@ jobs:
 
 #         echo "wget SDL2_gfx: - (CURRENTLY FAILS!) ---------------------------------"
 #         echo "exec: curl --fail --silent --show-error --location --output sdl2_gfx.zip https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz"
+#         http://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-1.0.4.zip
 #         curl --fail --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 2>&1
 #         echo "tar xzf sdl2_gfx.tar.gz: ---------------------------------------------"
 #         tar xzf sdl2_gfx.tar.gz
