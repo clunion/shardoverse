@@ -42,8 +42,8 @@ We chose to write a little roguelike game and maybe add some extras.
 
 ## Current state
 **2020-07-17, Now is when it all begins...**   
-Most things of the development environment are set up in a resonable way now, including logging.
-Git, some Contiuous Integration pipelining and the generating of source documentation is working.  
+Most things of the development environment are set up in a reasonable way now, including logging.
+Git, some Continuous Integration pipelining and the generating of source documentation is working.  
 Several basic assets for graphics and sound are selected.
 
 Currently, we 
@@ -100,7 +100,7 @@ For the further steps, open this shell.
    
 Perhaps it is now the right time to configure this shell/window for your liking.
 
-### Updating the Msys2- and MinGW64-Packages and -Repositories
+### Updating the MSys2- and MinGW64-Packages and -Repositories
     pacman -Syuu
 
 (repeat this until there is nothing more to update)
@@ -184,7 +184,7 @@ The reason behind this is, that these scripts then do not have to be found throu
 
 The naming of the aliases is out of historical reasons. `md` means `make debug`, `sr` is for `start release` and so on.
 
-The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' into them, so i am not really willing to change that.
+The naming of the scripts here is changed to the terms used by Rust (build and run), but my fingers have already wired 'md' into them, so I am not really willing to change that.
 
     alias md="./bin/build_debug.sh"
     alias mr="./bin/build_release.sh"
@@ -216,7 +216,7 @@ If it is not installed yet, this can be done in the MSys2-Shell via:
    
 # Reading Material <-- start here
 Now Rust compiler and some tools and libraries should be ready to use.   
-To get into Rust itself, the following resoources can be used.   
+To get into Rust itself, the following resources can be used.   
 
 While *The Rust Programming Language* is the **THE BOOK** and is written in a way that encourages to read it from start to end, it is also possible to just read the first few chapters, and then start picking topics when they are needed.   
 
@@ -230,11 +230,11 @@ While *The Rust Programming Language* is the **THE BOOK** and is written in a wa
  * [`The Cargo Book`](https://doc.rust-lang.org/cargo/)  The Rust Package-Manager which also builds, runs and tests our code
  
 ### Roguelike programming in Rust 
- * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/) - A great tutorial of how to write a roguelike in Rust, covering every aspect and using modern techniques like Data Driven Deesign and Entity Component Systems!
+ * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/) - A great tutorial of how to write a roguelike in Rust, covering every aspect and using modern techniques like Data Driven Design and Entity Component Systems!
 
 
 ### Install git for Msys2
-Git is used for version control, to coordinate the different contributors working in parallel, as a base for continous integration and, later, for publishing the results.   
+Git is used for version control, to coordinate the different contributors working in parallel, as a base for continuous integration and, later, for publishing the results.   
 Git can be set up as described in 9 steps at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
 
 #### In short:
@@ -261,7 +261,7 @@ Here, a file with Path and name like this is used:
 
     /e/Temp/msys_cyglockfile
 
-Currently, the variant using the cygwin compatible socket seems to work with Msys2.
+Currently, the variant using the Cygwin compatible socket seems to work with Msys2.
 If not, try the other (msysgit) variant.   
 File path and name used in KeeAgent:
 
@@ -304,8 +304,8 @@ If the window fails to appear, it is probably off-screen.
 There are some ways to get that fixed:
 * start the executable with the parameter --windowreset. This could be done via:     
 >     cargo run --release -- --windowreset
-* __or:__ remove the file `shardoverse.ini`. The window coordinates are then initialised with defaults, which should be on the main screen.
-* __or:__ it is also possible to change the contenten of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
+* __or:__ remove the file `shardoverse.ini`. The window coordinates are then initialized with defaults, which should be on the main screen.
+* __or:__ it is also possible to change the content of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
 
 ------------------
 > An example for a similar environment is the small and nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).   
@@ -331,12 +331,12 @@ To automate the login to GitHub using SSH-Keys with [`KeePass2`](https://keepass
 * transfer your SSH public Key to GitHub
 * install [`KeePass2`](https://keepass.info/) (tested here: Version 2.44)
 * install the KeePass2-Plugin [`KeeAgent`](https://lechnology.com/software/keeagent/) (Version 0.11.1.0, by David Lechner)
-* load and activate the ssh keys into KeePas2
+* load and activate the ssh keys into KeePass2
 * load the Keys into KeeAgent
-* Let KeeAgent create (at least) the 'cygwin compatible **socket file**'
+* Let KeeAgent create (at least) the 'Cygwin compatible **socket file**'
 * take note of the socket file's path and filename (in **windows style**, could be something like: E:\Temp\msys_cyglockfile)
 * in an Msys2 startup script like .bash_profile: set and export a shell environment variable named **SSH_AUTH_SOCK** with the **unix-style** path to the socket file like this:
-```export SSH_AUTH_SOCK="/c/Temp7cyglockfile"```
+```export SSH_AUTH_SOCK="/c/Temp/cyglockfile"```
 
 Now Git actions involving the GitHub server (like push and pull) should not ask for credentials again.   
 Note: Setting this up was a bit shaky first, it did not work right away, so some tinkering around for some time was necessary. It may be the same at your side.
@@ -404,11 +404,11 @@ The currently available wordfile defines the single apostrophe (') as one of the
 This leads to a funny coloring when the Rust-code is using labeled loops or lifetimes, which also use the single apostrophe.   
 
 **Workaround:** when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
-the coloring looks much better, at least around labeled loops.
+the coloring looks much better, at least around loop-labels and lifetimes.
 
 
 # Project structure
-* Very small main.rs with parameter checking, initialisation of the logging and only minimal logic
+* Very small main.rs with parameter checking, initialization of the logging and only minimal logic
 * nearly everything goes into module-files to make the functions unit-testable
 * for simplicity, we start using a 'central-core' module to bind the parts and layers together
 * integration testing will be set up early (when beginning with the network stuff)
@@ -422,7 +422,7 @@ Additionally, colored error and warning-messages are wirtten to the console, usi
 
 The common log-level can also be changed at runtime by setting the environment variable RUST_LANG.   
 
-For the code currently in the work, the log level is set to debug, so only for thet code file(s) there is output at debug-level.   
+For the code currently in the work, the log level is set to debug, so only for that code file(s) there is output at debug-level.   
 
 In the release variant of Shardoverse, only errors and warnings are   
 included in the executable, all else are 'compiled out' by cargo options.
@@ -440,8 +440,8 @@ This is not needed to build Shardoverse locally, only describes what is done her
 
 ## Some Notes on AppVeyor
 First idea was to make a very simple and minimal CI-Setup, using only the appveyor.yml file and defining all stages there.
-This worked until the integration of SDL2_gfx was tried, which could be downloaded and uncompressed, but then a whole C-buildstage would be necessary for SDL2_gfx alone.
-Setting this up in the crude mixture of weird powershell and windows-cmd commands was no fun at all. At last it was decided to
+This worked until the integration of SDL2_gfx was tried, which could be downloaded and uncompressed, but then a whole C-build stage would be necessary for SDL2_gfx alone.
+Setting this up in the crude mixture of weird PowerShell and windows-cmd commands was no fun at all. At last it was decided to
 put the logic for install, build and test stages in separate windows-cmd scripts and install the necessary libs through Msys2 using pacman, which works quite well.
 
 ## Some Notes on TravisCI
@@ -451,7 +451,7 @@ Perhaps when a bigger matrix of OSs and Dev-Envs will be used, that YAML gets ha
 
 ## Code Coverage
 To investigate:
-* Best way to compute th code coverage 
+* Best way to compute the code coverage 
 * how to use [`tarpaulin`](https://github.com/xd009642/tarpaulin)
 
 ## Security Safeguarding
@@ -460,8 +460,8 @@ To investigate:
 
 ## Source Styling
 Ok, this is something of a personal matter, and preferred style/formatting is different for nearly everyone.   
-The prefered sourcecode formatting for Shardoverse currently can not be achieved in the stable Rust build, 
-because some of the preferred formatting options are considerd unstable in Rust fmt.    
+The preferred source code formatting for Shardoverse currently can not be achieved in the stable Rust build, 
+because some of the preferred formatting options are considered unstable in Rust fmt.    
 
 Unstable fmt options can be used in nightly Rust builds, but currently a change of Shardoverse to nightly is not intended.   
 
@@ -469,7 +469,7 @@ Unstable fmt options can be used in nightly Rust builds, but currently a change 
 To investigate:
 * How to do performance checking
 * Hint: [`criterion.rs`](https://github.com/bheisler/criterion.rs)     
-* Example for a perfarmance test: [`uhyve`](https://github.com/hermitcore/uhyve)
+* Example for a performance test: [`uhyve`](https://github.com/hermitcore/uhyve)
 * probably needs a [`runner`](https://help.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners) on GitHub to give comparable results.
 
 
@@ -549,13 +549,13 @@ Some more tilesets can be found here:
 * [`Zero-to-Game`](https://www.zerotoga.me/) - A website in blog-style, taking the reader on a journey from Zero (game programming experience) to Game. Well written and fun to read. In a way, a bit similar to what is intended here with Shardoverse.
 * [`New Rustacean`](https://newrustacean.com/) - A well made podcast about learning Rust.
 * [`Rust Sokoban`](https://sokoban.iolivia.me/) - A compact course of writing a sokoban game in Rust. Straightly delving into the game, getting quickly to the fun of it.   
-* [`Crate publishing guidelines and tips`](https://blog.wnut.pw/2020/03/12/crate-publishing-guidelines-and-tips/#take-a-look-at-the-api-guidelines) - Many useful hints about improving code qulity before publishing code.   
+* [`Crate publishing guidelines and tips`](https://blog.wnut.pw/2020/03/12/crate-publishing-guidelines-and-tips/#take-a-look-at-the-api-guidelines) - Many useful hints about improving code quality before publishing code.   
 
 ## Rust game development community
 * [`Rust gamedev news/`](https://rust-gamedev.github.io/) - A monthly newsletter 
 * [`Game Development in Rust server`](https://discord.gg/yNtPTb2) - The Discord server for Rust game development   
 * [`r/rustgamedev`](http://reddit.com/r/rust_gamedev) - Subreddit of and for Rust game development   
-* [`@rust_gamedev`](https://twitter.com/rust_gamedev) - Twitter chanel   
+* [`@rust_gamedev`](https://twitter.com/rust_gamedev) - Twitter channel   
     
 #### And a more global entry point is:    
 * [`Are we game yet?`](https://arewegameyet.rs/) 
