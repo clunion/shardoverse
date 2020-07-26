@@ -1,8 +1,8 @@
 target
 log/*
 assets/audio
-assets/fonts
-assets/graphics
+assets/graphics/2.5D-isometric
+assets/graphics/3D
 assets/gui
 assets/videos
 notes.txt

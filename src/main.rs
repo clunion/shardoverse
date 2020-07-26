@@ -196,7 +196,7 @@ if  shard_config.windowreset
     };
 
 // Hand over control to central core:
-match run(&mut shard_config, Path::new("assets/cursors/pointers_part_5/glove3.png"))
+match run(&mut shard_config)
     {
     Ok(_shard_config) => {},
     Err(error) => { error!("Error initialising: {:?}", error); }, //return Err(error); },

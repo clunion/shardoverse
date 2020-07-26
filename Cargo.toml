@@ -1,7 +1,7 @@
 [package]
 name        = "shardoverse"
 license     = "MIT"
-version     = "0.0.1"
+version     = "0.1.0"
 description = "A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust"
 authors     = [
               "Christian Lunau <Christian.Lunau@gmx.de>",
@@ -11,6 +11,13 @@ authors     = [
               
 edition     = "2018"
 
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+homepage    = "https://github.com/clunion/shardoverse"
+repository  = "https://github.com/clunion/shardoverse"
+readme      = "README.md"
+keywords    = ["rust", "sdl2", "game", "game-dev", "roguelike", "git", "learning", "rust-lang", "ecs", "specs"]
+categories  = ["games", "roguelike"]
 
 [[bin]]
 name = "shardoverse"
