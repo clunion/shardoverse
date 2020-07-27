@@ -50,7 +50,6 @@ mod central_core;                         // <filename>
 //___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
 //use std::env;
 use std::io;
-use std::path::Path;
 
 use clap::{Arg, App};
 
@@ -102,7 +101,7 @@ fn main() -> Result<(), io::Error>
 let mut shard_config: ShardConfig = ShardConfig::default();
 
 // Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
-match Logger::with_env_or_str("info, shardoverse::modules::config=debug")
+match Logger::with_env_or_str("info, shardoverse::modules::central_core=debug, shardoverse::modules::asset=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
             .log_to_file()
@@ -199,14 +198,14 @@ if  shard_config.windowreset
 match run(&mut shard_config)
     {
     Ok(_shard_config) => {},
-    Err(error) => { error!("Error initialising: {:?}", error); }, //return Err(error); },
+    Err(error) => { error!("running central core: {:?}", error); }, // return Err(error); },
     }
 
 // Save configuration and states, de-initialise everything:
 match config::exit(config_filename, shard_config)
     {
     Ok(_)      => {},
-    Err(error) => { error!("Error de-initialising: {:?}", error); return Err(error); },
+    Err(error) => { error!("de-initialising: {:?}", error); return Err(error); },
     }
 
 Ok(())

@@ -134,7 +134,7 @@ impl Default for ShardConfig
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub(crate) fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>  
+pub(crate) fn load(ini_filename_p: &str) -> Result<ShardConfig, io::Error>
 {
 debug!("config::load() called");
 

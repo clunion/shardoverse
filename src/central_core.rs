@@ -41,15 +41,18 @@ use std::rc::Rc;
 #[allow(unused_imports)]
 use log::{trace, debug, info, warn, error};
 
+use sdl2::rect::Rect;
+use sdl2::video::Window;
+use sdl2::surface::Surface;
+use sdl2::render::Canvas;
+use sdl2::render::{Texture, TextureCreator};
 use sdl2::event::Event;
-use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::image::{InitFlag, LoadTexture, LoadSurface};
 use sdl2::keyboard::Keycode;
 use sdl2::mouse::Cursor;
+//use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::pixels;
-use sdl2::surface::Surface;
-use sdl2::render::{Texture, TextureCreator, TextureQuery};
-use sdl2::rect::Rect;
+//use sdl2::pixels::Color;
+use sdl2::image::{InitFlag, LoadTexture, LoadSurface};
 use sdl2::ttf::{Font, Sdl2TtfContext};
 
 use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
@@ -58,9 +61,6 @@ use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<mod
 
 //___ CONSTANTS: _____________________________________________________________________________________________________________
 //___ none ___
-static SCREEN_WIDTH : u32 = 800;
-static SCREEN_HEIGHT : u32 = 600;
-
 
 //___ TYPES: _________________________________________________________________________________________________________________
 //___ none ___
@@ -72,13 +72,22 @@ static SCREEN_HEIGHT : u32 = 600;
 //___ none ___
 
 
+//---------------------------------------------------------------------------------------------
+// handle the annoying Rect i32
+macro_rules! rect(
+       ( $x:expr, $y:expr, $w:expr, $h:expr) 
+    => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) )
+);
+
+
+
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  run   
 /// **`TYPE:       `**  common function, only called once from main.rs!   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` <changing> `**    
 /// **`RETURNS:    `** **` Result --> `** - OK(WindowConfig)   
-/// **`            `** **`     or --> `** - Error   
+/// **`            `** **`     or --> `** - Error(Error-Message)   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
 /// Here it all comes together, this contains the central event loop, ties input to logic to output.   
@@ -91,13 +100,11 @@ static SCREEN_HEIGHT : u32 = 600;
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub(crate) fn run<'a>(shard_config_p: &'a mut ShardConfig) -> Result<&'a ShardConfig, String> 
+pub(crate) fn run(shard_config_p: &mut ShardConfig) -> Result<&ShardConfig, String> 
 {
-let mut lastx = 0;
-let mut lasty = 0;
 let mut tick  = 0;
 
-let cursor_img: &Path   = Path::new("assets/cursors/pointers_part_5/glove3.png");
+let cursor_path: &Path   = Path::new("assets/cursors/pointers_part_5/glove3.png");
 let image_path:  String =           "assets/graphics/2D/tiles/DungeonCrawlStoneSoupFull/dungeon/floor/sandstone_floor_0.png".to_string();
 let font_path:   String =           "assets/fonts/NugieRomanticItalic-8P6D.ttf".to_string();
 
@@ -113,7 +120,7 @@ let default_creature: creature::Creature = creature::Creature::default();
 match creature::display_values(&default_creature)
     {
     Ok(_)       => {},
-    Err(error)  => { println!("ERROR displaying default_creature: {:?}", error); }, // return Err(error); },
+    Err(error)  => { println!("ERROR displaying default_creature: {:?}", error); return Err(error.to_string()); },
     }
 ;
 
@@ -121,77 +128,77 @@ let default_item: item::Item = item::Item::default();
 match item::display_values(&default_item)
     {
     Ok(_)       => {},
-    Err(error)  => { println!("ERROR displaying default_item: {:?}", error); }, // return Err(error); },
+    Err(error)  => { println!("ERROR displaying default_item: {:?}", error); return Err(error.to_string()); },
     }
 ;
 
-let sdl_context = sdl2::init()?;
-let video_subsys = sdl_context.video()?;
-let font_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
+// -- Initialisation of SDL2: ----------------------------------------
+let sdl_context    = sdl2::init()?;
+let video_subsys   = sdl_context.video()?;
+let font_context   = sdl2::ttf::init().map_err(|e| e.to_string())?;
 let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
 
-let window = video_subsys
-            .window("Shardoverse", shard_config_p.window.width, shard_config_p.window.height)
-            .position(shard_config_p.window.pos_x, shard_config_p.window.pos_y)
-            .resizable()
-            .opengl()
-            .build()
-            .map_err(|e| e.to_string())?;
+let window         = video_subsys
+                    .window("Shardoverse", shard_config_p.window.width, shard_config_p.window.height)
+                    .position(shard_config_p.window.pos_x, shard_config_p.window.pos_y)
+                    .resizable()
+                    .opengl()
+                    .build()
+                    .map_err(|e| e.to_string())?;
 
-let mut canvas = window.into_canvas()
-                .present_vsync()
-                .build()
-                .map_err(|e| e.to_string())?;
+let mut canvas: Canvas<Window> = window
+                                .into_canvas()
+                                .present_vsync()
+                                .build()
+                                .map_err(|err| err.to_string())?;
 
-let surface = Surface::from_file(cursor_img)
-             .map_err(|err| format!("failed to load cursor image: {}", err))?;
+let cursor_surface = Surface::from_file(cursor_path)
+                    .map_err(|err| format!("failed to load cursor image: {}", err))?;
 
-let cursor = Cursor::from_surface(surface, 0, 0)
-            .map_err(|err| format!("failed to load cursor: {}", err))?;
+/*                    
+pub fn blit_scaled<R1, R2>(
+    &self,
+    src_rect: R1,
+    dst: &mut SurfaceRef,
+    dst_rect: R2
+) -> Result<Option<Rect>, String> 
+*/
 
-let texture_creator = canvas.texture_creator();
-let mut texture_manager = TextureManager::new(&texture_creator);
-let mut font_manager = FontManager::new(&font_context);
-let font_details = FontDetails { path: font_path.clone(), size: 64, };
+let cursor         = Cursor::from_surface(cursor_surface, 0, 0)
+                    .map_err(|err| format!("failed to load cursor: {}", err))?;
 
 cursor.set();
 
-canvas.set_draw_color(pixels::Color::RGBA( 50, 50, 50, 255));
-canvas.clear();
+// this struct manages textures. For lifetime reasons, the canvas cannot directly create textures, you have to create a `TextureCreator` instead.
+let texture_creator: TextureCreator<_> = canvas.texture_creator();
 
-    // Load a font
-    let mut font = font_context.load_font(font_path, 128)?;
-    font.set_style(sdl2::ttf::FontStyle::BOLD);
+let mut texture_manager = TextureManager::new(&texture_creator);
 
-    // render a surface, and convert it to a texture bound to the canvas
-    let surface = font
-                 .render("Hello Rust!")
-                 .blended(pixels::Color::RGBA(255, 0, 0, 255))
-                 .map_err(|e| e.to_string())?;
-
-    let texture = texture_creator
-                 .create_texture_from_surface(&surface)
-                 .map_err(|e| e.to_string())?;
-
-    canvas.set_draw_color(pixels::Color::RGBA(195, 217, 255, 255));
-    canvas.clear();
-
-    let TextureQuery { width, height, .. } = texture.query();
-
-    // If the example text is too big for the screen, downscale it (and center irregardless)
-    let padding = 64;
-    let target = get_centered_rect(width, height, SCREEN_WIDTH - padding, SCREEN_HEIGHT - padding);
-
-    canvas.copy(&texture, None, Some(target))?;
+// load the  font only once:
+let mut font_manager = FontManager::new(&font_context);
+let     font_details = FontDetails { path: font_path.clone(), size: 64, };
+let     font         = font_manager.load(&font_details)?;
+let     font_surface = font
+                      .render("Shardoverse")
+                      .blended(pixels::Color::RGBA(200, 200, 200, 155))
+                      .map_err(|e| e.to_string())?;
+       
+let     font_texture = texture_creator
+                      .create_texture_from_surface(&font_surface)
+                      .map_err(|e| e.to_string())?;
 
 
-canvas.present();
+// load the image texture only once:
+let texture = texture_manager.load(image_path.as_str())?;
 
 let mut events = sdl_context.event_pump()
                 .map_err(|e| e)?;
 
 'main: loop 
     {
+    canvas.set_draw_color(pixels::Color::RGBA( 50, 50, 50, 255));
+    canvas.clear();
+
     for event in events.poll_iter() 
         {
         match event 
@@ -203,50 +210,35 @@ let mut events = sdl_context.event_pump()
                                                            }
                                                            
             Event::MouseButtonDown {x, y, ..} =>           {
-                                                           let color = pixels::Color::RGB(x as u8, y as u8, 255);
-                                                           let  _    = canvas.line(lastx, lasty, x as i16, y as i16, color);
-                                                           lastx     = x as i16;
-                                                           lasty     = y as i16;
                                                            info!("mouse btn down at ({},{})", x, y);
-                                                           canvas.present();
                                                            }
             _ => {}
             } // end of: main-loop
         } // end of events-poll
 
-    // will load the image texture + font only once
-    let texture = texture_manager.load(image_path.as_str())?;
-    let font    = font_manager.load(&font_details)?;
-
-    // not recommended to create a texture from the font each iteration
-    // but it is the simplest thing to do for this example
-    let surface = font
-                 .render("Shardoverse")
-                 .blended(pixels::Color::RGBA(200, 200, 200, 155))
-                 .map_err(|e| e.to_string())?;
-
-    let font_texture = texture_creator
-                      .create_texture_from_surface(&surface)
-                      .map_err(|e| e.to_string())?;
-
-    //let TextureQuery { width, height, .. } = texture.query();
-
-    // If the example text is too big for the screen, downscale it (and center irregardless)
-    let padding = 16;
-    let target = get_centered_rect(200, 80, SCREEN_WIDTH - padding, SCREEN_HEIGHT - padding);
-
-    //draw all
-    canvas.clear();
-    canvas.copy(&texture, None, None)?;
-    canvas.copy(&font_texture, None, Some(target))?;
-    canvas.present();
-
     // Update the window title:
     let window       = canvas.window_mut();
     let win_position = window.position();
     let win_size     = window.size();
-    let win_title    = format!("Window - pos({}x{}), size({}x{}): {}", win_position.0, win_position.1, win_size.0, win_size.1, tick);
+    let win_title    = format!("Shardoverse - pos({}x{}), size({}x{}): {}", win_position.0, win_position.1, win_size.0, win_size.1, tick);
     window.set_title(&win_title).map_err(|e| e.to_string())?;
+
+    //draw everything
+    let rect_size = 32;
+    let row_tiles = win_size.0 / rect_size;
+    let col_tiles = win_size.1 / rect_size;
+    for row in 0 ..= row_tiles 
+        {
+        for col in 0 ..= col_tiles
+            {
+            debug!("row = {}, col = {}",row, col);
+            canvas.copy(&texture     , rect!(   0,   0, rect_size, rect_size), rect!(  row*rect_size, col*rect_size,  rect_size,  rect_size))?;
+            }
+        }
+
+    canvas.copy(&font_texture, None                    , rect!( 20,  20, 464,  64))?;
+    canvas.present();
+
 
     tick += 1;
     std::thread::sleep(Duration::from_millis(100));
@@ -275,6 +267,7 @@ Ok(shard_config_p)
 
 //---------------------------------------------------------------------------------------------
 type TextureManager<'l, T> = ResourceManager<'l, String, Texture<'l>, TextureCreator<T>>;
+
 type FontManager<'l> = ResourceManager<'l, FontDetails, Font<'l, 'static>, Sdl2TtfContext>;
 
 //---------------------------------------------------------------------------------------------
@@ -292,10 +285,10 @@ impl<'l, K, R, L> ResourceManager<'l, K, R, L>
     where K: Hash + Eq,
           L: ResourceLoader<'l, R>
 {
-    pub fn new(loader: &'l L) -> Self {
+    pub fn new(loader_p: &'l L) -> Self {
         ResourceManager {
             cache: HashMap::new(),
-            loader: loader,
+            loader: loader_p,
         }
     }
 
@@ -341,7 +334,7 @@ pub trait ResourceLoader<'l, R> {
 impl<'l> ResourceLoader<'l, Font<'l, 'static>> for Sdl2TtfContext {
     type Args = FontDetails;
     fn load(&'l self, details: &FontDetails) -> Result<Font<'l, 'static>, String> {
-        println!("LOAD(ED) A FONT");
+        println!("LOADED A FONT");
         self.load_font(&details.path, details.size)
     }
 }
@@ -364,40 +357,6 @@ impl<'a> From<&'a FontDetails> for FontDetails {
     }
 }
 
-
-//---------------------------------------------------------------------------------------------
-// handle the annoying Rect i32
-macro_rules! rect(
-    ($x:expr, $y:expr, $w:expr, $h:expr) => (
-        Rect::new($x as i32, $y as i32, $w as u32, $h as u32)
-    )
-);
-
-
-//---------------------------------------------------------------------------------------------
-// Scale fonts to a reasonable size when they're too big (though they might look less smooth)
-fn get_centered_rect(rect_width: u32, rect_height: u32, cons_width: u32, cons_height: u32) -> Rect {
-    let wr = rect_width as f32 / cons_width as f32;
-    let hr = rect_height as f32 / cons_height as f32;
-
-    let (w, h) = if wr > 1f32 || hr > 1f32 {
-        if wr > hr {
-            println!("Scaling down! The text will look worse!");
-            let h = (rect_height as f32 / wr) as i32;
-            (cons_width as i32, h)
-        } else {
-            println!("Scaling down! The text will look worse!");
-            let w = (rect_width as f32 / hr) as i32;
-            (w, cons_height as i32)
-        }
-    } else {
-        (rect_width as i32, rect_height as i32)
-    };
-
-    let cx = (SCREEN_WIDTH  as i32 - w) / 2;
-    let cy = (SCREEN_HEIGHT as i32 - h) / 2;
-    rect!(cx, cy, w, h)
-}
 
 
 

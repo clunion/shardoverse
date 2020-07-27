@@ -121,23 +121,23 @@ pub(crate) fn display_values(item_p: &Item) -> Result<(), io::Error>
 {
 debug!("item::display_values() called");
 
-    println!("name:                   '{}'", item_p.name                    );  // String
-    println!("kind:                   {}",   item_p.kind                    );  // u32
-    println!("value:                  {}",   item_p.value                   );  // u32
-    println!("quality:                {}",   item_p.quality                 );  // u8
-    println!("weight:                 {}",   item_p.weight                  );  // i32
-    println!("weight_mod:             {}",   item_p.weight_mod              );  // i32
-    println!("livepoints_max_mod:     {}",   item_p.livepoints_max_mod      );  // i32
-    println!("livepoints_regen_mod:   {}",   item_p.livepoints_regen_mod    );  // i32
-    println!("magicpoints_max_mod:    {}",   item_p.magicpoints_max_mod     );  // i32
-    println!("magicpoints_regen_mod:  {}",   item_p.magicpoints_regen_mod   );  // i32
-    println!("strength_mod:           {}",   item_p.strength_mod            );  // i32
-    println!("endurance_mod:          {}",   item_p.endurance_mod           );  // i32
-    println!("dexterity_mod:          {}",   item_p.dexterity_mod           );  // i32
-    println!("willpower_mod:          {}",   item_p.willpower_mod           );  // i32
-    println!("wisdom_mod:             {}",   item_p.wisdom_mod              );  // i32
-    println!("intelligence_mod:       {}",   item_p.intelligence_mod        );  // i32 
-    println!("armor_mod:              {}",   item_p.armor_mod               );  // i32 
+    debug!("name:                   '{}'", item_p.name                    );  // String
+    debug!("kind:                   {}",   item_p.kind                    );  // u32
+    debug!("value:                  {}",   item_p.value                   );  // u32
+    debug!("quality:                {}",   item_p.quality                 );  // u8
+    debug!("weight:                 {}",   item_p.weight                  );  // i32
+    debug!("weight_mod:             {}",   item_p.weight_mod              );  // i32
+    debug!("livepoints_max_mod:     {}",   item_p.livepoints_max_mod      );  // i32
+    debug!("livepoints_regen_mod:   {}",   item_p.livepoints_regen_mod    );  // i32
+    debug!("magicpoints_max_mod:    {}",   item_p.magicpoints_max_mod     );  // i32
+    debug!("magicpoints_regen_mod:  {}",   item_p.magicpoints_regen_mod   );  // i32
+    debug!("strength_mod:           {}",   item_p.strength_mod            );  // i32
+    debug!("endurance_mod:          {}",   item_p.endurance_mod           );  // i32
+    debug!("dexterity_mod:          {}",   item_p.dexterity_mod           );  // i32
+    debug!("willpower_mod:          {}",   item_p.willpower_mod           );  // i32
+    debug!("wisdom_mod:             {}",   item_p.wisdom_mod              );  // i32
+    debug!("intelligence_mod:       {}",   item_p.intelligence_mod        );  // i32 
+    debug!("armor_mod:              {}",   item_p.armor_mod               );  // i32 
 
 Ok(())
 }
