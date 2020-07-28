@@ -101,7 +101,7 @@ fn main() -> Result<(), io::Error>
 let mut shard_config: ShardConfig = ShardConfig::default();
 
 // Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
-match Logger::with_env_or_str("info, shardoverse::modules::central_core=debug, shardoverse::modules::asset=debug")
+match Logger::with_env_or_str("info, shardoverse::central_core=debug, shardoverse::modules::asset=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
             .log_to_file()

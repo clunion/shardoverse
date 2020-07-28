@@ -85,7 +85,7 @@ match level
     };
 
 write!( w, 
-        "{} {:>5}{:>18}[{:4}] {}",
+        "{} {:5}{:>18}[{:4}] {}",
         now.now().format("%H:%M:%S"),
         shard_style.paint(record.level()),
         shard_tool::basename(record.file().unwrap_or("<unnamed>")),
