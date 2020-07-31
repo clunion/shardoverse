@@ -51,6 +51,9 @@ start with creating the first easy data structures (for creatures and items),
 expanding the project structure while applying some design principles.
 Using an Entity Component System (ECS) model is in consideration, perhaps [`Specs or Legion`](https://csherratt.github.io/blog/posts/specs-and-legion/) will be used.
 
+The very first screenshot:
+![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Screenshot_001.jpg)
+No game at all, yet. Keyboard input works, scaling and redrawing.
 
 ## Software Design Principles
 Design principles for a small learning project, for a small computer game? Yes, definitely.
@@ -294,10 +297,16 @@ Since there is no game yet, the usage is simple.
 
 After starting shardoverse, the program can be left by closing the window.   
 
-| Key    | Action                               |
-|--------|--------------------------------------|
-| ESC    | Exit program                         |
-| P      | Paint colored pixels in main window  |
+| Key           | Action                                                                 |
+|---------------|------------------------------------------------------------------------|
+| ESC           | Exit program                                                           |
+| Keypad-'+'    | Scale up / Zoom-In by 1 pixel per tile, until max of 255               |
+| Keypad-'-'    | Scale down / Zoom out by 1 pixel per tile, until min of 8              |
+| Keypad-','    | Reset scaling to the base of 32 (which also is the original tile-size) |
+| Keypad-'*'    | Toggle delay in main-loop on or off                                    |
+| Mouse-Wheel   | Zoom in/out with dynamic step size                                     |
+| P             | Paint colored pixels in main window (gets immediatly painted over now) |
+
 
 When the program is started, a (currently empty) window should appear on screen.   
 If the window fails to appear, it is probably off-screen. 

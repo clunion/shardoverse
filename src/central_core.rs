@@ -47,7 +47,8 @@ use sdl2::surface::Surface;
 use sdl2::render::Canvas;
 use sdl2::render::{Texture, TextureCreator};
 use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
+//use sdl2::keyboard::Keycode;
+use sdl2::keyboard::Scancode;
 use sdl2::mouse::{Cursor};
 //use sdl2::mouse::{Cursor, MouseButton, MouseState };
 //use sdl2::gfx::primitives::DrawRenderer;
@@ -57,28 +58,31 @@ use sdl2::image::{InitFlag, LoadTexture, LoadSurface};
 use sdl2::ttf::{Font, Sdl2TtfContext};
 use sdl2::event::WindowEvent;
 
-use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
 use crate::modules::*;                     // crate::<dirname>::<filename>
+use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
 use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<modulename>
 
-//___ CONSTANTS: _____________________________________________________________________________________________________________
+//___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
 
-//___ TYPES: _________________________________________________________________________________________________________________
+//___ TYPES: __________________________________________________________________________________________________________________
 //___ none ___
 
-//___ ENUMS: _________________________________________________________________________________________________________________
+//___ ENUMS: __________________________________________________________________________________________________________________
 //___ none ___
 
-//___ STRUCTS: _______________________________________________________________________________________________________________
+//___ STRUCTS: ________________________________________________________________________________________________________________
+//___ none ___
+
+//___ METHODS: ________________________________________________________________________________________________________________
 //___ none ___
 
 
-//---------------------------------------------------------------------------------------------
-// handle the annoying Rect i32
+//___ MACROS: _________________________________________________________________________________________________________________
+
+// build a Rect with i32s:
 macro_rules! rect(
-       ( $x:expr, $y:expr, $w:expr, $h:expr) 
-    => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) )
+       ( $x:expr, $y:expr, $w:expr, $h:expr) => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) )
 );
 
 
@@ -141,17 +145,21 @@ let mut timer      = sdl_context.timer()?;
 let font_context   = sdl2::ttf::init().map_err(|e| e.to_string())?;
 let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
 
-let     window     = video_subsys
+let     window     = match video_subsys
                     .window("Shardoverse", shard_config_p.window.width, shard_config_p.window.height)
                     .position(shard_config_p.window.pos_x, shard_config_p.window.pos_y)
                     .resizable()
                     .opengl()
                     .build()
-                    .map_err(|e| e.to_string())?;
+                     {
+                          Ok(window) => window,
+                          Err(err)   => return Err("Failed to create window: ".to_owned() + &err.to_string())
+                     };
+//                    .map_err(|e| e.to_string())?;
 
 let mut canvas: Canvas<Window> = window
                                 .into_canvas()
-                                .present_vsync()
+//                                .present_vsync()
                                 .build()
                                 .map_err(|err| err.to_string())?;
 
@@ -200,29 +208,31 @@ let mut events         = sdl_context.event_pump()
 
 // initialize values for FPS-counting:
 #[allow(unused_assignments)]
-let mut startclock:  u32 = 0; 
+let mut start_ticks:             u32 = 0; 
 #[allow(unused_assignments)]
-let mut deltaclock:  u32 = 0;
-let mut current_fps: u32 = 0;
+let mut start_perfcounter:       u64 = 0; 
+#[allow(unused_assignments)]     
+let mut delta_ticks:             u32 = 0;
+#[allow(unused_assignments)]     
+let mut delta_perfcounter:       u64 = 0;
+let mut current_fps_ticks:       u32 = 0;
+let mut current_fps_perfcounter: f64 = 0.0;
 
-let mut rect_size        = 32;          // 32 is the tile-size, this also used as scaling-factor
+let mut delay_in_loop: bool = true;
+
+let mut rect_size: i32   = 32;          // 32 is the tile-size, this also used as scaling-factor
 let mut win              = canvas.window_mut();
 #[allow(unused_assignments)]
 let mut win_position     = win.position();
+#[allow(unused_assignments)]
 let mut win_size         = win.size();
-let mut win_title        = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps, tick);
+let mut win_title        = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps_ticks, tick);
 win.set_title(&win_title).map_err(|e| e.to_string())?;
 
-let mut row_tiles        = win_size.0 / rect_size;
-let mut col_tiles        = win_size.1 / rect_size;
 
-
-// sdl2::TimerSubsystem::ticks (SDL_GetTicks) - 32-bit millisecond precision, returns time since the SDL initialization, may not be enough
-// or 
-// sdl2::TimerSubsystem::performance_counter (SDL_GetPerformanceCounter) - 64-bit precision, returns the current value of the high resolution counter since the SDL initialization, 
-
-// at beginning of loop
-startclock = timer.ticks(); 
+// FPS-Counting at beginning of loop:
+start_ticks        = timer.ticks(); 
+start_perfcounter = timer.performance_counter(); 
 
 'main: loop 
     {
@@ -235,38 +245,47 @@ startclock = timer.ticks();
             {
             Event::Window {win_event: WindowEvent::Resized(w, h),..} => 
                                                            {
-                                                           row_tiles = w as u32 / rect_size;
-                                                           col_tiles = h as u32 / rect_size;
-                                                           debug!("window resized to w: {} h: {}",w,h);
+                                                           debug!("window Resized to     w: {} h: {}",w,h);
                                                            }
 
             Event::Window {win_event: WindowEvent::SizeChanged(w, h),..} => 
                                                            {
-                                                           row_tiles = w as u32 / rect_size; col_tiles = h as u32 / rect_size;
                                                            debug!("window SizeChanged to w: {} h: {}",w,h);
                                                            }
 
-            Event::KeyDown {keycode: Some(keycode), ..} => {
-                                                           if      keycode == Keycode::Escape   { info!("Esc");     break 'main } 
-                                                           else if keycode == Keycode::P        { info!("P");       pixel_draw::formula_fill(&mut canvas); }
-                                                           else if keycode == Keycode::KpPlus   { info!("KpPlus");  if rect_size < 255  {rect_size +=  1;} }
-                                                           else if keycode == Keycode::KpMinus  { info!("KpMinus"); if rect_size >   8  {rect_size -=  1;} }
-                                                           else if keycode == Keycode::KpDivide { info!("KpDivide");                     rect_size  = 32;}
-                                                           win       = canvas.window_mut();    // todo: exec only on scale-change
-                                                           win_size  = win.size();             // todo: exec only on scale-change
-                                                           row_tiles = win_size.0 / rect_size; // todo: exec only on scale-change
-                                                           col_tiles = win_size.1 / rect_size; // todo: exec only on scale-change   
-                                                           }
-                                                           
+       //   Event::KeyUp   {keycode:  Some(keycode), 
+       //                   scancode: Some(scancode), ..} |
+            Event::KeyDown {keycode:  Some(keycode), 
+                            scancode: Some(scancode),
+                                           keymod, ..} => {
+                                                           debug!("keymod: {:?}, keycode: {:?}, scancode: {:?}",keymod,keycode,scancode);
+                                                           match scancode 
+                                                               {
+                                                               Scancode::Escape     => {break 'main } 
+                                                               Scancode::P          => {pixel_draw::formula_fill(&mut canvas); }
+                                                               Scancode::KpPlus     => {if (rect_size + 1) <= 255  {rect_size +=  1; } }
+                                                               Scancode::KpMinus    => {if (rect_size - 1) >=   8  {rect_size -=  1; } }
+                                                               Scancode::KpPeriod   => {                            rect_size  = 32; }
+                                                               Scancode::V          => {                            }
+                                                               Scancode::KpMultiply => {if delay_in_loop {delay_in_loop = false;} else {delay_in_loop = true;} ; }
+                                                                                  _ => { trace!("unassigned - keymod: {:?}, keycode: {:?}, scancode: {:?}",keymod,keycode,scancode);},
+                                                               }
+                                                           }    
+
             Event::MouseButtonDown {x, y, ..} =>           {
                                                            debug!("mouse button down at (x:{},y:{})", x, y);
                                                            }
+
             Event::MouseButtonUp {x, y, ..} =>             {
                                                            debug!("mouse button up   at (x:{},y:{})", x, y);
                                                            }
+
             Event::MouseWheel {timestamp, window_id, which, x, y, ..} => 
                                                            {
-                                                           debug!("mouse wheel: timestamp {}, window_id {}, which {}, x {}, y {}, direction (?)",timestamp, window_id, which, x, y);
+                                                           debug!("mouse wheel: timestamp {}, window_id {}, which {}, x {}, y {}",timestamp, window_id, which, x, y);
+                                                           #[allow(clippy::if_same_then_else)]
+                                                           if      y > 0 && (rect_size + y) <= 255 { rect_size += y; }
+                                                           else if y < 0 && (rect_size + y) >= 8   { rect_size += y; }
                                                            }
 
             Event::Quit {..}                            => break 'main,
@@ -275,39 +294,45 @@ startclock = timer.ticks();
             } // end of: match event
         } // end of events-poll
 
-    // actual fps calculation inside loop
+    // actual FPS calculation inside loop:
     let current_ticks = timer.ticks();
-    deltaclock = current_ticks - startclock;
-    startclock = current_ticks;
-    if deltaclock != 0 {current_fps = 1000 / deltaclock;}  
+    delta_ticks = current_ticks - start_ticks;
+    start_ticks = current_ticks;
+    if delta_ticks != 0 {current_fps_ticks = 1000 / delta_ticks;}  
+
+    let current_perfcounter = timer.performance_counter();
+    delta_perfcounter = current_perfcounter - start_perfcounter;
+    start_perfcounter = current_perfcounter;
+    if delta_perfcounter != 0 {current_fps_perfcounter = 10_000_000.0 / delta_perfcounter as f64;}  
 
     tick += 1;
 
     // Update the window title:
+    win_title    = format!("Shardoverse - scale: {:>3}, Ticks-FPS: {:>-5}, Perf-FPS: {:>-8.2}, tick: {:>5}", rect_size, current_fps_ticks, current_fps_perfcounter, tick);
     win          = canvas.window_mut();
-    win_title    = format!("Shardoverse - scale:{:>3}, FPS:{:>4}, tick:{:>5}", rect_size, current_fps, tick);
     win.set_title(&win_title).map_err(|e| e.to_string())?;
+    win_size     = win.size(); 
 
-    //draw everything
-    for col in 0 ..= col_tiles
+    //draw everything:
+    for col in (0 ..= win_size.1).step_by(rect_size as usize)
         {
-        for row in 0 ..= row_tiles 
-            {
-            trace!("row = {}, col = {}",row, col);
-            canvas.copy(&ground_texture, rect!(   0,   0, rect_size, rect_size), rect!(  row*rect_size, col*rect_size,  rect_size,  rect_size))?;
+        for row in (0 ..= win_size.0).step_by(rect_size as usize)
+            {// todo: replace scale-on-copy with pre-scale and blit
+            canvas.copy(&ground_texture, rect!(   0,   0, rect_size, rect_size), rect!(row, col, rect_size, rect_size))?;
             }
         }
 
-    canvas.copy(&font_texture, None                    , rect!( 20,  20, 464,  64))?;
+    canvas.copy(&font_texture, None , rect!( 20,  20, 464,  64))?;
     canvas.present();  // display new content of the window
 
-    std::thread::sleep(Duration::from_millis(100));
+    if delay_in_loop {std::thread::sleep(Duration::from_millis(100));}
+    
     } // end of: loop main
 
 win          = canvas.window_mut();
 win_position = win.position();
 win_size     = win.size();
-win_title    = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps, tick);
+win_title    = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps_ticks, tick);
 win.set_title(&win_title).map_err(|e| e.to_string())?;
 
 shard_config_p.window.title  = win_title;           
