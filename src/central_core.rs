@@ -1,3 +1,6 @@
+#![deny(clippy::all)]
+#![forbid(unsafe_code)]
+
 //! ___________________________________________________________________________________________________________________________
 //! **`PROJECT:    `** Shardoverse    
 //! **`HOME:       `** [Shardoverse on GitHub](https://github.com/clunion/shardoverse)    
@@ -30,46 +33,75 @@
 //___ none ___
 
 //___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
-//use std::io;
+
+// use std::path::Path;
+// use std::borrow::Borrow;
+// use std::collections::HashMap;
+// use std::hash::Hash;
+// use std::rc::Rc;
+
+// use std::io::{self, BufRead};
+// use std::sync::mpsc::{self, TryRecvError, Receiver};
+// use std::thread;
+
+extern crate image;
+
+use std::thread;
+use std::time;
+use std::time::{Duration, Instant};
 use std::path::Path;
-use std::time::Duration;
-use std::borrow::Borrow;
-use std::collections::HashMap;
-use std::hash::Hash;
-use std::rc::Rc;
 
 #[allow(unused_imports)]
 use log::{trace, debug, info, warn, error};
 
-use sdl2::rect::Rect;
-use sdl2::video::Window;
-use sdl2::surface::Surface;
-use sdl2::render::Canvas;
-use sdl2::render::{Texture, TextureCreator};
-use sdl2::event::Event;
-//use sdl2::keyboard::Keycode;
-use sdl2::keyboard::Scancode;
-use sdl2::mouse::{Cursor};
-//use sdl2::mouse::{Cursor, MouseButton, MouseState };
-//use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::pixels;
-//use sdl2::pixels::Color;
-use sdl2::image::{InitFlag, LoadTexture, LoadSurface};
-use sdl2::ttf::{Font, Sdl2TtfContext};
-use sdl2::event::WindowEvent;
+use winit::
+{
+    window::{WindowBuilder, Fullscreen, Icon},
+//  dpi::{LogicalSize, PhysicalPosition},
+    dpi::{LogicalPosition, PhysicalSize},
+    event::{ElementState, Event, StartCause, KeyboardInput, VirtualKeyCode, ModifiersState, WindowEvent},
+//  event::{DeviceEvent},
+    event_loop::{ControlFlow, EventLoop},
+    platform::desktop::EventLoopExtDesktop,
+};
 
-use crate::modules::*;                     // crate::<dirname>::<filename>
-use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
+//use pixels::{Error, Pixels, SurfaceTexture};
+use pixels::{Pixels, SurfaceTexture};
+
+/// Representation of the application state. In this example, a box will bounce around the screen.
+struct World 
+{
+    box_pos_x:   i32,
+    box_pos_y:   i32,
+    box_width:   i32,
+    box_height:  i32,
+    box_speed_x: i32,
+    box_speed_y: i32,
+    win_width:   u32,
+    win_height:  u32,
+}
+
+
+//use crate::modules::*;                     // crate::<dirname>::<filename>
+//use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
 use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<modulename>
+
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
+
 
 //___ TYPES: __________________________________________________________________________________________________________________
 //___ none ___
 
 //___ ENUMS: __________________________________________________________________________________________________________________
-//___ none ___
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Mode {
+    Wait,
+    WaitUntil,
+    Poll,
+}
+
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
@@ -81,9 +113,34 @@ use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<mod
 //___ MACROS: _________________________________________________________________________________________________________________
 
 // build a Rect with i32s:
-macro_rules! rect(
-       ( $x:expr, $y:expr, $w:expr, $h:expr) => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) )
-);
+// macro_rules! rect( ( $x:expr, $y:expr, $w:expr, $h:expr) => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) ) );
+
+// fn thread_fun(rx_p: Receiver<()> ) -> ()
+// {
+// loop {
+//         println!("Working...");
+//         thread::sleep(Duration::from_millis(500));
+//         match rx_p.try_recv() {
+//             Ok(_) | Err(TryRecvError::Disconnected) => {
+//                 println!("Terminating.");
+//                 break;
+//             }
+//             Err(TryRecvError::Empty) => {}
+//         }
+//     }    
+// }
+
+
+fn load_icon(path: &Path) -> Icon 
+{
+let image = image::open(path)
+           .expect("Failed to open icon path")
+           .into_rgba();
+let (icon_width, icon_height) = image.dimensions();
+let icon_rgba = image.into_raw();
+    
+Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+}
 
 
 
@@ -106,346 +163,572 @@ macro_rules! rect(
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
-pub(crate) fn run(shard_config_p: &mut ShardConfig) -> Result<&ShardConfig, String> 
+pub(crate) fn run_central_core(shard_config_p: &mut ShardConfig) -> Result<&ShardConfig, String> 
 {
-let mut tick  = 0;
 
-let cursor_path: &Path   = Path::new("assets/cursors/pointers_part_5/glove3.png");
-let image_path:  String =           "assets/graphics/2D/tiles/DungeonCrawlStoneSoupFull/dungeon/floor/sandstone_floor_0.png".to_string();
-let font_path:   String =           "assets/fonts/NugieRomanticItalic-8P6D.ttf".to_string();
-
-debug!("Values in shard_config_p:");
-debug!("title      {:?}", shard_config_p.window.title);
-debug!("win_pos_x  {:?}", shard_config_p.window.pos_x);
-debug!("win_pos_y  {:?}", shard_config_p.window.pos_y);
-debug!("win_width  {:?}", shard_config_p.window.width);
-debug!("win_height {:?}", shard_config_p.window.height);
-debug!("active     {:?}", shard_config_p.window.active);
-
-let default_creature: creature::Creature = creature::Creature::default();
-match creature::display_values(&default_creature)
+debug!("Values in shardoverse config:");
+for win_conf in shard_config_p.window_configs.iter() 
     {
-    Ok(_)       => {},
-    Err(error)  => { println!("ERROR displaying default_creature: {:?}", error); return Err(error.to_string()); },
-    }
-;
-
-let default_item: item::Item = item::Item::default();
-match item::display_values(&default_item)
-    {
-    Ok(_)       => {},
-    Err(error)  => { println!("ERROR displaying default_item: {:?}", error); return Err(error.to_string()); },
-    }
-;
-
-// -- Initialisation of SDL2: ----------------------------------------
-let sdl_context    = sdl2::init()?;
-let video_subsys   = sdl_context.video()?;
-let mut timer      = sdl_context.timer()?;
-let font_context   = sdl2::ttf::init().map_err(|e| e.to_string())?;
-let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
-
-let     window     = match video_subsys
-                    .window("Shardoverse", shard_config_p.window.width, shard_config_p.window.height)
-                    .position(shard_config_p.window.pos_x, shard_config_p.window.pos_y)
-                    .resizable()
-                    .opengl()
-                    .build()
-                     {
-                          Ok(window) => window,
-                          Err(err)   => return Err("Failed to create window: ".to_owned() + &err.to_string())
-                     };
-//                    .map_err(|e| e.to_string())?;
-
-let mut canvas: Canvas<Window> = window
-                                .into_canvas()
-//                                .present_vsync()
-                                .build()
-                                .map_err(|err| err.to_string())?;
-
-let cursor_surface = Surface::from_file(cursor_path)
-                    .map_err(|err| format!("failed to load cursor image: {}", err))?;
-
-/*                    
-pub fn blit_scaled<R1, R2>(
-    &self,
-    src_rect: R1,
-    dst: &mut SurfaceRef,
-    dst_rect: R2
-) -> Result<Option<Rect>, String> 
-*/
-
-let cursor         = Cursor::from_surface(cursor_surface, 0, 0)
-                    .map_err(|err| format!("failed to load cursor: {}", err))?;
-
-cursor.set();
-
-// this struct manages textures. For lifetime reasons, the canvas cannot directly create textures, you have to create a `TextureCreator` instead.
-let texture_creator: TextureCreator<_> = canvas.texture_creator();
-
-let mut texture_manager = TextureManager::new(&texture_creator);
-
-// load the  font only once:
-let mut font_manager   = FontManager::new(&font_context);
-//let     font_details   = FontDetails { path: font_path.clone(), size: 64, };
-let     font_details   = FontDetails { path: font_path, size: 64, };
-let     font           = font_manager.load(&font_details)?;
-let     font_surface   = font
-                        .render("Shardoverse")
-                        .blended(pixels::Color::RGBA(200, 200, 200, 155))
-                        .map_err(|e| e.to_string())?;
-                       
-let     font_texture   = texture_creator
-                        .create_texture_from_surface(&font_surface)
-                        .map_err(|e| e.to_string())?;
+    debug!("conf_name: ...{:?}", win_conf.conf_name);
+    debug!("conf_num: ....{}"  , win_conf.conf_num );
+    debug!("title: .......{}"  , win_conf.title    );
+    debug!("pos_x .=......{}"  , win_conf.pos_x    );
+    debug!("pos_y .=......{}"  , win_conf.pos_y    );
+    debug!("width .=......{}"  , win_conf.width    );
+    debug!("height.=......{}"  , win_conf.height   );
+    debug!("active.=......{}"  , win_conf.active   );
+    } // end of: for
 
 
-// load the image texture only once:
-let     ground_texture = texture_manager.load(image_path.as_str())?;
+// let cursor_path: &Path  = Path::new("assets/cursors/pointers_part_5/glove3.png");
+let path = concat!(env!("CARGO_MANIFEST_DIR"), "/assets/gui/icons/shardoverse_icon_01.png");
 
-let mut events         = sdl_context.event_pump()
-                        .map_err(|e| e)?;
+let  game_icon = load_icon(Path::new(path));
+let  maps_icon = load_icon(Path::new(path));
+let  invt_icon = load_icon(Path::new(path));
+let  jrnl_icon = load_icon(Path::new(path));
+let  help_icon = load_icon(Path::new(path));
+let  pixl_icon = load_icon(Path::new(path));
+
+
+// -- Initialisation of winit: ----------------------------------------
+let mut event_loop = EventLoop::new();
+
+
+let     game_window = create_window(shard_config_p.window_configs[0].title.as_str(), game_icon, &event_loop, shard_config_p.window_configs[0].width , shard_config_p.window_configs[0].height, shard_config_p.window_configs[0].pos_x, shard_config_p.window_configs[0].pos_y);
+let     maps_window = create_window(shard_config_p.window_configs[1].title.as_str(), maps_icon, &event_loop, shard_config_p.window_configs[1].width , shard_config_p.window_configs[1].height, shard_config_p.window_configs[1].pos_x, shard_config_p.window_configs[1].pos_y);
+let     invt_window = create_window(shard_config_p.window_configs[2].title.as_str(), invt_icon, &event_loop, shard_config_p.window_configs[2].width , shard_config_p.window_configs[2].height, shard_config_p.window_configs[2].pos_x, shard_config_p.window_configs[2].pos_y);
+let     jrnl_window = create_window(shard_config_p.window_configs[3].title.as_str(), jrnl_icon, &event_loop, shard_config_p.window_configs[3].width , shard_config_p.window_configs[3].height, shard_config_p.window_configs[3].pos_x, shard_config_p.window_configs[3].pos_y);
+let     help_window = create_window(shard_config_p.window_configs[4].title.as_str(), help_icon, &event_loop, shard_config_p.window_configs[4].width , shard_config_p.window_configs[4].height, shard_config_p.window_configs[4].pos_x, shard_config_p.window_configs[4].pos_y);
+let     pixl_window = create_window(shard_config_p.window_configs[5].title.as_str(), pixl_icon, &event_loop, shard_config_p.window_configs[5].width , shard_config_p.window_configs[5].height, shard_config_p.window_configs[5].pos_x, shard_config_p.window_configs[5].pos_y);
+                                                                                     
+let     pixl_window_size     = pixl_window.inner_size();
+let     pixl_surface_texture = SurfaceTexture::new(pixl_window_size.width, pixl_window_size.height, &pixl_window);
+let mut pixels               = Pixels::new(        pixl_window_size.width, pixl_window_size.height, pixl_surface_texture).unwrap();
+let mut pixl_world           = World::new();
+
+
+info!("Usage:");
+info!("  Esc - Quit");
+info!("  1   - switch to Wait mode.");
+info!("  2   - switch to WaitUntil mode.");
+info!("  3   - switch to Poll mode.");
+info!("  R   - toggle request_redraw() calls.");
+info!("  F   - Toggle borderless fullscreen (on current desktop screen)");
+info!("  M   - Toggle minimized");
+info!("  X   - Toggle maximized");
+info!("  V   - Toggle visibility");
+
+// event-loop:
+let mut delay_in_milis:  u64 = 100;
+let mut wait_time:       time::Duration = time::Duration::from_millis(delay_in_milis);
+let mut poll_sleep_time: time::Duration = time::Duration::from_millis(delay_in_milis);
+
+// window:
+let mut minimized = false;
+let mut maximized = false;
+let mut visible   = true;
+
+// control-flow:
+let mut mode                   = Mode::WaitUntil;
+let mut request_redraw:  bool  = true;
+let mut wait_cancelled:  bool  = false;
+let mut close_requested: bool  = false;
+let mut delay_in_loop:   bool  = true;
+
 
 // initialize values for FPS-counting:
-#[allow(unused_assignments)]
-let mut start_ticks:             u32 = 0; 
-#[allow(unused_assignments)]
-let mut start_perfcounter:       u64 = 0; 
-#[allow(unused_assignments)]     
-let mut delta_ticks:             u32 = 0;
-#[allow(unused_assignments)]     
-let mut delta_perfcounter:       u64 = 0;
-let mut current_fps_ticks:       u32 = 0;
-let mut current_fps_perfcounter: f64 = 0.0;
+let mut start     = Instant::now();
+let mut delta     = Duration::new(0,0);  // just to avoid error[E0381]: borrow of possibly-uninitialized variable: `delta`
+let mut tick: u32 = 0;
+let mut fps:  f64 = 0.0;
 
-let mut delay_in_loop: bool = true;
+let mut modifers_state: ModifiersState = ModifiersState::default();
 
-let mut rect_size: i32   = 32;          // 32 is the tile-size, this also used as scaling-factor
-let mut win              = canvas.window_mut();
-#[allow(unused_assignments)]
-let mut win_position     = win.position();
-#[allow(unused_assignments)]
-let mut win_size         = win.size();
-let mut win_title        = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps_ticks, tick);
-win.set_title(&win_title).map_err(|e| e.to_string())?;
-
-
-// FPS-Counting at beginning of loop:
-start_ticks        = timer.ticks(); 
-start_perfcounter = timer.performance_counter(); 
-
-'main: loop 
+event_loop.run_return(|event, _, control_flow| 
     {
-    canvas.set_draw_color(pixels::Color::RGBA( 50, 50, 50, 255));
-    canvas.clear();
-
-    for event in events.poll_iter() 
-        {
-        match event 
-            {
-            Event::Window {win_event: WindowEvent::Resized(w, h),..} => 
-                                                           {
-                                                           debug!("window Resized to     w: {} h: {}",w,h);
-                                                           }
-
-            Event::Window {win_event: WindowEvent::SizeChanged(w, h),..} => 
-                                                           {
-                                                           debug!("window SizeChanged to w: {} h: {}",w,h);
-                                                           }
-
-       //   Event::KeyUp   {keycode:  Some(keycode), 
-       //                   scancode: Some(scancode), ..} |
-            Event::KeyDown {keycode:  Some(keycode), 
-                            scancode: Some(scancode),
-                                           keymod, ..} => {
-                                                           debug!("keymod: {:?}, keycode: {:?}, scancode: {:?}",keymod,keycode,scancode);
-                                                           match scancode 
-                                                               {
-                                                               Scancode::Escape     => {break 'main } 
-                                                               Scancode::P          => {pixel_draw::formula_fill(&mut canvas); }
-                                                               Scancode::KpPlus     => {if (rect_size + 1) <= 255  {rect_size +=  1; } }
-                                                               Scancode::KpMinus    => {if (rect_size - 1) >=   8  {rect_size -=  1; } }
-                                                               Scancode::KpPeriod   => {                            rect_size  = 32; }
-                                                               Scancode::V          => {                            }
-                                                               Scancode::KpMultiply => {if delay_in_loop {delay_in_loop = false;} else {delay_in_loop = true;} ; }
-                                                                                  _ => { trace!("unassigned - keymod: {:?}, keycode: {:?}, scancode: {:?}",keymod,keycode,scancode);},
-                                                               }
-                                                           }    
-
-            Event::MouseButtonDown {x, y, ..} =>           {
-                                                           debug!("mouse button down at (x:{},y:{})", x, y);
-                                                           }
-
-            Event::MouseButtonUp {x, y, ..} =>             {
-                                                           debug!("mouse button up   at (x:{},y:{})", x, y);
-                                                           }
-
-            Event::MouseWheel {timestamp, window_id, which, x, y, ..} => 
-                                                           {
-                                                           debug!("mouse wheel: timestamp {}, window_id {}, which {}, x {}, y {}",timestamp, window_id, which, x, y);
-                                                           #[allow(clippy::if_same_then_else)]
-                                                           if      y > 0 && (rect_size + y) <= 255 { rect_size += y; }
-                                                           else if y < 0 && (rect_size + y) >= 8   { rect_size += y; }
-                                                           }
-
-            Event::Quit {..}                            => break 'main,
-
-                                                      _ => {}
-            } // end of: match event
-        } // end of events-poll
+    trace!("{:?}", event);
+        
+    *control_flow = ControlFlow::WaitUntil(time::Instant::now() + wait_time);
 
     // actual FPS calculation inside loop:
-    let current_ticks = timer.ticks();
-    delta_ticks = current_ticks - start_ticks;
-    start_ticks = current_ticks;
-    if delta_ticks != 0 {current_fps_ticks = 1000 / delta_ticks;}  
-
-    let current_perfcounter = timer.performance_counter();
-    delta_perfcounter = current_perfcounter - start_perfcounter;
-    start_perfcounter = current_perfcounter;
-    if delta_perfcounter != 0 {current_fps_perfcounter = 10_000_000.0 / delta_perfcounter as f64;}  
-
+    delta = start.elapsed();
+    if  delta > Duration::new(1,0)  // if delta is > 1 second
+        {
+        fps = (tick as f64/delta.as_millis() as f64) * 1_000.0 as f64;
+        debug!("delay_in_milis={}, start={:?}, delta={:?}, tick={}, fps={}", delay_in_milis, start, delta.as_secs(), tick, fps);
+        tick=0;                  // re-init for counting the loops in the next second
+        start = Instant::now();  // re-init for counting the loops in the next second
+        // or better (c++ code, averaging some time samples):
+        // static const int NUM_FPS_SAMPLES = 64;float fpsSamples[NUM_FPS_SAMPLES]int currentSample = 0;float CalcFPS(int dt){    fpsSamples[currentSample % NUM_FPS_SAMPLES] = 1.0f / dt;    float fps = 0;    for (int i = 0; i < NUM_FPS_SAMPLES; i++)        fps += fpsSamples;    fps /= NUM_FPS_SAMPLES;    return fps;}
+        }
+    trace!("delay_in_milis={}, start={:?}, delta={:?}, tick={}, fps={}", delay_in_milis, start, delta.as_secs(), tick, fps);
     tick += 1;
 
     // Update the window title:
-    win_title    = format!("Shardoverse - scale: {:>3}, Ticks-FPS: {:>-5}, Perf-FPS: {:>-8.2}, tick: {:>5}", rect_size, current_fps_ticks, current_fps_perfcounter, tick);
-    win          = canvas.window_mut();
-    win.set_title(&win_title).map_err(|e| e.to_string())?;
-    win_size     = win.size(); 
+    pixl_window.set_title(&format!("Shardoverse - scale: {:>3}, tick: {:>5}, delay: {:>3}, FPS: {:>-8.2}", 0, tick, delay_in_milis, fps));
 
-    //draw everything:
-    for col in (0 ..= win_size.1).step_by(rect_size as usize)
+    match event 
         {
-        for row in (0 ..= win_size.0).step_by(rect_size as usize)
-            {// todo: replace scale-on-copy with pre-scale and blit
-            canvas.copy(&ground_texture, rect!(   0,   0, rect_size, rect_size), rect!(row, col, rect_size, rect_size))?;
-            }
-        }
+        Event::NewEvents(start_cause)      => {
+                                              wait_cancelled = match start_cause {
+                                                                                 StartCause::WaitCancelled { .. } => mode == Mode::WaitUntil,
+                                                                                                                _ => false,
+                                                                                 }
+                                              }
+        Event::WindowEvent { event, window_id }   => match event {
+                                                        WindowEvent::ModifiersChanged(m) => { // Key-Modifier states: (ctrl, alt, shift, logo)
+                                                                                            modifers_state = m;
+                                                                                            debug!("ModifiersChanged to state: {:?}",modifers_state);
+                                                                                            }
+                                                        WindowEvent::CloseRequested => {
+                                                                                       println!("Window {:?} has received the signal to close", window_id);
+                                                                                       }
+                                                                                       
+                                                        WindowEvent::KeyboardInput  {input: KeyboardInput {virtual_keycode: Some(virtual_code), state: ElementState::Pressed, .. }, .. } 
+                                                                                    => match virtual_code {
+                                                                                                         VirtualKeyCode::Escape   => {
+                                                                                                                                     debug!("close_requested");
+                                                                                                                                     close_requested = true;
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Multiply => {
+                                                                                                                                     if  modifers_state.ctrl() 
+                                                                                                                                         {
+                                                                                                                                         debug!("toggle delay in loop to: {}",!delay_in_loop);
+                                                                                                                                         delay_in_loop = !delay_in_loop; 
+                                                                                                                                         }
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Subtract => { // decrease speed
+                                                                                                                                     if  modifers_state.ctrl() 
+                                                                                                                                         {
+                                                                                                                                         if delay_in_milis <= 990 {delay_in_milis += 10}; 
+                                                                                                                                         debug!("raise delay in loop to: {}",delay_in_milis);
+                                                                                                                                         wait_time       = time::Duration::from_millis(delay_in_milis);
+                                                                                                                                         poll_sleep_time = time::Duration::from_millis(delay_in_milis);
+                                                                                                                                         }
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Add      => { // increase speed 
+                                                                                                                                     if  modifers_state.ctrl() 
+                                                                                                                                         {
+                                                                                                                                         if delay_in_milis >= 10 {delay_in_milis -= 10}; 
+                                                                                                                                         debug!("lower delay in loop to: {}",delay_in_milis);
+                                                                                                                                         wait_time       = time::Duration::from_millis(delay_in_milis);
+                                                                                                                                         poll_sleep_time = time::Duration::from_millis(delay_in_milis);
+                                                                                                                                         }
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Key1     => {
+                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
+                                                                                                                                     mode = Mode::Wait;
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Key2     => {
+                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
+                                                                                                                                     mode = Mode::WaitUntil;
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::Key3     => {
+                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
+                                                                                                                                     mode = Mode::Poll;
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::R        => {
+                                                                                                                                     debug!("request_redraw: {}", request_redraw);
+                                                                                                                                     request_redraw = !request_redraw;
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::F        => {
+                                                                                                                                     debug!("Toggle borderless fullscreen");
+                                                                                                                                     if  pixl_window.fullscreen().is_some() 
+                                                                                                                                         {
+                                                                                                                                         pixl_window.set_fullscreen(None);
+                                                                                                                                         } 
+                                                                                                                                     else{
+                                                                                                                                         let monitor = pixl_window.current_monitor();
+                                                                                                                                         pixl_window.set_fullscreen(Some(Fullscreen::Borderless(monitor)));
+                                                                                                                                         }
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::M        => {
+                                                                                                                                     debug!("toggle minimized to: {}", !minimized);
+                                                                                                                                     minimized = !minimized;
+                                                                                                                                     pixl_window.set_minimized(minimized);
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::V        => {
+                                                                                                                                     debug!("toggle {:?} visible to: {}", window_id, !visible);
+                                                                                                                                     visible = !visible;
+                                                                                                                                     pixl_window.set_visible(visible);
+                                                                                                                                     }
+                                                                                                         VirtualKeyCode::X        => {
+                                                                                                                                     debug!("toggle maximized to: {}", !maximized);
+                                                                                                                                     maximized = !maximized;
+                                                                                                                                     pixl_window.set_maximized(maximized);
+                                                                                                                                     }
+                                                                                                         _                        => {
+                                                                                                                                     info!("unused virtual_code = '{:?}'",virtual_code);
+                                                                                                                                     }
+                                                                                                         },  // end of match virtual_code
+                                                        WindowEvent::Resized(new_size) => {
+                                                                                          debug!("Window resized to: {:?}",new_size);
+                                                                                          pixl_world.resize( new_size.width, new_size.height);
+                                                                                          pixels.resize(new_size.width, new_size.height);
+                                                                                          //pixl_window.request_redraw();  // ???
+                                                                                          }
+                                                                                    _  => {trace!("Window-event={:?}",event);},
+                                                        }, // end of: match WindowEvent(event)
+        Event::MainEventsCleared           => {
+                                              if  request_redraw && !wait_cancelled && !close_requested 
+                                                  {
+                                                  pixl_window.request_redraw();
+                                                  }
+                                              if  close_requested 
+                                                  {
+                                                  *control_flow = ControlFlow::Exit;   // Urgs, when using the winit::run() function, this does an immediate program exit...
+                                                  }
+                                              }
+        Event::RedrawRequested(window_id)  => {
+                                              info!("Redraw requested for window_id {:?}",window_id);
 
-    canvas.copy(&font_texture, None , rect!( 20,  20, 464,  64))?;
-    canvas.present();  // display new content of the window
+                                              // Update internal state and request a redraw:
+                                              pixl_world.update();
+                                              let frame = pixels.get_frame();
 
-    if delay_in_loop {std::thread::sleep(Duration::from_millis(100));}
-    
-    } // end of: loop main
+                                              pixl_world.draw( frame );   // draws content into a frame-buffer
 
-win          = canvas.window_mut();
-win_position = win.position();
-win_size     = win.size();
-win_title    = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps_ticks, tick);
-win.set_title(&win_title).map_err(|e| e.to_string())?;
+                                              if  pixels
+                                                  .render()
+                                                  .map_err(|e| error!("pixels.render() failed: {}", e))
+                                                  .is_err()
+                                                {
+                                                *control_flow = ControlFlow::Exit;
+                                                return;
+                                                }
 
-shard_config_p.window.title  = win_title;           
-shard_config_p.window.pos_x  = win_position.0;      
-shard_config_p.window.pos_y  = win_position.1;      
-shard_config_p.window.width  = win_size.0;          
-shard_config_p.window.height = win_size.1;          
-shard_config_p.window.active = true;                
+                                              }
+        Event::RedrawEventsCleared         => {
+                                              *control_flow = match mode {
+                                                                         Mode::Wait      => ControlFlow::Wait,
+                                                                         Mode::WaitUntil => {
+                                                                                            if  wait_cancelled 
+                                                                                                {
+                                                                                                *control_flow
+                                                                                                } 
+                                                                                            else{
+                                                                                                ControlFlow::WaitUntil(time::Instant::now() + wait_time)
+                                                                                                }
+                                                                                            }
+                                                                         Mode::Poll      => {
+                                                                                            thread::sleep(poll_sleep_time);
+                                                                                            ControlFlow::Poll
+                                                                                            }
+                                                                         };
+                                              }
+        _                                  => {
+//                                              info!("outer event={:?}",event);
+                                              },
+        };  // end of: match event
+    }  // end of: event loop
+    ); // end of: event clojure loop run[_return]()
 
+
+let game_window_pos  = game_window.outer_position().unwrap();  debug!("game_window_inner_pos.x: {}, y: {}"    , game_window_pos.x     , game_window_pos.y);
+let game_window_size = game_window.inner_size();               debug!("game_window_inner_size: {}, height: {}", game_window_size.width, game_window_size.height);
+
+let maps_window_pos  = maps_window.outer_position().unwrap();  debug!("maps_window_inner_pos.x: {}, y: {}"    , maps_window_pos.x     , maps_window_pos.y);
+let maps_window_size = maps_window.inner_size();               debug!("maps_window_inner_size: {}, height: {}", maps_window_size.width, maps_window_size.height);
+
+let invt_window_pos  = invt_window.outer_position().unwrap();  debug!("invt_window_inner_pos.x: {}, y: {}"    , invt_window_pos.x     , invt_window_pos.y);
+let invt_window_size = invt_window.inner_size();               debug!("invt_window_inner_size: {}, height: {}", invt_window_size.width, invt_window_size.height);
+
+let jrnl_window_pos  = jrnl_window.outer_position().unwrap();  debug!("jrnl_window_inner_pos.x: {}, y: {}"    , jrnl_window_pos.x     , jrnl_window_pos.y);
+let jrnl_window_size = jrnl_window.inner_size();               debug!("jrnl_window_inner_size: {}, height: {}", jrnl_window_size.width, jrnl_window_size.height);
+
+let help_window_pos  = help_window.outer_position().unwrap();  debug!("help_window_inner_pos.x: {}, y: {}"    , help_window_pos.x     , help_window_pos.y);
+let help_window_size = help_window.inner_size();               debug!("help_window_inner_size: {}, height: {}", help_window_size.width, help_window_size.height);
+
+let pixl_window_pos  = pixl_window.outer_position().unwrap();  debug!("window_inner_pos.x: {}, y: {}",          pixl_window_pos.x     , pixl_window_pos.y);
+let pixl_window_size = pixl_window.inner_size();               debug!("window_inner_size: {}, height: {}",      pixl_window_size.width, pixl_window_size.height);
+
+shard_config_p.window_configs[0].pos_x  = game_window_pos.x;      
+shard_config_p.window_configs[0].pos_y  = game_window_pos.y;      
+shard_config_p.window_configs[0].width  = game_window_size.width;          
+shard_config_p.window_configs[0].height = game_window_size.height;          
+shard_config_p.window_configs[0].active = true;                
+
+shard_config_p.window_configs[1].pos_x  = maps_window_pos.x;      
+shard_config_p.window_configs[1].pos_y  = maps_window_pos.y;      
+shard_config_p.window_configs[1].width  = maps_window_size.width;          
+shard_config_p.window_configs[1].height = maps_window_size.height;          
+shard_config_p.window_configs[1].active = true;                
+
+shard_config_p.window_configs[2].pos_x  = invt_window_pos.x;      
+shard_config_p.window_configs[2].pos_y  = invt_window_pos.y;      
+shard_config_p.window_configs[2].width  = invt_window_size.width;          
+shard_config_p.window_configs[2].height = invt_window_size.height;          
+shard_config_p.window_configs[2].active = true;                
+
+shard_config_p.window_configs[3].pos_x  = jrnl_window_pos.x;      
+shard_config_p.window_configs[3].pos_y  = jrnl_window_pos.y;      
+shard_config_p.window_configs[3].width  = jrnl_window_size.width;          
+shard_config_p.window_configs[3].height = jrnl_window_size.height;          
+shard_config_p.window_configs[3].active = true;                
+
+shard_config_p.window_configs[4].pos_x  = help_window_pos.x;      
+shard_config_p.window_configs[4].pos_y  = help_window_pos.y;      
+shard_config_p.window_configs[4].width  = help_window_size.width;          
+shard_config_p.window_configs[4].height = help_window_size.height;          
+shard_config_p.window_configs[4].active = true;                
+
+shard_config_p.window_configs[5].pos_x  = pixl_window_pos.x;      
+shard_config_p.window_configs[5].pos_y  = pixl_window_pos.y;      
+shard_config_p.window_configs[5].width  = pixl_window_size.width;          
+shard_config_p.window_configs[5].height = pixl_window_size.height;          
+shard_config_p.window_configs[5].active = true;                
 
 debug!("Values in shard_config_p before return:");
-debug!("title      {:?}", shard_config_p.window.title);
-debug!("win_pos_x  {:?}", shard_config_p.window.pos_x);
-debug!("win_pos_y  {:?}", shard_config_p.window.pos_y);
-debug!("win_width  {:?}", shard_config_p.window.width);
-debug!("win_height {:?}", shard_config_p.window.height);
-debug!("active     {:?}", shard_config_p.window.active);
+for win_conf in shard_config_p.window_configs.iter() 
+    {
+    debug!("conf_name: .....{:?}", win_conf.conf_name  );
+    debug!("Conf-Num: ....{}"  , win_conf.conf_num );
+    debug!("Window-Title: {}"  , win_conf.title    );
+    debug!("pos_x .=......{}"  , win_conf.pos_x    );
+    debug!("pos_y .=......{}"  , win_conf.pos_y    );
+    debug!("width .=......{}"  , win_conf.width    );
+    debug!("height.=......{}"  , win_conf.height   );
+    debug!("active.=......{}"  , win_conf.active   );
+    } // end of: for
 
 Ok(shard_config_p)
-}// end of: run()
+} // end of: run()
 
 
-//---------------------------------------------------------------------------------------------
-type TextureManager<'l, T> = ResourceManager<'l, String, Texture<'l>, TextureCreator<T>>;
-
-type FontManager<'l> = ResourceManager<'l, FontDetails, Font<'l, 'static>, Sdl2TtfContext>;
-
-//---------------------------------------------------------------------------------------------
-// Generic struct to cache any resource loaded by a ResourceLoader
-pub struct ResourceManager<'l, K, R, L>
-    where K: Hash + Eq,
-          L: 'l + ResourceLoader<'l, R>
+/// Create a window for the game.
+///
+/// Automatically scales the window to cover about 2/3 of the monitor height.
+///
+/// # Returns
+///
+/// Tuple of `(window, surface, width, height, pos_x, pos_y, hidpi_factor)`
+/// `width` and `height` are in `PhysicalSize` units.
+fn create_window( title_p: &str, icon_p: Icon, event_loop_p: &EventLoop<()>, try_width_p: u32, try_height_p: u32, try_pos_x: i32, try_pos_y: i32) -> winit::window::Window
 {
-    loader: &'l L,
-    cache: HashMap<K, Rc<R>>,
+
+    // Create a hidden window so we can derive a scaling-factor:
+    let window = WindowBuilder::new()
+                .with_title(title_p)
+                .with_window_icon(Some(icon_p))
+                .with_visible(false)
+                .build(&event_loop_p)
+                .unwrap();
+
+    window.set_outer_position(LogicalPosition::new(try_pos_x, try_pos_y));  // to get the correct current_monitor()
+
+    let hidpi_factor   = window.scale_factor();
+
+    // calculate dimensions which are fitting on the monitor:
+    //let monitor_size   = window.current_monitor().size();
+    //let monitor_width  = monitor_size.width  as f64 / hidpi_factor; 
+    //let monitor_height = monitor_size.height as f64 / hidpi_factor;
+    
+    //let hori_scale: f64 = (monitor_width  / try_width_p  as f64 * 2.0 / 3.0).round();
+    //let vert_scale: f64 = (monitor_height / try_height_p as f64 * 2.0 / 3.0).round();
+
+//  info!("monitor_size={:?}",monitor_size);
+//  info!("hidpi_factor={:?}",hidpi_factor);
+//  info!("hori_scale={:?}", hori_scale);
+//  info!("vert_scale={:?}", vert_scale);
+
+    // calculate sizes and position of the new window:
+//  let try_cur_size: winit::dpi::LogicalSize<f64> = PhysicalSize::new(  try_width_p as f64 * hori_scale                ,  try_height_p as f64 * vert_scale                ).to_logical(hidpi_factor);
+//  let try_min_size: winit::dpi::LogicalSize<f64> = PhysicalSize::new(((try_width_p as f64 * hori_scale) / 4.0) as f64, ((try_height_p as f64 * vert_scale) / 4.0) as f64 ).to_logical(hidpi_factor);
+    let try_cur_size: winit::dpi::LogicalSize<f64> = PhysicalSize::new( try_width_p as f64       , try_height_p as f64       ).to_logical(hidpi_factor);
+    let try_min_size: winit::dpi::LogicalSize<f64> = PhysicalSize::new( try_width_p as f64 / 4.0 , try_height_p as f64 / 4.0 ).to_logical(hidpi_factor);
+
+ // let center = LogicalPosition::new( (monitor_width  - try_width_p  as f64 * scale) / 2.0,    (monitor_height - try_height_p as f64 * scale) / 2.0 );
+
+    // apply the calculated values and display the window:
+    window.set_inner_size(         try_cur_size);
+    window.set_min_inner_size(Some(try_min_size));
+    window.set_outer_position(LogicalPosition::new(try_pos_x, try_pos_y));
+    window.set_visible(true);
+
+    // return:
+    window
 }
 
-//---------------------------------------------------------------------------------------------
-impl<'l, K, R, L> ResourceManager<'l, K, R, L>
-    where K: Hash + Eq,
-          L: ResourceLoader<'l, R>
-{
-    pub fn new(loader_p: &'l L) -> Self {
-        ResourceManager {
-            cache: HashMap::new(),
-            loader: loader_p,
-        }
-    }
 
-    // Generics magic to allow a HashMap to use String as a key
-    // while allowing it to use &str for gets
-    pub fn load<D>(&mut self, details: &D) -> Result<Rc<R>, String>
-        where L: ResourceLoader<'l, R, Args = D>,
-              D: Eq + Hash + ?Sized,
-              K: Borrow<D> + for<'a> From<&'a D>
+impl World {
+    /// Create a new `World` instance that can draw a moving box.
+    fn new() -> Self 
     {
-        self.cache
-            .get(details)
-            .cloned()
-            .map_or_else(|| {
-                             let resource = Rc::new(self.loader.load(details)?);
-                             self.cache.insert(details.into(), resource.clone());
-                             Ok(resource)
-                         },
-                         Ok)
+    Self {
+         box_pos_x:    32,
+         box_pos_y:    32,
+         box_width:    32,
+         box_height:   32,
+         box_speed_x:   4,
+         box_speed_y:   4,
+         win_width:   320,
+         win_height:  200,
+         }
     }
-}
 
-//---------------------------------------------------------------------------------------------
-// TextureCreator knows how to load Textures
-impl<'l, T> ResourceLoader<'l, Texture<'l>> for TextureCreator<T> {
-    type Args = str;
-    fn load(&'l self, path: &str) -> Result<Texture, String> {
-        println!("LOADED A TEXTURE");
-        self.load_texture(path)
+    /// Update the `World` internal state; bounce the box around the screen.
+    fn update(&mut self) 
+    {
+        if self.box_pos_x <= 0 || self.box_pos_x + self.box_width  > self.win_width  as i32 
+            {
+            self.box_speed_x *= -1;
+            }
+
+        if self.box_pos_y <= 0 || self.box_pos_y + self.box_height > self.win_height as i32 
+            {
+            self.box_speed_y *= -1;
+            }
+
+        self.box_pos_x += self.box_speed_x;
+        self.box_pos_y += self.box_speed_y;
     }
-}
 
-//---------------------------------------------------------------------------------------------
-// Generic trait to Load any Resource Kind
-pub trait ResourceLoader<'l, R> {
-    type Args: ?Sized;
-    fn load(&'l self, data: &Self::Args) -> Result<R, String>;
-}
-
-
-//---------------------------------------------------------------------------------------------
-// Font Context knows how to load Fonts
-impl<'l> ResourceLoader<'l, Font<'l, 'static>> for Sdl2TtfContext {
-    type Args = FontDetails;
-    fn load(&'l self, details: &FontDetails) -> Result<Font<'l, 'static>, String> {
-        println!("LOADED A FONT");
-        self.load_font(&details.path, details.size)
+    /// Resize the `World`.
+    fn resize(&mut self, win_width_p: u32, win_height_p: u32 ) 
+    {
+        self.win_width  = win_width_p;
+        self.win_height = win_height_p;
     }
-}
 
-//---------------------------------------------------------------------------------------------
-// Information needed to load a Font
-#[derive(PartialEq, Eq, Hash)]
-pub struct FontDetails {
-    pub path: String,
-    pub size: u16,
-}
+    /// Draw the World's state to the frame buffer.
+    ///
+    /// Assumes the default texture format: [`wgpu::TextureFormat::Rgba8UnormSrgb`]
+    fn  draw(&self, frame: &mut [u8]) 
+        {
+        let  stretch_factor_x: f64 = self.win_width  as f64 / 256.0;
+        let  stretch_factor_y: f64 = self.win_height as f64 / 256.0 ;
+            
+        for (i, pixel) in frame.chunks_exact_mut(4).enumerate() 
+            {
+            let x = (i % self.win_width  as usize) as i32;
+            let y = (i / self.win_width  as usize) as i32;
 
-//---------------------------------------------------------------------------------------------
-impl<'a> From<&'a FontDetails> for FontDetails {
-    fn from(details: &'a FontDetails) -> FontDetails {
-        FontDetails {
-            path: details.path.clone(),
-            size: details.size,
+            let inside_the_box  = x >= self.box_pos_x
+                               && x <  self.box_pos_x + self.box_width
+                               && y >= self.box_pos_y
+                               && y <  self.box_pos_y + self.box_height;
+
+            let fl_x  = x as f64;
+            let fl_y  = y as f64;
+    
+            // linear functions:
+            // let red   = (x as f64 /stretch_factor_x ) as u8;
+            // let green = (y as f64 /stretch_factor_y ) as u8;
+            // let blue  = (y as f64 /stretch_factor_y ) as u8;
+    
+            // trigonometric functions:
+            // let red   = (((fl_x.sin()+10.0).abs() *  9.0)       % 255.0) as u8;
+            // let green = (((fl_x.sin()+10.0).abs() * 10.0)       % 255.0) as u8;
+            // let blue  = (((fl_x.sin()+10.0).abs() * 11.0)       % 255.0) as u8;
+    
+            // combination of linear and trigonometric functions:
+            let red   = ( (x as f64 / stretch_factor_x )+((fl_x/fl_y).cos() *  23.0) % 256.0 ) as u8;
+            let green = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() *  72.0) % 256.0 ) as u8;
+            let blue  = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() * 156.0) % 256.0 ) as u8;
+            let alpha = 0xff as u8;
+    
+            // debug!("x={}, y={} --> red={}, green={}, blue={}", x, y, red, green, blue);
+
+            let  rgba = if inside_the_box { [green , blue    , red    , 0x04 ] } 
+            else                          { [red   , green   , blue   , alpha] };
+
+            pixel.copy_from_slice(&rgba);
+            }
         }
-    }
 }
+
+
+
+
+//  pub(crate) fn render(rx_p: Receiver<()>, window_p: Window) -> Result<(), String> 
+//  {
+//  let cursor_path: &Path  = Path::new("assets/cursors/pointers_part_5/glove3.png");
+//  let image_path:  String =           "assets/graphics/2D/tiles/DungeonCrawlStoneSoupFull/dungeon/floor/sandstone_floor_0.png".to_string();
+//  let font_path:   String =           "assets/fonts/NugieRomanticItalic-8P6D.ttf".to_string();
+//  
+//  let mut tick  = 0;
+//  
+//  // initialize values for FPS-counting:
+//  #[allow(unused_assignments)]
+//  let mut start_ticks:             u32 = 0; 
+//  #[allow(unused_assignments)]
+//  let mut start_perfcounter:       u64 = 0; 
+//  #[allow(unused_assignments)]     
+//  let mut delta_ticks:             u32 = 0;
+//  #[allow(unused_assignments)]     
+//  let mut delta_perfcounter:       u64 = 0;
+//  let mut current_fps_ticks:       u32 = 0;
+//  let mut current_fps_perfcounter: f64 = 0.0;
+//  
+//  let delay_in_loop: bool = true;
+//  let rect_size: i32   = 32;          // 32 is the tile-size, this also used as scaling-factor
+//  
+//  //let mut win              = canvas.window_mut();
+//  ////#[allow(unused_assignments)]
+//  ////let mut win_position     = win.position();
+//  //#[allow(unused_assignments)]
+//  //let mut win_size         = win.size();
+//  //let mut win_title        = format!("Shardoverse - scale: {:>3}, FPS: {:>4}, tick: {:>5}", rect_size, current_fps_ticks, tick);
+//  //win.set_title(&win_title).map_err(|e| e.to_string())?;
+//  
+//  
+//  // FPS-Counting at beginning of loop:
+//  //#[allow(unused_assignments)]
+//  //start_ticks       = timer.ticks(); 
+//  //start_perfcounter = timer.performance_counter(); 
+//  
+//  let mut cnt = 0;
+//  'render_loop: loop 
+//      {
+//      match rx_p.try_recv() {
+//          Ok(_) | Err(TryRecvError::Disconnected) => {
+//              println!("Terminating.");
+//              break 'render_loop;
+//          }
+//          Err(TryRecvError::Empty) => {}
+//      }
+//      
+//      // actual FPS calculation inside loop:
+//  //    let current_ticks = timer.ticks();
+//  //    delta_ticks = current_ticks - start_ticks;
+//  //    start_ticks = current_ticks;
+//  //    if delta_ticks != 0 {current_fps_ticks = 1000 / delta_ticks;}  
+//  //
+//  //    let current_perfcounter = timer.performance_counter();
+//  //    delta_perfcounter = current_perfcounter - start_perfcounter;
+//  //    start_perfcounter = current_perfcounter;
+//  //    if delta_perfcounter != 0 {current_fps_perfcounter = 10_000_000.0 / delta_perfcounter as f64;}  
+//  //
+//  //    tick += 1;
+//  
+//      // Update the window title:
+//    //  win_title    = format!("Shardoverse - scale: {:>3}, Ticks-FPS: {:>-5}, Perf-FPS: {:>-8.2}, tick: {:>5}", rect_size, current_fps_ticks, current_fps_perfcounter, tick);
+//    //  win          = canvas.window_mut();
+//    //  win.set_title(&win_title).map_err(|e| e.to_string())?;
+//    //  win_size     = win.size(); 
+//  
+//      //draw everything:
+//  //    for col in (0 ..= win_size.1).step_by(rect_size as usize)
+//  //        {
+//  //        for row in (0 ..= win_size.0).step_by(rect_size as usize)
+//  //            {// todo: replace scale-on-copy with pre-scale and blit
+//  //            canvas.copy(&ground_texture, rect!(   0,   0, rect_size, rect_size), rect!(row, col, rect_size, rect_size))?;
+//  //            }
+//  //        }
+//  //
+//  //    canvas.copy(&font_texture, None , rect!( 20,  20, 464,  64))?;
+//  //    canvas.present();  // display new content of the window
+//  //    
+//  //    if delay_in_loop {std::thread::sleep(Duration::from_millis(100));}
+//  //
+//  //    cnt += 1;
+//  //    if cnt >= 100 {break 'render_loop; }  // TEST exit
+//  //    } // end of render_loop
+//  
+//  Ok(())
+//  } // end of: render()
+
 
 
 

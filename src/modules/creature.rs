@@ -172,6 +172,7 @@ impl Default for Creature
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
+#[allow(dead_code)]
 pub(crate) fn display_values(creature_p: &Creature) -> Result<(), io::Error>  
 {
 debug!("creature::display_values() called");
@@ -212,6 +213,13 @@ debug!("creature::display_values() called");
 Ok(())
 }
 
+// let default_creature: creature::Creature = creature::Creature::default();
+// match creature::display_values(&default_creature)
+//     {
+//     Ok(_)       => {},
+//     Err(error)  => { println!("ERROR displaying default_creature: {:?}", error); return Err(error.to_string()); },
+//     }
+// ;
 
 
 /// ___________________________________________________________________________________________________________________________

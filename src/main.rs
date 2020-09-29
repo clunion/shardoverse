@@ -40,7 +40,7 @@
 //!    
 
 //___ CRATES EXTERNAL: ________________________________________________________________________________________________________
-extern crate sdl2;
+//extern crate sdl2;
 extern crate clap;
 
 //___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
@@ -83,7 +83,6 @@ use crate::central_core::*;               // crate::<filename>::*
 /// **`FUNCTION:   `**  main   
 /// **`TYPE:       `**  program entry point   
 /// ___________________________________________________________________________________________________________________________
-/// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **`<none>     `**    
 /// **`RETURNS:    `** **`Result --> `** - OK(state)   
 /// **`            `** **`       --> `** - Error   
@@ -107,7 +106,7 @@ fn main() -> Result<(), io::Error>
 let mut shard_config: ShardConfig = ShardConfig::default();
 
 // Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
-match Logger::with_env_or_str("info, shardoverse::central_core=debug, shardoverse::modules::asset=debug")
+match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardoverse::modules::config=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
             .log_to_file()
@@ -188,24 +187,31 @@ match cmd_line.occurrences_of("verbosity")
     }
 
 // Handle the existence of command line parameters by requesting matches by name:
-if cmd_line.is_present("test-mode")     {shard_config.test        = true; info!("Test Mode enabled")    ; }
-if cmd_line.is_present("debug-mode")    {shard_config.debug       = true; info!("Debug Mode enabled")   ; } 
-if cmd_line.is_present("training-mode") {shard_config.training    = true; info!("Training Mode enabled"); }
-if cmd_line.is_present("windowreset")   {shard_config.windowreset = true; info!("Window reset detected"); }
-
-// Reset the windows coordinates and size:
-if  shard_config.windowreset
+if  cmd_line.is_present("test-mode")     {info!("Test Mode enabled")    ; shard_config.test        = true; }
+if  cmd_line.is_present("debug-mode")    {info!("Debug Mode enabled")   ; shard_config.debug       = true; } 
+if  cmd_line.is_present("training-mode") {info!("Training Mode enabled"); shard_config.training    = true; }
+if  cmd_line.is_present("windowreset")   
     {
-    info!("windowreset will be done"); 
-    shard_config.window = WindowConfig::default();
+    info!("Window reset detected"); 
+    // Reset the windows coordinates and size:
+    shard_config = shard_config.reset_all_windows(); 
+    };
+
+if  cmd_line.is_present("configrecreate")   
+    {
+    info!("Config recreate detected"); 
+    // Recreates the configuraion settings, including config sections, windows coordinates, sizes, titles, ...:
+    shard_config = shard_config.recreate_all_configs(); 
     };
 
 // Hand over control to central core:
-match run(&mut shard_config)
+match run_central_core(&mut shard_config)
     {
     Ok(_shard_config) => {},
     Err(error) => { error!("running central core: {:?}", error); }, // return Err(error); },
     }
+
+debug!("back in main()"); 
 
 // Save configuration and states, de-initialise everything:
 match config::exit(config_filename, shard_config)

@@ -121,6 +121,7 @@ impl Default for Item
 /// * everything   
 /// ___________________________________________________________________________________________________________________________
 
+#[allow(dead_code)]
 pub(crate) fn display_values(item_p: &Item) -> Result<(), io::Error>  
 {
 debug!("item::display_values() called");
@@ -146,6 +147,14 @@ debug!("item::display_values() called");
 Ok(())
 }
 
+
+// let default_item: item::Item = item::Item::default();
+// match item::display_values(&default_item)
+//     {
+//     Ok(_)       => {},
+//     Err(error)  => { println!("ERROR displaying default_item: {:?}", error); return Err(error.to_string()); },
+//     }
+// ;
 
 
 /// ___________________________________________________________________________________________________________________________

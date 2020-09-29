@@ -1,4 +1,5 @@
 ### shortcut for Rust's cargo run of the target:
 
 #export RUST_LOG=trace
- cargo run --release --quiet
+export PIXELS_HIGH_PERF=1
+cargo run --release --quiet

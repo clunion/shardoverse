@@ -52,7 +52,9 @@ expanding the project structure while applying some design principles.
 Using an Entity Component System (ECS) model is in consideration, perhaps [`Specs or Legion`](https://csherratt.github.io/blog/posts/specs-and-legion/) will be used.
 
 The very first screenshot:
-![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Screenshot_001.jpg)
+![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Screenshot_001.jpg)     
+
+
 No game at all, yet. Keyboard input works, scaling and redrawing.
 
 ## Software Design Principles
@@ -169,12 +171,12 @@ In one of the dot-files which get executed at start of the shell (in login-mode)
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
 #### Tell Rust where to find the SDL2-Libraries!
-In the MSys2 environment on MS-Windows, Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
+In the MSys2 environment on MS-Windows (and Apple-Darwin), Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
 This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_profile or the like) to the correct path containing the SDL2-Libs. The path might be /mingw64/lib, then set the variable this way:
 
     export LIBRARY_PATH=/mingw64/lib
 
-On Unix-like systems (Linux, BSD, Apple-Darwin(?), ...), the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
+On Unix-like systems (Linux, BSD, ...), the same mechanism happens, but the Shell variable is called *LD_LIBRARY_PATH* and the correct path may look like /usr/local/lib/. Then it also has to be set in the start up scripts, in this case like this:
 
     export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 
@@ -314,7 +316,7 @@ There are some ways to get that fixed:
 * start the executable with the parameter --windowreset. This could be done via:     
 >     cargo run --release -- --windowreset
 * __or:__ remove the file `shardoverse.ini`. The window coordinates are then initialized with defaults, which should be on the main screen.
-* __or:__ it is also possible to change the content of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
+* __or:__ change the content of `shardoverse.ini`, it is an ordinary human readable text, and correct the window position therein.    
 
 ------------------
 > An example for a similar environment is the small and nice Asteroids-alike-game [`rust-belt`](https://github.com/johnthagen/rust-belt).   
@@ -414,6 +416,14 @@ This leads to a funny coloring when the Rust-code is using labeled loops or life
 
 **Workaround:** when the apostrophe is removed form the String Chars list (it is in the first line of rust.uew),
 the coloring looks much better, at least around loop-labels and lifetimes.
+
+## Install an IDE (Visual Studio Code, optional)
+
+Download Visual Studio Code from https://code.visualstudio.com/
+
+
+### Debugging Rust (with VSCode)
+https://www.forrestthewoods.com/blog/how-to-debug-rust-with-visual-studio-code/
 
 
 # Project structure
@@ -572,3 +582,5 @@ Some more tilesets can be found here:
 # Maintainer of Shardoverse
 * [@clunion](https://github.com/clunion)
 
+# Communicate 
+* [Discord-Server Shardoverse](https://discord.gg/PWAtRU) 

@@ -28,11 +28,11 @@
 #[allow(unused_imports)]
 use log::{trace, debug, info, warn, error};
 
-use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::pixels::*;
-//use sdl2::pixels::Color;
-use sdl2::render::{Canvas};
-use sdl2::video::{Window};
+// use sdl2::gfx::primitives::DrawRenderer;
+// use sdl2::pixels::*;
+// //use sdl2::pixels::Color;
+// use sdl2::render::{Canvas};
+// use sdl2::video::{Window};
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
@@ -72,6 +72,15 @@ use sdl2::video::{Window};
 ///  * nothing   
 /// ___________________________________________________________________________________________________________________________
 
+
+#[allow(dead_code)]
+pub(crate) fn formula_fill() -> bool
+{
+    true
+}
+
+
+/*
 pub(crate) fn formula_fill(canvas_p: &mut Canvas<Window>) -> bool
 {
 let retval: bool = true;
@@ -128,6 +137,7 @@ canvas_p.present();
 
 retval
 } // end of: pixel_draw()
+*/
 
 /*
 /// ___________________________________________________________________________________________________________________________
