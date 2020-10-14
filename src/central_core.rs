@@ -1,5 +1,7 @@
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
+#![allow(clippy::suspicious_else_formatting)]
+#![allow(clippy::collapsible_if)]
 
 //! ___________________________________________________________________________________________________________________________
 //! **`PROJECT:    `** Shardoverse    
@@ -33,6 +35,7 @@
 //___ none ___
 
 //___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
+use crate::modules::config::*;            // crate::<dirname>::<filename>::*
 
 // use std::path::Path;
 // use std::borrow::Borrow;
@@ -68,23 +71,10 @@ use winit::
 //use pixels::{Error, Pixels, SurfaceTexture};
 use pixels::{Pixels, SurfaceTexture};
 
-/// Representation of the application state. In this example, a box will bounce around the screen.
-struct World 
-{
-    box_pos_x:   i32,
-    box_pos_y:   i32,
-    box_width:   i32,
-    box_height:  i32,
-    box_speed_x: i32,
-    box_speed_y: i32,
-    win_width:   u32,
-    win_height:  u32,
-}
-
-
-//use crate::modules::*;                     // crate::<dirname>::<filename>
-//use crate::modules::pixel_draw;            // crate::<dirname>::<filename>
-use crate::modules::config::ShardConfig;   // crate::<dirname>::<filename>::<modulename>
+//use crate::modules::*;                  // crate::<dirname>::<filename>
+use crate::modules::pixel_painter::*;     // crate::<dirname>::<filename>
+use crate::modules::config::ShardConfig;  // crate::<dirname>::<filename>::<modulename>
+use crate::modules::asset::*;             // crate::<dirname>::<filename>::<modulename>
 
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
@@ -102,6 +92,8 @@ enum Mode {
     Poll,
 }
 
+//___ MACROS: _________________________________________________________________________________________________________________
+//___ none ___
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
@@ -109,8 +101,6 @@ enum Mode {
 //___ METHODS: ________________________________________________________________________________________________________________
 //___ none ___
 
-
-//___ MACROS: _________________________________________________________________________________________________________________
 
 // build a Rect with i32s:
 // macro_rules! rect( ( $x:expr, $y:expr, $w:expr, $h:expr) => ( Rect::new($x as i32, $y as i32, $w as u32, $h as u32) ) );
@@ -131,26 +121,14 @@ enum Mode {
 // }
 
 
-fn load_icon(path: &Path) -> Icon 
-{
-let image = image::open(path)
-           .expect("Failed to open icon path")
-           .into_rgba();
-let (icon_width, icon_height) = image.dimensions();
-let icon_rgba = image.into_raw();
-    
-Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
-}
-
-
 
 /// ___________________________________________________________________________________________________________________________
-/// **`FUNCTION:   `**  run   
+/// **`FUNCTION:   `**  run_central_core   
 /// **`TYPE:       `**  common function, only called once from main.rs!   
 /// ___________________________________________________________________________________________________________________________
-/// **`PARAMETER:  `** **` <changing> `**    
-/// **`RETURNS:    `** **` Result --> `** - OK(WindowConfig)   
-/// **`            `** **`     or --> `** - Error(Error-Message)   
+/// **`PARAMETER:  `** **` shard_config_p `** - struct containing the whole configuration, as loaded from config ini-file   
+/// **`RETURNS:    `** **`     Result --> `** - OK(WindowConfig)   
+/// **`            `** **`         or --> `** - Error(Error-Message)   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
 /// Here it all comes together, this contains the central event loop, ties input to logic to output.   
@@ -165,18 +143,43 @@ Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon"
 
 pub(crate) fn run_central_core(shard_config_p: &mut ShardConfig) -> Result<&ShardConfig, String> 
 {
+info!("Usage:");
+info!("     'Esc' - Quit");
+info!("      '1'  - switch to Wait mode.");
+info!("      '2'  - switch to WaitUntil mode.");
+info!("      '3'  - switch to Poll mode.");
+info!("      'R'  - toggle request_redraw() calls.");
+info!("      'F'  - Toggle borderless fullscreen (on current desktop screen)");
+info!("      'H'  - Toggle Help-window");
+info!("      'J'  - Toggle Journal-window");
+info!("      'M'  - Toggle Maps-window");
+info!(" Ctrl-'M'  - Toggle minimized the active window");
+info!(" Ctrl-'X'  - Toggle maximized");
+info!("      'V'  - Toggle visibility");
+info!(" ctrl-'+'  - decrease speed");
+info!(" ctrl-'-'  - increase speed");
+info!("shift-'+'  - decrease scale");
+info!("shift-'-'  - increase scale");
 
 debug!("Values in shardoverse config:");
+debug!("verbosity: {}", shard_config_p.verbosity );
+debug!("debug    : {}", shard_config_p.debug     );
+debug!("test     : {}", shard_config_p.test      );
+debug!("training : {}", shard_config_p.training  );
+debug!("language : {}", shard_config_p.language  );
+debug!("delay    : {}", shard_config_p.delay     );
+debug!("scale    : {}", shard_config_p.scale     );
+debug!("encoding : {}", shard_config_p.encoding  );
+
 for win_conf in shard_config_p.window_configs.iter() 
     {
-    debug!("conf_name: ...{:?}", win_conf.conf_name);
-    debug!("conf_num: ....{}"  , win_conf.conf_num );
-    debug!("title: .......{}"  , win_conf.title    );
-    debug!("pos_x .=......{}"  , win_conf.pos_x    );
-    debug!("pos_y .=......{}"  , win_conf.pos_y    );
-    debug!("width .=......{}"  , win_conf.width    );
-    debug!("height.=......{}"  , win_conf.height   );
-    debug!("active.=......{}"  , win_conf.active   );
+    debug!("conf_name: .{:?}", win_conf.conf_name);
+    debug!("{:8}.=......{}"  ,CONF_WIN_TITLE  , win_conf.title  );
+    debug!("{:8}.=......{}"  ,CONF_WIN_POS_X  , win_conf.pos_x  );
+    debug!("{:8}.=......{}"  ,CONF_WIN_POS_Y  , win_conf.pos_y  );
+    debug!("{:8}.=......{}"  ,CONF_WIN_WIDTH  , win_conf.width  );
+    debug!("{:8}.=......{}"  ,CONF_WIN_HEIGHT , win_conf.height );
+    debug!("{:8}.=......{}\n",CONF_WIN_VISIBLE, win_conf.visible);
     } // end of: for
 
 
@@ -190,44 +193,66 @@ let  jrnl_icon = load_icon(Path::new(path));
 let  help_icon = load_icon(Path::new(path));
 let  pixl_icon = load_icon(Path::new(path));
 
+let mut scale_in_pixels = shard_config_p.scale;
+
+let  game_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_GAME.to_string()).unwrap(); // this better shall panic if not successfull!
+let  maps_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_MAPS.to_string()).unwrap(); // this better shall panic if not successfull!
+let  invt_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_INVT.to_string()).unwrap(); // this better shall panic if not successfull!
+let  jrnl_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_JRNL.to_string()).unwrap(); // this better shall panic if not successfull!
+let  help_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_HELP.to_string()).unwrap(); // this better shall panic if not successfull!
+let  pixl_index: usize = shard_config_p.find_window_conf_index_by_conf_name(CONF_WINDOW_PIXL.to_string()).unwrap(); // this better shall panic if not successfull!
 
 // -- Initialisation of winit: ----------------------------------------
-let mut event_loop = EventLoop::new();
+let mut event_loop = EventLoop::new();   // needed to create the windows
+
+let     game_window = create_window(shard_config_p.window_configs[game_index].title.as_str(), game_icon, &event_loop, shard_config_p.window_configs[game_index].width, shard_config_p.window_configs[game_index].height, shard_config_p.window_configs[game_index].pos_x, shard_config_p.window_configs[game_index].pos_y, shard_config_p.window_configs[game_index].visible );
+let     maps_window = create_window(shard_config_p.window_configs[maps_index].title.as_str(), maps_icon, &event_loop, shard_config_p.window_configs[maps_index].width, shard_config_p.window_configs[maps_index].height, shard_config_p.window_configs[maps_index].pos_x, shard_config_p.window_configs[maps_index].pos_y, shard_config_p.window_configs[maps_index].visible );
+let     invt_window = create_window(shard_config_p.window_configs[invt_index].title.as_str(), invt_icon, &event_loop, shard_config_p.window_configs[invt_index].width, shard_config_p.window_configs[invt_index].height, shard_config_p.window_configs[invt_index].pos_x, shard_config_p.window_configs[invt_index].pos_y, shard_config_p.window_configs[invt_index].visible );
+let     jrnl_window = create_window(shard_config_p.window_configs[jrnl_index].title.as_str(), jrnl_icon, &event_loop, shard_config_p.window_configs[jrnl_index].width, shard_config_p.window_configs[jrnl_index].height, shard_config_p.window_configs[jrnl_index].pos_x, shard_config_p.window_configs[jrnl_index].pos_y, shard_config_p.window_configs[jrnl_index].visible );
+let     help_window = create_window(shard_config_p.window_configs[help_index].title.as_str(), help_icon, &event_loop, shard_config_p.window_configs[help_index].width, shard_config_p.window_configs[help_index].height, shard_config_p.window_configs[help_index].pos_x, shard_config_p.window_configs[help_index].pos_y, shard_config_p.window_configs[help_index].visible );
+let     pixl_window = create_window(shard_config_p.window_configs[pixl_index].title.as_str(), pixl_icon, &event_loop, shard_config_p.window_configs[pixl_index].width, shard_config_p.window_configs[pixl_index].height, shard_config_p.window_configs[pixl_index].pos_x, shard_config_p.window_configs[pixl_index].pos_y, shard_config_p.window_configs[pixl_index].visible );
+
+let     game_window_id = game_window.id();  // these ids are used in the event-loop
+let     maps_window_id = maps_window.id();  // these ids are used in the event-loop
+let     invt_window_id = invt_window.id();  // these ids are used in the event-loop
+let     jrnl_window_id = jrnl_window.id();  // these ids are used in the event-loop
+let     help_window_id = help_window.id();  // these ids are used in the event-loop
+let     pixl_window_id = pixl_window.id();  // these ids are used in the event-loop
 
 
-let     game_window = create_window(shard_config_p.window_configs[0].title.as_str(), game_icon, &event_loop, shard_config_p.window_configs[0].width , shard_config_p.window_configs[0].height, shard_config_p.window_configs[0].pos_x, shard_config_p.window_configs[0].pos_y);
-let     maps_window = create_window(shard_config_p.window_configs[1].title.as_str(), maps_icon, &event_loop, shard_config_p.window_configs[1].width , shard_config_p.window_configs[1].height, shard_config_p.window_configs[1].pos_x, shard_config_p.window_configs[1].pos_y);
-let     invt_window = create_window(shard_config_p.window_configs[2].title.as_str(), invt_icon, &event_loop, shard_config_p.window_configs[2].width , shard_config_p.window_configs[2].height, shard_config_p.window_configs[2].pos_x, shard_config_p.window_configs[2].pos_y);
-let     jrnl_window = create_window(shard_config_p.window_configs[3].title.as_str(), jrnl_icon, &event_loop, shard_config_p.window_configs[3].width , shard_config_p.window_configs[3].height, shard_config_p.window_configs[3].pos_x, shard_config_p.window_configs[3].pos_y);
-let     help_window = create_window(shard_config_p.window_configs[4].title.as_str(), help_icon, &event_loop, shard_config_p.window_configs[4].width , shard_config_p.window_configs[4].height, shard_config_p.window_configs[4].pos_x, shard_config_p.window_configs[4].pos_y);
-let     pixl_window = create_window(shard_config_p.window_configs[5].title.as_str(), pixl_icon, &event_loop, shard_config_p.window_configs[5].width , shard_config_p.window_configs[5].height, shard_config_p.window_configs[5].pos_x, shard_config_p.window_configs[5].pos_y);
-                                                                                     
+// prepare the Pixel-Painter window:
 let     pixl_window_size     = pixl_window.inner_size();
 let     pixl_surface_texture = SurfaceTexture::new(pixl_window_size.width, pixl_window_size.height, &pixl_window);
 let mut pixels               = Pixels::new(        pixl_window_size.width, pixl_window_size.height, pixl_surface_texture).unwrap();
-let mut pixl_world           = World::new();
+let mut pixl_world           = PixelWorld::new();
 
-
-info!("Usage:");
-info!("  Esc - Quit");
-info!("  1   - switch to Wait mode.");
-info!("  2   - switch to WaitUntil mode.");
-info!("  3   - switch to Poll mode.");
-info!("  R   - toggle request_redraw() calls.");
-info!("  F   - Toggle borderless fullscreen (on current desktop screen)");
-info!("  M   - Toggle minimized");
-info!("  X   - Toggle maximized");
-info!("  V   - Toggle visibility");
 
 // event-loop:
-let mut delay_in_milis:  u64 = 100;
+let mut delay_in_milis:  u64 = shard_config_p.delay.into();
 let mut wait_time:       time::Duration = time::Duration::from_millis(delay_in_milis);
 let mut poll_sleep_time: time::Duration = time::Duration::from_millis(delay_in_milis);
 
 // window:
-let mut minimized = false;
-let mut maximized = false;
-let mut visible   = true;
+let mut game_window_visible   = shard_config_p.window_configs[game_index].visible;
+let mut maps_window_visible   = shard_config_p.window_configs[maps_index].visible;
+let mut invt_window_visible   = shard_config_p.window_configs[invt_index].visible;
+let mut jrnl_window_visible   = shard_config_p.window_configs[jrnl_index].visible;
+let mut help_window_visible   = shard_config_p.window_configs[help_index].visible;
+let mut pixl_window_visible   = shard_config_p.window_configs[pixl_index].visible;
+
+let mut game_window_minimized = false;
+let mut maps_window_minimized = false;
+let mut invt_window_minimized = false;
+let mut jrnl_window_minimized = false;
+let mut help_window_minimized = false;
+let mut pixl_window_minimized = false;
+
+let mut game_window_maximized = false;
+let mut maps_window_maximized = false;
+let mut invt_window_maximized = false;
+let mut jrnl_window_maximized = false;
+let mut help_window_maximized = false;
+let mut pixl_window_maximized = false;
 
 // control-flow:
 let mut mode                   = Mode::WaitUntil;
@@ -262,11 +287,12 @@ event_loop.run_return(|event, _, control_flow|
         // or better (c++ code, averaging some time samples):
         // static const int NUM_FPS_SAMPLES = 64;float fpsSamples[NUM_FPS_SAMPLES]int currentSample = 0;float CalcFPS(int dt){    fpsSamples[currentSample % NUM_FPS_SAMPLES] = 1.0f / dt;    float fps = 0;    for (int i = 0; i < NUM_FPS_SAMPLES; i++)        fps += fpsSamples;    fps /= NUM_FPS_SAMPLES;    return fps;}
         }
+
     trace!("delay_in_milis={}, start={:?}, delta={:?}, tick={}, fps={}", delay_in_milis, start, delta.as_secs(), tick, fps);
     tick += 1;
 
     // Update the window title:
-    pixl_window.set_title(&format!("Shardoverse - scale: {:>3}, tick: {:>5}, delay: {:>3}, FPS: {:>-8.2}", 0, tick, delay_in_milis, fps));
+    game_window.set_title(&format!("Shardoverse - scale: {:>3}, tick: {:>5}, delay: {:>3}, FPS: {:>-8.2}", scale_in_pixels, tick, delay_in_milis, fps));
 
     match event 
         {
@@ -276,104 +302,154 @@ event_loop.run_return(|event, _, control_flow|
                                                                                                                 _ => false,
                                                                                  }
                                               }
-        Event::WindowEvent { event, window_id }   => match event {
-                                                        WindowEvent::ModifiersChanged(m) => { // Key-Modifier states: (ctrl, alt, shift, logo)
-                                                                                            modifers_state = m;
-                                                                                            debug!("ModifiersChanged to state: {:?}",modifers_state);
-                                                                                            }
-                                                        WindowEvent::CloseRequested => {
-                                                                                       println!("Window {:?} has received the signal to close", window_id);
-                                                                                       }
-                                                                                       
-                                                        WindowEvent::KeyboardInput  {input: KeyboardInput {virtual_keycode: Some(virtual_code), state: ElementState::Pressed, .. }, .. } 
-                                                                                    => match virtual_code {
-                                                                                                         VirtualKeyCode::Escape   => {
-                                                                                                                                     debug!("close_requested");
-                                                                                                                                     close_requested = true;
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Multiply => {
-                                                                                                                                     if  modifers_state.ctrl() 
-                                                                                                                                         {
-                                                                                                                                         debug!("toggle delay in loop to: {}",!delay_in_loop);
-                                                                                                                                         delay_in_loop = !delay_in_loop; 
-                                                                                                                                         }
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Subtract => { // decrease speed
-                                                                                                                                     if  modifers_state.ctrl() 
-                                                                                                                                         {
-                                                                                                                                         if delay_in_milis <= 990 {delay_in_milis += 10}; 
-                                                                                                                                         debug!("raise delay in loop to: {}",delay_in_milis);
-                                                                                                                                         wait_time       = time::Duration::from_millis(delay_in_milis);
-                                                                                                                                         poll_sleep_time = time::Duration::from_millis(delay_in_milis);
-                                                                                                                                         }
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Add      => { // increase speed 
-                                                                                                                                     if  modifers_state.ctrl() 
-                                                                                                                                         {
-                                                                                                                                         if delay_in_milis >= 10 {delay_in_milis -= 10}; 
-                                                                                                                                         debug!("lower delay in loop to: {}",delay_in_milis);
-                                                                                                                                         wait_time       = time::Duration::from_millis(delay_in_milis);
-                                                                                                                                         poll_sleep_time = time::Duration::from_millis(delay_in_milis);
-                                                                                                                                         }
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Key1     => {
-                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
-                                                                                                                                     mode = Mode::Wait;
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Key2     => {
-                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
-                                                                                                                                     mode = Mode::WaitUntil;
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::Key3     => {
-                                                                                                                                     debug!("event_loop-mode: {:?}", mode);
-                                                                                                                                     mode = Mode::Poll;
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::R        => {
-                                                                                                                                     debug!("request_redraw: {}", request_redraw);
-                                                                                                                                     request_redraw = !request_redraw;
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::F        => {
-                                                                                                                                     debug!("Toggle borderless fullscreen");
-                                                                                                                                     if  pixl_window.fullscreen().is_some() 
-                                                                                                                                         {
-                                                                                                                                         pixl_window.set_fullscreen(None);
-                                                                                                                                         } 
-                                                                                                                                     else{
-                                                                                                                                         let monitor = pixl_window.current_monitor();
-                                                                                                                                         pixl_window.set_fullscreen(Some(Fullscreen::Borderless(monitor)));
-                                                                                                                                         }
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::M        => {
-                                                                                                                                     debug!("toggle minimized to: {}", !minimized);
-                                                                                                                                     minimized = !minimized;
-                                                                                                                                     pixl_window.set_minimized(minimized);
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::V        => {
-                                                                                                                                     debug!("toggle {:?} visible to: {}", window_id, !visible);
-                                                                                                                                     visible = !visible;
-                                                                                                                                     pixl_window.set_visible(visible);
-                                                                                                                                     }
-                                                                                                         VirtualKeyCode::X        => {
-                                                                                                                                     debug!("toggle maximized to: {}", !maximized);
-                                                                                                                                     maximized = !maximized;
-                                                                                                                                     pixl_window.set_maximized(maximized);
-                                                                                                                                     }
-                                                                                                         _                        => {
-                                                                                                                                     info!("unused virtual_code = '{:?}'",virtual_code);
-                                                                                                                                     }
-                                                                                                         },  // end of match virtual_code
-                                                        WindowEvent::Resized(new_size) => {
-                                                                                          debug!("Window resized to: {:?}",new_size);
-                                                                                          pixl_world.resize( new_size.width, new_size.height);
-                                                                                          pixels.resize(new_size.width, new_size.height);
-                                                                                          //pixl_window.request_redraw();  // ???
-                                                                                          }
-                                                                                    _  => {trace!("Window-event={:?}",event);},
-                                                        }, // end of: match WindowEvent(event)
+        Event::WindowEvent { event, window_id } => match event {
+                                                         WindowEvent::ModifiersChanged(m) => { // Key-Modifier states: (ctrl, alt, shift, logo)
+                                                                                             modifers_state = m;
+                                                                                             debug!("ModifiersChanged to state: {:?}",modifers_state);
+                                                                                             }
+                                                         WindowEvent::CloseRequested => {
+                                                                                        println!("Window {:?} has received the signal to close", window_id);
+                                                                                        // This drops the window, causing it to close.
+                                                                                        }
+                                                                                        
+                                                         WindowEvent::KeyboardInput  {input: KeyboardInput {virtual_keycode: Some(virtual_code), state: ElementState::Pressed, .. }, .. } 
+                                                                                     => match virtual_code {
+                                                                                              VirtualKeyCode::Escape   => {
+                                                                                                                          debug!("close_requested");
+                                                                                                                          close_requested = true;
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Multiply => {
+                                                                                                                          if  modifers_state.ctrl() 
+                                                                                                                              {
+                                                                                                                              debug!("toggle delay in loop to: {}",!delay_in_loop);
+                                                                                                                              delay_in_loop = !delay_in_loop; 
+                                                                                                                              }
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Subtract => { 
+                                                                                                                          if  modifers_state.ctrl() // decrease speed
+                                                                                                                              {
+                                                                                                                              if delay_in_milis <= 990 {delay_in_milis += 10}; 
+                                                                                                                              debug!("raise delay in loop to: {}",delay_in_milis);
+                                                                                                                              wait_time       = time::Duration::from_millis(delay_in_milis);
+                                                                                                                              poll_sleep_time = time::Duration::from_millis(delay_in_milis);
+                                                                                                                              }
+                                                                                                                          else    
+                                                                                                                          if  modifers_state.shift() // increase scale
+                                                                                                                              {
+                                                                                                                              if scale_in_pixels > 10 {scale_in_pixels -= 1};
+                                                                                                                              }
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Add      => {
+                                                                                                                          if  modifers_state.ctrl() // increase speed 
+                                                                                                                              {
+                                                                                                                              if delay_in_milis >= 10 {delay_in_milis -= 10}; 
+                                                                                                                              debug!("lower delay in loop to: {}",delay_in_milis);
+                                                                                                                              wait_time       = time::Duration::from_millis(delay_in_milis);
+                                                                                                                              poll_sleep_time = time::Duration::from_millis(delay_in_milis);
+                                                                                                                              }
+                                                                                                                          else
+                                                                                                                          if  modifers_state.shift() // increase scale
+                                                                                                                              {
+                                                                                                                              if scale_in_pixels < 250 {scale_in_pixels += 1};
+                                                                                                                              }
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Key1     => {
+                                                                                                                          debug!("event_loop-mode: {:?}", mode);
+                                                                                                                          mode = Mode::Wait;
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Key2     => {
+                                                                                                                          debug!("event_loop-mode: {:?}", mode);
+                                                                                                                          mode = Mode::WaitUntil;
+                                                                                                                          }
+                                                                                              VirtualKeyCode::Key3     => {
+                                                                                                                          debug!("event_loop-mode: {:?}", mode);
+                                                                                                                          mode = Mode::Poll;
+                                                                                                                          }
+                                                                                              VirtualKeyCode::F        => {
+                                                                                                                          debug!("Toggle borderless fullscreen");
+                                                                                                                          if  game_window.fullscreen().is_some() 
+                                                                                                                              {
+                                                                                                                              game_window.set_fullscreen(None);
+                                                                                                                              } 
+                                                                                                                          else{
+                                                                                                                              let monitor = game_window.current_monitor();
+                                                                                                                              game_window.set_fullscreen(Some(Fullscreen::Borderless(monitor)));
+                                                                                                                              }
+                                                                                                                          }
+
+                                                                                              VirtualKeyCode::H        => {
+                                                                                                                              debug!("toggle Help-Window visibility to: {}", !help_window_visible);
+                                                                                                                              help_window_visible   = !help_window_visible;
+                                                                                                                              help_window.set_visible( help_window_visible);
+                                                                                                                          }
+                                                                                                                          
+                                                                                              VirtualKeyCode::I        => {
+                                                                                                                              debug!("toggle Inventory-Window visibility to: {}", !invt_window_visible);
+                                                                                                                              invt_window_visible   = !invt_window_visible;
+                                                                                                                              invt_window.set_visible( invt_window_visible);
+                                                                                                                          }
+                                                                                                                          
+                                                                                              VirtualKeyCode::J        => {
+                                                                                                                              debug!("toggle Help-Window visibility to: {}", !jrnl_window_visible);
+                                                                                                                              jrnl_window_visible   = !jrnl_window_visible;
+                                                                                                                              jrnl_window.set_visible( jrnl_window_visible);
+                                                                                                                          }
+                                                                                                                          
+                                                                                              VirtualKeyCode::M        => {
+                                                                                                                          if  modifers_state.ctrl() 
+                                                                                                                              {
+                                                                                                                              debug!("toggle minimized state of window-id: {:?}", window_id );
+                                                                                                                                   if window_id == game_window_id {game_window_minimized = !game_window_minimized; game_window.set_minimized(game_window_minimized);}
+                                                                                                                              else if window_id == maps_window_id {maps_window_minimized = !maps_window_minimized; maps_window.set_minimized(maps_window_minimized);}
+                                                                                                                              else if window_id == invt_window_id {invt_window_minimized = !invt_window_minimized; invt_window.set_minimized(invt_window_minimized);}
+                                                                                                                              else if window_id == jrnl_window_id {jrnl_window_minimized = !jrnl_window_minimized; jrnl_window.set_minimized(jrnl_window_minimized);}
+                                                                                                                              else if window_id == help_window_id {help_window_minimized = !help_window_minimized; help_window.set_minimized(help_window_minimized);}
+                                                                                                                              else if window_id == pixl_window_id {pixl_window_minimized = !pixl_window_minimized; pixl_window.set_minimized(pixl_window_minimized);}
+                                                                                                                              }
+                                                                                                                          else{    
+                                                                                                                              debug!("toggle Maps-Window visibility to: {}", !maps_window_visible);
+                                                                                                                              maps_window_visible = !maps_window_visible;
+                                                                                                                              maps_window.set_visible( maps_window_visible);
+                                                                                                                              }
+                                                                                                                          }
+                                                                                                                          
+                                                                                              VirtualKeyCode::P        => {
+                                                                                                                              debug!("toggle PixelPainter-Window visibility to: {}", !pixl_window_visible);
+                                                                                                                              pixl_window_visible   = !pixl_window_visible;
+                                                                                                                              pixl_window.set_visible( pixl_window_visible);
+                                                                                                                          }
+                                                                                              VirtualKeyCode::R        => {
+                                                                                                                          debug!("toggle request_redraw to {}", !request_redraw);
+                                                                                                                          request_redraw = !request_redraw;
+                                                                                                                          }
+                                                                                              VirtualKeyCode::X        => {
+                                                                                                                          if  modifers_state.ctrl() 
+                                                                                                                              {
+                                                                                                                              debug!("toggle maximized state of window-id: {:?}", window_id );
+                                                                                                                                   if window_id == game_window_id {game_window_maximized = !game_window_maximized; game_window.set_maximized(game_window_maximized);}
+                                                                                                                              else if window_id == maps_window_id {maps_window_maximized = !maps_window_maximized; maps_window.set_maximized(maps_window_maximized);}
+                                                                                                                              else if window_id == invt_window_id {invt_window_maximized = !invt_window_maximized; invt_window.set_maximized(invt_window_maximized);}
+                                                                                                                              else if window_id == jrnl_window_id {jrnl_window_maximized = !jrnl_window_maximized; jrnl_window.set_maximized(jrnl_window_maximized);}
+                                                                                                                              else if window_id == help_window_id {help_window_maximized = !help_window_maximized; help_window.set_maximized(help_window_maximized);}
+                                                                                                                              else if window_id == pixl_window_id {pixl_window_maximized = !pixl_window_maximized; pixl_window.set_maximized(pixl_window_maximized);}
+                                                                                                                              }
+                                                                                                                          }
+                                                                                              _                        => {
+                                                                                                                          info!("unused virtual_code = '{:?}'",virtual_code);
+                                                                                                                          }
+                                                                                              },  // end of match virtual_code
+                                                         WindowEvent::Resized(new_size) => {
+                                                                                           debug!("Window resized to: {:?}",new_size);
+                                                                                           pixl_world.resize( new_size.width, new_size.height);
+                                                                                           pixels.resize(new_size.width, new_size.height);
+                                                                                           //pixl_window.request_redraw();  // ???
+                                                                                           }
+                                                                                     _  => {trace!("Window-event={:?}",event);},
+                                                         }, // end of: match WindowEvent(event)
         Event::MainEventsCleared           => {
                                               if  request_redraw && !wait_cancelled && !close_requested 
                                                   {
-                                                  pixl_window.request_redraw();
+                                                  game_window.request_redraw();
                                                   }
                                               if  close_requested 
                                                   {
@@ -382,21 +458,24 @@ event_loop.run_return(|event, _, control_flow|
                                               }
         Event::RedrawRequested(window_id)  => {
                                               info!("Redraw requested for window_id {:?}",window_id);
-
-                                              // Update internal state and request a redraw:
-                                              pixl_world.update();
-                                              let frame = pixels.get_frame();
-
-                                              pixl_world.draw( frame );   // draws content into a frame-buffer
-
-                                              if  pixels
-                                                  .render()
-                                                  .map_err(|e| error!("pixels.render() failed: {}", e))
-                                                  .is_err()
-                                                {
-                                                *control_flow = ControlFlow::Exit;
-                                                return;
-                                                }
+                                              // drawing with Pixels will fail if the window is minimized.
+                                              //if  pixl_window.visible() // Grumbl, no such function available in winit?
+                                              //  {
+                                                  // Update internal state and request a redraw:
+                                                  pixl_world.update();
+                                                  let frame = pixels.get_frame();
+                                                      
+                                                  pixl_world.draw( frame );   // draws content into a frame-buffer
+                                                      
+                                                  if  pixels
+                                                      .render()
+                                                      .map_err(|e| error!("pixels.render() failed: {}", e))
+                                                      .is_err()
+                                                      {
+                                                      *control_flow = ControlFlow::Exit;
+                                                      return;
+                                                      }
+                                              //  }
 
                                               }
         Event::RedrawEventsCleared         => {
@@ -425,71 +504,77 @@ event_loop.run_return(|event, _, control_flow|
     ); // end of: event clojure loop run[_return]()
 
 
-let game_window_pos  = game_window.outer_position().unwrap();  debug!("game_window_inner_pos.x: {}, y: {}"    , game_window_pos.x     , game_window_pos.y);
-let game_window_size = game_window.inner_size();               debug!("game_window_inner_size: {}, height: {}", game_window_size.width, game_window_size.height);
+let game_window_pos  = game_window.outer_position().unwrap();
+let game_window_size = game_window.inner_size();             
 
-let maps_window_pos  = maps_window.outer_position().unwrap();  debug!("maps_window_inner_pos.x: {}, y: {}"    , maps_window_pos.x     , maps_window_pos.y);
-let maps_window_size = maps_window.inner_size();               debug!("maps_window_inner_size: {}, height: {}", maps_window_size.width, maps_window_size.height);
+let maps_window_pos  = maps_window.outer_position().unwrap();
+let maps_window_size = maps_window.inner_size();             
 
-let invt_window_pos  = invt_window.outer_position().unwrap();  debug!("invt_window_inner_pos.x: {}, y: {}"    , invt_window_pos.x     , invt_window_pos.y);
-let invt_window_size = invt_window.inner_size();               debug!("invt_window_inner_size: {}, height: {}", invt_window_size.width, invt_window_size.height);
+let invt_window_pos  = invt_window.outer_position().unwrap();
+let invt_window_size = invt_window.inner_size();             
 
-let jrnl_window_pos  = jrnl_window.outer_position().unwrap();  debug!("jrnl_window_inner_pos.x: {}, y: {}"    , jrnl_window_pos.x     , jrnl_window_pos.y);
-let jrnl_window_size = jrnl_window.inner_size();               debug!("jrnl_window_inner_size: {}, height: {}", jrnl_window_size.width, jrnl_window_size.height);
+let jrnl_window_pos  = jrnl_window.outer_position().unwrap();
+let jrnl_window_size = jrnl_window.inner_size();             
 
-let help_window_pos  = help_window.outer_position().unwrap();  debug!("help_window_inner_pos.x: {}, y: {}"    , help_window_pos.x     , help_window_pos.y);
-let help_window_size = help_window.inner_size();               debug!("help_window_inner_size: {}, height: {}", help_window_size.width, help_window_size.height);
+let help_window_pos  = help_window.outer_position().unwrap();
+let help_window_size = help_window.inner_size();             
 
-let pixl_window_pos  = pixl_window.outer_position().unwrap();  debug!("window_inner_pos.x: {}, y: {}",          pixl_window_pos.x     , pixl_window_pos.y);
-let pixl_window_size = pixl_window.inner_size();               debug!("window_inner_size: {}, height: {}",      pixl_window_size.width, pixl_window_size.height);
+let pixl_window_pos  = pixl_window.outer_position().unwrap();
+let pixl_window_size = pixl_window.inner_size();
 
-shard_config_p.window_configs[0].pos_x  = game_window_pos.x;      
-shard_config_p.window_configs[0].pos_y  = game_window_pos.y;      
-shard_config_p.window_configs[0].width  = game_window_size.width;          
-shard_config_p.window_configs[0].height = game_window_size.height;          
-shard_config_p.window_configs[0].active = true;                
+// shard_config_p.verbosity = 2;                         // currently unchanged
+// shard_config_p.debug     = false;                     // currently unchanged
+// shard_config_p.test      = false;                     // currently unchanged
+// shard_config_p.training  = false;                     // currently unchanged
+// shard_config_p.language  = "Gremlinese".to_string();  // currently unchanged
+shard_config_p.delay     = delay_in_milis as u16;
+shard_config_p.scale     = scale_in_pixels;
 
-shard_config_p.window_configs[1].pos_x  = maps_window_pos.x;      
-shard_config_p.window_configs[1].pos_y  = maps_window_pos.y;      
-shard_config_p.window_configs[1].width  = maps_window_size.width;          
-shard_config_p.window_configs[1].height = maps_window_size.height;          
-shard_config_p.window_configs[1].active = true;                
+shard_config_p.window_configs[game_index].pos_x   = game_window_pos.x;
+shard_config_p.window_configs[game_index].pos_y   = game_window_pos.y;
+shard_config_p.window_configs[game_index].width   = game_window_size.width; 
+shard_config_p.window_configs[game_index].height  = game_window_size.height;
+shard_config_p.window_configs[game_index].visible = game_window_visible;
 
-shard_config_p.window_configs[2].pos_x  = invt_window_pos.x;      
-shard_config_p.window_configs[2].pos_y  = invt_window_pos.y;      
-shard_config_p.window_configs[2].width  = invt_window_size.width;          
-shard_config_p.window_configs[2].height = invt_window_size.height;          
-shard_config_p.window_configs[2].active = true;                
+shard_config_p.window_configs[maps_index].pos_x   = maps_window_pos.x;
+shard_config_p.window_configs[maps_index].pos_y   = maps_window_pos.y;
+shard_config_p.window_configs[maps_index].width   = maps_window_size.width; 
+shard_config_p.window_configs[maps_index].height  = maps_window_size.height;
+shard_config_p.window_configs[maps_index].visible = maps_window_visible;
+                                                  
+shard_config_p.window_configs[invt_index].pos_x   = invt_window_pos.x;
+shard_config_p.window_configs[invt_index].pos_y   = invt_window_pos.y;
+shard_config_p.window_configs[invt_index].width   = invt_window_size.width; 
+shard_config_p.window_configs[invt_index].height  = invt_window_size.height;
+shard_config_p.window_configs[invt_index].visible = invt_window_visible;
+                                                  
+shard_config_p.window_configs[jrnl_index].pos_x   = jrnl_window_pos.x;
+shard_config_p.window_configs[jrnl_index].pos_y   = jrnl_window_pos.y;
+shard_config_p.window_configs[jrnl_index].width   = jrnl_window_size.width; 
+shard_config_p.window_configs[jrnl_index].height  = jrnl_window_size.height;
+shard_config_p.window_configs[jrnl_index].visible = jrnl_window_visible;
+                                                  
+shard_config_p.window_configs[help_index].pos_x   = help_window_pos.x;
+shard_config_p.window_configs[help_index].pos_y   = help_window_pos.y;
+shard_config_p.window_configs[help_index].width   = help_window_size.width; 
+shard_config_p.window_configs[help_index].height  = help_window_size.height;
+shard_config_p.window_configs[help_index].visible = help_window_visible;
+                                                  
+shard_config_p.window_configs[pixl_index].pos_x   = pixl_window_pos.x;
+shard_config_p.window_configs[pixl_index].pos_y   = pixl_window_pos.y;
+shard_config_p.window_configs[pixl_index].width   = pixl_window_size.width; 
+shard_config_p.window_configs[pixl_index].height  = pixl_window_size.height;
+shard_config_p.window_configs[pixl_index].visible = pixl_window_visible;
 
-shard_config_p.window_configs[3].pos_x  = jrnl_window_pos.x;      
-shard_config_p.window_configs[3].pos_y  = jrnl_window_pos.y;      
-shard_config_p.window_configs[3].width  = jrnl_window_size.width;          
-shard_config_p.window_configs[3].height = jrnl_window_size.height;          
-shard_config_p.window_configs[3].active = true;                
-
-shard_config_p.window_configs[4].pos_x  = help_window_pos.x;      
-shard_config_p.window_configs[4].pos_y  = help_window_pos.y;      
-shard_config_p.window_configs[4].width  = help_window_size.width;          
-shard_config_p.window_configs[4].height = help_window_size.height;          
-shard_config_p.window_configs[4].active = true;                
-
-shard_config_p.window_configs[5].pos_x  = pixl_window_pos.x;      
-shard_config_p.window_configs[5].pos_y  = pixl_window_pos.y;      
-shard_config_p.window_configs[5].width  = pixl_window_size.width;          
-shard_config_p.window_configs[5].height = pixl_window_size.height;          
-shard_config_p.window_configs[5].active = true;                
-
-debug!("Values in shard_config_p before return:");
 for win_conf in shard_config_p.window_configs.iter() 
     {
-    debug!("conf_name: .....{:?}", win_conf.conf_name  );
-    debug!("Conf-Num: ....{}"  , win_conf.conf_num );
-    debug!("Window-Title: {}"  , win_conf.title    );
-    debug!("pos_x .=......{}"  , win_conf.pos_x    );
-    debug!("pos_y .=......{}"  , win_conf.pos_y    );
-    debug!("width .=......{}"  , win_conf.width    );
-    debug!("height.=......{}"  , win_conf.height   );
-    debug!("active.=......{}"  , win_conf.active   );
+    debug!("conf_name: .{:?}", win_conf.conf_name);
+    debug!("{:8}.=......{}"  ,CONF_WIN_TITLE  , win_conf.title    );
+    debug!("{:8}.=......{}"  ,CONF_WIN_POS_X  , win_conf.pos_x    );
+    debug!("{:8}.=......{}"  ,CONF_WIN_POS_Y  , win_conf.pos_y    );
+    debug!("{:8}.=......{}"  ,CONF_WIN_WIDTH  , win_conf.width    );
+    debug!("{:8}.=......{}"  ,CONF_WIN_HEIGHT , win_conf.height   );
+    debug!("{:8}.=......{}\n",CONF_WIN_VISIBLE, win_conf.visible  );
     } // end of: for
 
 Ok(shard_config_p)
@@ -504,9 +589,9 @@ Ok(shard_config_p)
 ///
 /// Tuple of `(window, surface, width, height, pos_x, pos_y, hidpi_factor)`
 /// `width` and `height` are in `PhysicalSize` units.
-fn create_window( title_p: &str, icon_p: Icon, event_loop_p: &EventLoop<()>, try_width_p: u32, try_height_p: u32, try_pos_x: i32, try_pos_y: i32) -> winit::window::Window
+#[allow(clippy::too_many_arguments)]
+fn create_window( title_p: &str, icon_p: Icon, event_loop_p: &EventLoop<()>, try_width_p: u32, try_height_p: u32, try_pos_x_p: i32, try_pos_y_p: i32, visible_p: bool) -> winit::window::Window
 {
-
     // Create a hidden window so we can derive a scaling-factor:
     let window = WindowBuilder::new()
                 .with_title(title_p)
@@ -515,7 +600,7 @@ fn create_window( title_p: &str, icon_p: Icon, event_loop_p: &EventLoop<()>, try
                 .build(&event_loop_p)
                 .unwrap();
 
-    window.set_outer_position(LogicalPosition::new(try_pos_x, try_pos_y));  // to get the correct current_monitor()
+    window.set_outer_position(LogicalPosition::new(try_pos_x_p, try_pos_y_p));  // to get the correct current_monitor()
 
     let hidpi_factor   = window.scale_factor();
 
@@ -543,101 +628,12 @@ fn create_window( title_p: &str, icon_p: Icon, event_loop_p: &EventLoop<()>, try
     // apply the calculated values and display the window:
     window.set_inner_size(         try_cur_size);
     window.set_min_inner_size(Some(try_min_size));
-    window.set_outer_position(LogicalPosition::new(try_pos_x, try_pos_y));
-    window.set_visible(true);
+    window.set_outer_position(LogicalPosition::new(try_pos_x_p, try_pos_y_p));
+    window.set_visible(visible_p);
 
     // return:
     window
 }
-
-
-impl World {
-    /// Create a new `World` instance that can draw a moving box.
-    fn new() -> Self 
-    {
-    Self {
-         box_pos_x:    32,
-         box_pos_y:    32,
-         box_width:    32,
-         box_height:   32,
-         box_speed_x:   4,
-         box_speed_y:   4,
-         win_width:   320,
-         win_height:  200,
-         }
-    }
-
-    /// Update the `World` internal state; bounce the box around the screen.
-    fn update(&mut self) 
-    {
-        if self.box_pos_x <= 0 || self.box_pos_x + self.box_width  > self.win_width  as i32 
-            {
-            self.box_speed_x *= -1;
-            }
-
-        if self.box_pos_y <= 0 || self.box_pos_y + self.box_height > self.win_height as i32 
-            {
-            self.box_speed_y *= -1;
-            }
-
-        self.box_pos_x += self.box_speed_x;
-        self.box_pos_y += self.box_speed_y;
-    }
-
-    /// Resize the `World`.
-    fn resize(&mut self, win_width_p: u32, win_height_p: u32 ) 
-    {
-        self.win_width  = win_width_p;
-        self.win_height = win_height_p;
-    }
-
-    /// Draw the World's state to the frame buffer.
-    ///
-    /// Assumes the default texture format: [`wgpu::TextureFormat::Rgba8UnormSrgb`]
-    fn  draw(&self, frame: &mut [u8]) 
-        {
-        let  stretch_factor_x: f64 = self.win_width  as f64 / 256.0;
-        let  stretch_factor_y: f64 = self.win_height as f64 / 256.0 ;
-            
-        for (i, pixel) in frame.chunks_exact_mut(4).enumerate() 
-            {
-            let x = (i % self.win_width  as usize) as i32;
-            let y = (i / self.win_width  as usize) as i32;
-
-            let inside_the_box  = x >= self.box_pos_x
-                               && x <  self.box_pos_x + self.box_width
-                               && y >= self.box_pos_y
-                               && y <  self.box_pos_y + self.box_height;
-
-            let fl_x  = x as f64;
-            let fl_y  = y as f64;
-    
-            // linear functions:
-            // let red   = (x as f64 /stretch_factor_x ) as u8;
-            // let green = (y as f64 /stretch_factor_y ) as u8;
-            // let blue  = (y as f64 /stretch_factor_y ) as u8;
-    
-            // trigonometric functions:
-            // let red   = (((fl_x.sin()+10.0).abs() *  9.0)       % 255.0) as u8;
-            // let green = (((fl_x.sin()+10.0).abs() * 10.0)       % 255.0) as u8;
-            // let blue  = (((fl_x.sin()+10.0).abs() * 11.0)       % 255.0) as u8;
-    
-            // combination of linear and trigonometric functions:
-            let red   = ( (x as f64 / stretch_factor_x )+((fl_x/fl_y).cos() *  23.0) % 256.0 ) as u8;
-            let green = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() *  72.0) % 256.0 ) as u8;
-            let blue  = ( (y as f64 / stretch_factor_y )+((fl_x/fl_y).cos() * 156.0) % 256.0 ) as u8;
-            let alpha = 0xff as u8;
-    
-            // debug!("x={}, y={} --> red={}, green={}, blue={}", x, y, red, green, blue);
-
-            let  rgba = if inside_the_box { [green , blue    , red    , 0x04 ] } 
-            else                          { [red   , green   , blue   , alpha] };
-
-            pixel.copy_from_slice(&rgba);
-            }
-        }
-}
-
 
 
 
@@ -734,7 +730,7 @@ impl World {
 
 
 // /// ___________________________________________________________________________________________________________________________
-// /// **`TESTMODULE: `** for config   
+// /// **`TESTMODULE: `** for central_core   
 // /// **`TYPE:       `** unit tests   
 // /// ___________________________________________________________________________________________________________________________
 // #[cfg(test)]

@@ -40,13 +40,13 @@
 
 
 //___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
-pub(crate) mod shard_tool;   // <filename>
-pub(crate) mod shard_log;    // <filename>
-pub(crate) mod asset;        // <filename>
-pub(crate) mod config;       // <filename>
-pub(crate) mod creature;     // <filename>
-pub(crate) mod item;         // <filename>
-pub(crate) mod pixel_draw;   // <filename>
+pub(crate) mod shard_tool;    // <filename>
+pub(crate) mod shard_log;     // <filename>
+pub(crate) mod asset;         // <filename>
+pub(crate) mod config;        // <filename>
+pub(crate) mod creature;      // <filename>
+pub(crate) mod item;          // <filename>
+pub(crate) mod pixel_painter; // <filename>
 
 //___ CONSTANTS: ______________________________________________________________________________________________________________
 //___ none ___
@@ -57,11 +57,12 @@ pub(crate) mod pixel_draw;   // <filename>
 //___ ENUMS: __________________________________________________________________________________________________________________
 //___ none ___
 
+//___ MACROS: _________________________________________________________________________________________________________________
+//___ none ___
+
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
 
 //___ METHODS: ________________________________________________________________________________________________________________
 //___ none ___
 
-//___ MACROS: _________________________________________________________________________________________________________________
-//___ none ___

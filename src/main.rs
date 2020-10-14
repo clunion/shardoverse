@@ -70,13 +70,13 @@ use crate::central_core::*;               // crate::<filename>::*
 //___ ENUMS: __________________________________________________________________________________________________________________
 //___ none ___
 
+//___ MACROS: _________________________________________________________________________________________________________________
+//___ none ___
+
 //___ STRUCTS: ________________________________________________________________________________________________________________
 //___ none ___
 
 //___ METHODS: ________________________________________________________________________________________________________________
-//___ none ___
-
-//___ MACROS: _________________________________________________________________________________________________________________
 //___ none ___
 
 /// ___________________________________________________________________________________________________________________________
@@ -106,7 +106,7 @@ fn main() -> Result<(), io::Error>
 let mut shard_config: ShardConfig = ShardConfig::default();
 
 // Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
-match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardoverse::modules::config=debug")
+match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardoverse::modules::pixel_draw=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
             .log_to_file()
@@ -120,6 +120,9 @@ match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardovers
     Ok(_reconf_handle) => {},
     Err(error)         => { println!("ERROR initialising flexi_logger: {:?}", error); }, // return Err(error); },
     }
+
+if   cfg!(debug_assertions) {println!("compiled in DEBUG mode");   }
+else                        {println!("compiled in RELEASE mode"); }
 
 trace!("this is a  trace message");
 debug!("this is a  debug {}", "message");
@@ -164,10 +167,10 @@ let cmd_line = App::new("Shardoverse")
                        .takes_value(false))
                    .get_matches();
 
-// Get the name of a config-file, if supplied on commandline, or defaults to config::NAME_OF_INI_FILE
-let config_filename = cmd_line.value_of("configfile").unwrap_or(config::NAME_OF_INI_FILE);
-shard_config.file   = config_filename.to_string();
-info!("config-file: {}", shard_config.file);
+// Get the name of a config-file, if supplied on commandline, or defaults to config::INI_FILE_NAME
+let config_filename = cmd_line.value_of("configfile").unwrap_or(config::INI_FILE_NAME);
+shard_config.ini_file_name   = config_filename.to_string();
+info!("config-file: {}", shard_config.ini_file_name);
 
 // Load configuration, states and assets, initialise everything:
 match config::init(config_filename)

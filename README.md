@@ -41,8 +41,7 @@ Goal of this project is to learn:
 We chose to write a little roguelike game and maybe add some extras.
 
 ## Current state
-**2020-07-17, Now is when it all begins...**   
-Most things of the development environment are set up in a reasonable way now, including logging.
+Most things of the development environment are set up in a reasonable way now, including logging and a bit of configuration file handling.
 Git, some Continuous Integration pipelining and the generating of source documentation is working.  
 Several basic assets for graphics and sound are selected.
 
@@ -51,11 +50,10 @@ start with creating the first easy data structures (for creatures and items),
 expanding the project structure while applying some design principles.
 Using an Entity Component System (ECS) model is in consideration, perhaps [`Specs or Legion`](https://csherratt.github.io/blog/posts/specs-and-legion/) will be used.
 
-The very first screenshot:
-![Shardoverse](https://raw.githubusercontent.com/clunion/shardoverse/master/assets/images/Screenshot_001.jpg)     
+After some experimentation with SDL2, the handling of windows was not satisfactory: In the Rust-environment it seems not to be possible to get continued redraws and events while moving or resizing windows. 
+So we switched to winit for the window-handling (which includes input and event handling) and are about to try bevy engine for drawing and ECS (and perhaps more).
 
 
-No game at all, yet. Keyboard input works, scaling and redrawing.
 
 ## Software Design Principles
 Design principles for a small learning project, for a small computer game? Yes, definitely.
@@ -76,12 +74,11 @@ It is surely not necessary to follow every detail of these principles, but the i
 | [`Rust`](https://www.rust-lang.org/)                            | Rust is said to be fast and reliable at the same time, so it should be perfect for games                                                   |
 | [`MSys2`](https://www.msys2.org)                                | To develop somewhat independent of the underlying system platform                                                                          |
 | [`MinGW64`](http://mingw.org/)                                  | MinGW goes together with MSys2, the decision here is to use 64-Bit libs for simplicity                                                     |
-| [`SDL2`](https://wiki.libsdl.org/)                              | A well probed and platform independent set of libraries                                                                                    |
 | [`git`](https://https://git-scm.com/)                           | subversion would have done since this is just for learning, but let's do it right from the start.                                          |
 | [`GitHub`](https://github.com/)                                 | Er, ok, we are already here. Rust is here, some libs are here, some other games, and so we are too.                                        |
 | [`MS-Windows`](https://en.wikipedia.org/wiki/Microsoft_Windows) | Not really a choice, that's what most already have. Even though, the environment and tools used here are meant to be platform independent. |
 | [`AreWeIDEyet`](https://areweideyet.com/)                       | Not yet. This learning project focusses on the programming itself. An IDE will (much) later be introduced, probably VisualStudioCode. More info on IDEs for Rust can be found here: [whats-the-best-ide-for-developing-in-rust](https://medium.com/cloud-native-the-gathering/whats-the-best-ide-for-developing-in-rust-5087d46006f5). |
-| [`Specs (ECS)`](https://github.com/amethyst/specs)              | Using an [`Entity Component System (ECS)`](https://en.wikipedia.org/wiki/Entity_component_system) seems to be the way to go. There are several available, **Specs** is used in the [`Roguelike-Tutorial`](https://bfnightly.bracketproductions.com/rustbook/), in [`Rust Sokoban`](https://sokoban.iolivia.me/) and (currently) in Amethyst (though [`Amethyst considers changing to Legion`](https://github.com/amethyst/rfcs/issues/22)). |
+| [`winit`](https://github.com/rust-windowing/winit)              | Cross-platform window creation and management. Has quite some features, looks a bit strange at first, but works reasonably well. Seems to be the standard for window handling in rust. |
 
 
 
@@ -89,9 +86,18 @@ It is surely not necessary to follow every detail of these principles, but the i
 
 | What                                                  | Why                                                                                      |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------|
-| [`amethyst`](https://crates.io/crates/amethyst)       | Hm, data-driven development looks like a good idea, maybe a bit strange to grasp. What is the relation to SDL2? Is Amethyst a replacement for SDL2 or can both be integrated? |
+| [`Bevy engine`](https://github.com/bevyengine/bevy)   | Promising new engine, should be fast, comes with an own variant of an ECS                |
+| [`amethyst`](https://crates.io/crates/amethyst)       | Hm, data-driven development looks like a good idea, maybe a bit strange to grasp.        |
 | [`bracket-lib`](https://crates.io/crates/bracket-lib) | Formerly known as RLTK/rltk_rs. Wow, that looks cool, and a mountain of docs is available! But that may be a bit much, since our goal is to learn how to do it in Rust by ourselves. On the other hand, may be we could integrate some things. |
 | [`Legion (ECS)`](https://github.com/TomGillen/legion) | A newer ECS, aimed for high performance. Looks tempting, currently not as well documented as Specs. So for learning purposes Specs looks better suited. |
+| [`Specs (ECS)`](https://github.com/amethyst/specs)    | Using an [`Entity Component System (ECS)`](https://en.wikipedia.org/wiki/Entity_component_system) seems to be the way to go. There are several available, **Specs** is used in the [`Roguelike-Tutorial`](https://bfnightly.bracketproductions.com/rustbook/), in [`Rust Sokoban`](https://sokoban.iolivia.me/) and (currently) in Amethyst (though [`Amethyst considers changing to Legion`](https://github.com/amethyst/rfcs/issues/22)). |
+
+
+## Dropped
+
+| What                                                  | Why                                                                                      |
+|-------------------------------------------------------|------------------------------------------------------------------------------------------|
+| [`SDL2`](https://wiki.libsdl.org/)                    | window handling: no redraws and events while moving or resizing windows.                 |
 
 
 ## Setting up the development environment
