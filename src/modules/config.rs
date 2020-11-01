@@ -28,6 +28,7 @@
 //___ PATHS TO MODULES TO USE: ________________________________________________________________________________________________
 use std::io;
 use std::str::FromStr;
+use std::clone::Clone;
 
 use ini::Ini;
 
@@ -98,11 +99,11 @@ const INITIAL_NUMBER_OF_WINDOW_CONFIGS: usize = 10;
 //___ none ___
 
 //___ STRUCTS: ________________________________________________________________________________________________________________
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub(crate) struct WindowConfig
 {
     pub(crate) conf_name: String,
-    pub(crate) title:     String,   // this means: Window-Title, later to be changed to localisation-string-ID
+    pub(crate) title:     String,   // this means: Window-Title, later to be changed to localization-string-ID
     pub(crate) pos_x:     i32,
     pub(crate) pos_y:     i32,
     pub(crate) height:    u32,
@@ -110,7 +111,7 @@ pub(crate) struct WindowConfig
     pub(crate) visible:   bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub(crate) struct ShardConfig 
 {
     pub(crate) ini_file_name:  String,
@@ -136,7 +137,7 @@ pub(crate) struct ShardConfig
 /// **`RETURNS:    `** **`               `** None   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
-/// Initialises a WindowConfig struct with default values   
+/// Initializes a WindowConfig struct with default values   
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -172,7 +173,7 @@ impl <'lt_winconf> WindowConfig
 /// **`TYPE:       `**  method of WindowConfig   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` conf_name_p   `** Name of the window-config, also this is a section name in the ini-file   
-/// **`            `** **` title_p       `** Titel of the window, displayd in the GUI (Title bar). Language dependant.   
+/// **`            `** **` title_p       `** Title of the window, displayed in the GUI (Title bar). Language dependant.   
 /// **`            `** **` pos_x_p       `** Initial horizontal position of the left edge of the window   
 /// **`            `** **` pos_y_p       `** Initial vertical   position of the top  edge of the window   
 /// **`            `** **` height_p      `** Initial vertical   height in pixels   
@@ -181,7 +182,7 @@ impl <'lt_winconf> WindowConfig
 /// **`RETURNS:    `** **` WindowConfig  `** a newly created struct   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
-/// Initialises a WindowConfig struct with default values   
+/// Initializes a WindowConfig struct with default values   
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -250,7 +251,7 @@ impl <'lt_shardconf> Default for ShardConfig
 /// **`RETURNS:    `** **`               `** None   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
-/// Initialises a ShardConfig struct with default values   
+/// Initializes a ShardConfig struct with default values   
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -384,7 +385,7 @@ pub(crate) fn find_window_conf_index_by_conf_name(&self, conf_name_p: String) ->
 /// **`TYPE:       `**  local, common function   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p`** Name of the INI-file to load the config from   
-/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = succesfull, flase = failed)   
+/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->    `** - Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
@@ -425,7 +426,7 @@ match config
 
 if !shard_conf_loaded          // if nothing could be loaded...
     {
-    return Ok(shard_config)    // ...then return config initialised with the default data!
+    return Ok(shard_config)    // ...then return config initialized with the default data!
     } 
 
 // if debug-mode: print all key-value data from the config ini-file:
@@ -517,7 +518,7 @@ Ok(shard_config)
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p `** Name of the INI-file to store the config in   
 /// **`            `** **` shard_config_p `** struct holding the current config to be stored   
-/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = succesfull, flase = failed)   
+/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->     `** Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
@@ -588,7 +589,7 @@ Ok(true)
 /// **`TYPE:       `**  initializing function, meant to be called exactly once at startup of the program   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p `** Name of the INI-file to store the config in   
-/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = succesfull, flase = failed)   
+/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->     `** Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
@@ -631,11 +632,11 @@ Ok(shard_config)
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p `** Name of the INI-file to store the config in   
 /// **`            `** **` shard_config_p `** struct holding the current config to be stored   
-/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = succesfull, false = failed)   
+/// **`RETURNS:    `** **` Result -->     `** OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->     `** Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
-/// de-initialises everything which needs to be freed, saves current state 
+/// de-initializes everything which needs to be freed, saves current state 
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -679,7 +680,7 @@ mod tests
   /// ___________________________________________________________________________________________________________________________
   /// **`FUNCTION:   `** test_init()   
   /// **`TYPE:       `** unit test   
-  /// **`TESTS:      `** checks if the initialisation with the default configuration INI-File results in ok()   
+  /// **`TESTS:      `** checks if the initialization with the default configuration INI-File results in ok()   
   /// ___________________________________________________________________________________________________________________________
   #[test]
   fn test_init() 
@@ -728,7 +729,7 @@ mod tests
     let mut window_conf_index: usize = 0; 
     let mut window_conf_found: bool;
 
-    // Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
+    // Initialize flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
     match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardoverse::modules::config=debug")
                 .check_parser_error()
                 .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
@@ -741,7 +742,7 @@ mod tests
                 .start()
         {
         Ok(_reconf_handle) => {},
-        Err(error)         => { println!("ERROR initialising flexi_logger: {:?}", error); }, // return Err(error); },
+        Err(error)         => { println!("ERROR initializing flexi_logger: {:?}", error); }, // return Err(error); },
         }
 
 

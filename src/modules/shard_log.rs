@@ -4,7 +4,7 @@
 //! **`SYNOPSIS:   `** A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust    
 //! ___________________________________________________________________________________________________________________________
 //! **`FILE:       `** shard_log.rs 🦀   
-//! **`DESCRIPTION:`** configuration and additional functions for logging. Requiers the crates log and flexi_logger   
+//! **`DESCRIPTION:`** configuration and additional functions for logging. Requires the crates log and flexi_logger   
 //! ___________________________________________________________________________________________________________________________
 //! **`LICENSE:    `**   
 //! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   
@@ -49,7 +49,7 @@ use crate::modules::*;      // crate::<dirname>::*
 
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  console_line_format   
-/// **`TYPE:       `**  public, callback for felxi_logger   
+/// **`TYPE:       `**  public, callback for flexi_logger   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` w             `** (output stream?)   
 /// **`            `** **` now           `** the timestamp of the moment the log macro is called   
@@ -68,7 +68,7 @@ use crate::modules::*;      // crate::<dirname>::*
 /// 0.1     | 2020-07-08 | Clunion   | initial version, based on flexi_logger::colored_opt_format   
 /// ___________________________________________________________________________________________________________________________
 /// **`TODO:       `**   
-/// * move the definition of the styles to a one-time initialiser or change into static or a macro...   
+/// * move the definition of the styles to a one-time initializer or change into static or a macro...   
 /// ___________________________________________________________________________________________________________________________
 pub(crate) fn console_line_format( w: &mut dyn std::io::Write, now: &mut DeferredNow, record: &Record, ) -> Result<(), std::io::Error> 
 {
@@ -102,7 +102,7 @@ write!( w,
 
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  file_line_format   
-/// **`TYPE:       `**  public, callback for felxi_logger   
+/// **`TYPE:       `**  public, callback for flexi_logger   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` w             `** (output stream?)   
 /// **`            `** **` now           `** the timestamp of the moment the log macro is called   

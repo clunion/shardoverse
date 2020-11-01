@@ -13,10 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Install SDL2-libs
-      run: |
-        sudo apt-get update
-        sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-gfx-dev 
     - uses: actions-rs/cargo@v1
       with:
         command: build
@@ -34,21 +30,6 @@ jobs:
       run: | 
         brew install rustup
         rustup-init -y --default-toolchain stable        
-        wget https://www.libsdl.org/release/SDL2-2.0.12.tar.gz -O sdl2.tar.gz
-        tar xzf sdl2.tar.gz
-        pushd SDL2-* && ./configure && make && sudo make install && popd
-        wget https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15.tar.gz -O sdl2_ttf.tar.gz
-        tar xzf sdl2_ttf.tar.gz
-        pushd SDL2_ttf-* && ./configure && make && sudo make install && popd
-        wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.5.tar.gz -O SDL2_image.tar.gz
-        tar xzf SDL2_image.tar.gz
-        pushd SDL2_image-* && ./configure && make && sudo make install && popd
-        wget https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz -O sdl2_mixer.tar.gz
-        tar xzf sdl2_mixer.tar.gz
-        pushd SDL2_mixer-* && ./configure && make && sudo make install && popd
-        wget --content-disposition -c https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz 
-        tar xzf sdl2_gfx.tar.gz
-        pushd SDL2_gfx-*/ && ./configure && make && sudo make install && popd
     - name: Build
       run: |
         export PATH="$HOME/.cargo/bin:$PATH"
@@ -59,88 +40,3 @@ jobs:
       run: |
         export PATH="$HOME/.cargo/bin:$PATH"
         cargo test
-      
-# test_Windows:
-#   runs-on: windows-2019
-#
-#   steps:
-#     - name: checkout Shardoverse
-#       uses: actions/checkout@v2
-#
-#     - name: actions-rs Install Rust stable
-#       uses: actions-rs/toolchain@v1
-#       with:
-#           toolchain: stable
-#           override: true
-#           components: clippy
-#
-#     - name: actions-rs check
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: check
-#       
-#     - name: actions-rs clippy
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: clippy
-#         args: --tests --examples --benches --all-features
-#
-#     - name: Setup SDL2-libraries
-#       run: | 
-#         echo "dir: ----------------------------------------------------------------"
-#         cmd /c "dir /O:GN"
-#         echo "choco install wget: -------------------------------------------------"
-#         choco install wget -y
-#         cmd /c "dir /O:GN C:\ProgramData\chocolatey\logs\chocolatey.log"  
-#         cmd /c "dir /O:GN C:\ProgramData\chocolatey\lib\Wget\tools"
-#         echo "curl SDL2: ----------------------------------------------------------"
-#         curl --fail --silent --show-error --location --output sdl2.zip https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip
-#         Expand-Archive sdl2.zip -DestinationPath sdl2
-#         cmd /c "dir /O:GN sdl2\SDL2-2.0.10\lib\x64"
-#         echo "curl SDL2_ttf: -------------------------------------------------------"
-#         curl --fail --silent --show-error --location --output sdl2_ttf.zip https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip
-#         Expand-Archive sdl2_ttf.zip -DestinationPath sdl2_ttf
-#         cmd /c "dir /O:GN sdl2_ttf\SDL2_ttf-2.0.15\lib\x64"
-#         echo "curl SDL2_image: -------------------------------------------------------"
-#         curl --fail --silent --show-error --location --output sdl2_image.zip https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip
-#         Expand-Archive sdl2_image.zip -DestinationPath sdl2_image
-#         cmd /c "dir /O:GN sdl2_image\SDL2_image-2.0.5\lib\x64"
-#         echo "curl SDL2_Mixer: -----------------------------------------------------"
-#         curl --fail --silent --show-error --location --output sdl2_mixer.zip https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip
-#         Expand-Archive sdl2_mixer.zip -DestinationPath sdl2_mixer
-#         cmd /c "dir /O:GN sdl2_mixer\SDL2_mixer-2.0.4\lib\x64"
-#         echo "wget SDL2_gfx: - (CURRENTLY FAILS!) ---------------------------------"
-#         echo "exec: curl --fail --silent --show-error --location --output sdl2_gfx.zip https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz"
-#         curl --fail --show-error --location --output sdl2_gfx.tar.gz https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz 2>&1
-#         tar xzf sdl2_gfx.tar.gz
-#         cmd /c "dir /O:GN "
-#         cmd /c "dir /O:GN sdl2_gfx"
-#         # even if the download would work, the archive only contains the sources, not prebuilt Libs.
-#         echo "check some versions:. -----------------------------------------------"
-#         rustc -V
-#         cargo -V
-#         echo "done. ----------------------------------------------------------------"
-#
-# fails too:
-#          echo "wget.exe --debug --content-disposition --continue https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz -O sdl2_gfx.tar.gz"
-#          C:\ProgramData\chocolatey\lib\Wget\tools\wget.exe "https://sourceforge.net/projects/sdl2gfx/files/SDL2_gfx-1.0.4.tar.gz" --output-document="sdl2_gfx.tar.gz" --debug --verbose
-#
-#     - name: cargo build
-#       run: | 
-#         echo "set LIB -------------------------------------------------------------"
-#         echo "LIB=$env:LIB"
-#         $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2\SDL2-2.0.10\lib\x64"
-#         $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2_ttf\SDL2_ttf-2.0.15\lib\x64"
-#         $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2_image\SDL2_image-2.0.5\lib\x64"
-#         $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2_mixer\SDL2_mixer-2.0.4\lib\x64"
-#         $env:LIB="$env:LIB;D:\a\shardoverse\shardoverse\sdl2_gfx"
-#         echo "LIB=$env:LIB"
-#         echo "cargo build: --------------------------------------------------------"
-#         echo "cargo build"
-#         cargo build
-#         echo "cargo build done. ---------------------------------------------------"
-#         
-#     - name: Run actions-rs tests
-#       uses: actions-rs/cargo@v1
-#       with:
-#         command: test

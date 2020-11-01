@@ -71,9 +71,9 @@ pub(crate) struct Creature
     pub(crate) wisdom:                 u16, 
     pub(crate) intelligence:           u16,
                                        
-    pub(crate) crarry_capacity_base:   u16,
-    pub(crate) crarry_capacity_cur:    u16,
-    pub(crate) crarry_capacity_used:   u16,
+    pub(crate) carry_capacity_base:    u16,
+    pub(crate) carry_capacity_cur:     u16,
+    pub(crate) carry_capacity_used:    u16,
                                        
     pub(crate) movement_range_base:    u16,
     pub(crate) movement_range_cur:     u16,
@@ -82,7 +82,7 @@ pub(crate) struct Creature
     pub(crate) armor_base:             u16,
     pub(crate) armor_cur:              u16,
 
-    pub(crate) attack_hit_chance_base: u16,  // to investigate: rules for crititcal hit chance?
+    pub(crate) attack_hit_chance_base: u16,  // to investigate: rules for critical hit chance?
     pub(crate) attack_hit_chance_cur:  u16,
 
     pub(crate) parry_base:             u16,
@@ -91,9 +91,9 @@ pub(crate) struct Creature
     pub(crate) evasion_base:           u16,
     pub(crate) evasion_cur:            u16,
 
-    // Liste (Vector?) of the current modifier states: 
-    // paralysed
-    // poisened
+    // List (Vector?) of the current modifier states: 
+    // paralyzed
+    // poisoned
     // burning
     // confused
     // silenced
@@ -133,9 +133,9 @@ impl Default for Creature
         willpower:              shard_tool::DEFAULT_VALUE_U16,                    // u16
         wisdom:                 shard_tool::DEFAULT_VALUE_U16,                    // u16
         intelligence:           shard_tool::DEFAULT_VALUE_U16,                    // u16
-        crarry_capacity_base:   shard_tool::DEFAULT_VALUE_U16,                    // u16
-        crarry_capacity_cur:    shard_tool::DEFAULT_VALUE_U16,                    // u16
-        crarry_capacity_used:   shard_tool::DEFAULT_VALUE_U16,                    // u16
+        carry_capacity_base:    shard_tool::DEFAULT_VALUE_U16,                    // u16
+        carry_capacity_cur:     shard_tool::DEFAULT_VALUE_U16,                    // u16
+        carry_capacity_used:    shard_tool::DEFAULT_VALUE_U16,                    // u16
         movement_range_base:    shard_tool::DEFAULT_VALUE_U16,                    // u16
         movement_range_cur:     shard_tool::DEFAULT_VALUE_U16,                    // u16
         movement_range_used:    shard_tool::DEFAULT_VALUE_U16,                    // u16
@@ -161,7 +161,7 @@ impl Default for Creature
 /// **`TYPE:       `**  local, common function   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` ini_filename_p`** Name of the INI-file to load the config from   
-/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = succesfull, flase = failed)   
+/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->    `** - Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
@@ -198,9 +198,9 @@ debug!("creature::display_values() called");
     debug!("willpower:              {}",   creature_p.willpower                );  // u16, 
     debug!("wisdom:                 {}",   creature_p.wisdom                   );  // u16, 
     debug!("intelligence:           {}",   creature_p.intelligence             );  // u16,
-    debug!("crarry_capacity_base:   {}",   creature_p.crarry_capacity_base     );  // u16,
-    debug!("crarry_capacity_cur:    {}",   creature_p.crarry_capacity_cur      );  // u16,
-    debug!("crarry_capacity_used:   {}",   creature_p.crarry_capacity_used     );  // u16,
+    debug!("carry_capacity_base:    {}",   creature_p.carry_capacity_base      );  // u16,
+    debug!("carry_capacity_cur:     {}",   creature_p.carry_capacity_cur       );  // u16,
+    debug!("carry_capacity_used:    {}",   creature_p.carry_capacity_used      );  // u16,
     debug!("movement_range_base:    {}",   creature_p.movement_range_base      );  // u16,
     debug!("movement_range_cur:     {}",   creature_p.movement_range_cur       );  // u16,
     debug!("movement_range_used:    {}",   creature_p.movement_range_used      );  // u16,
@@ -262,9 +262,9 @@ mod tests
     assert_eq!(defaults.willpower               , shard_tool::DEFAULT_VALUE_U16,                    );  // u16, 
     assert_eq!(defaults.wisdom                  , shard_tool::DEFAULT_VALUE_U16,                    );  // u16, 
     assert_eq!(defaults.intelligence            , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
-    assert_eq!(defaults.crarry_capacity_base    , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
-    assert_eq!(defaults.crarry_capacity_cur     , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
-    assert_eq!(defaults.crarry_capacity_used    , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
+    assert_eq!(defaults.carry_capacity_base     , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
+    assert_eq!(defaults.carry_capacity_cur      , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
+    assert_eq!(defaults.carry_capacity_used     , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
     assert_eq!(defaults.movement_range_base     , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
     assert_eq!(defaults.movement_range_cur      , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,
     assert_eq!(defaults.movement_range_used     , shard_tool::DEFAULT_VALUE_U16,                    );  // u16,

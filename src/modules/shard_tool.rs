@@ -4,7 +4,7 @@
 //! **`SYNOPSIS:   `** A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust    
 //! ___________________________________________________________________________________________________________________________
 //! **`FILE:       `** shard_log.rs 🦀   
-//! **`DESCRIPTION:`** configuration and additional functions for logging. Requiers the crates log and flexi_logger   
+//! **`DESCRIPTION:`** configuration and additional functions for logging. Requires the crates log and flexi_logger   
 //! ___________________________________________________________________________________________________________________________
 //! **`LICENSE:    `**   
 //! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   

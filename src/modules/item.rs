@@ -106,7 +106,7 @@ impl Default for Item
 /// **`TYPE:       `**  local, common function   
 /// ___________________________________________________________________________________________________________________________
 /// **`PARAMETER:  `** **` item_p        `** Reference to an item struct to display   
-/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = succesfull, flase = failed)   
+/// **`RETURNS:    `** **` Result -->    `** - OK(status flag: true = successful, false = failed)   
 /// **`            `** **`     or -->    `** - Error   
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   

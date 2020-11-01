@@ -20,7 +20,7 @@
 //!```
 //! shardoverse(.exe)
 //!     Starts the program shardoverse. 
-//!     Depending on the operating system the name may differ: on MS-Windows the programfile has the extension '.exe'.
+//!     Depending on the operating system the name may differ: on MS-Windows the program file has the extension '.exe'.
 //!
 //! shardoverse(.exe) --help
 //!     Writes a short help text to the console window, which shows all available commandline parameters and their meaning.
@@ -40,7 +40,6 @@
 //!    
 
 //___ CRATES EXTERNAL: ________________________________________________________________________________________________________
-//extern crate sdl2;
 extern crate clap;
 
 //___ DECLARATIONS OF SUBMODULES: _____________________________________________________________________________________________
@@ -51,7 +50,7 @@ mod central_core;                         // <filename>
 //use std::env;
 use std::io;
 
-use clap::{Arg, App};
+use clap::Arg;
 
 use log::{trace, debug, info, warn, error};
 use flexi_logger::{Logger, Duplicate, Cleanup, Criterion, Naming};
@@ -79,6 +78,7 @@ use crate::central_core::*;               // crate::<filename>::*
 //___ METHODS: ________________________________________________________________________________________________________________
 //___ none ___
 
+
 /// ___________________________________________________________________________________________________________________________
 /// **`FUNCTION:   `**  main   
 /// **`TYPE:       `**  program entry point   
@@ -89,7 +89,7 @@ use crate::central_core::*;               // crate::<filename>::*
 /// ___________________________________________________________________________________________________________________________
 /// **`DESCRIPTION:`**   
 /// The one and only main: startup and entry point of this program.   
-/// Here the handling of commandline paramaters and calls to initialise und de-initialise are done.   
+/// Here the handling of commandline parameters and calls to initialize und de-initialize are done.   
 /// ___________________________________________________________________________________________________________________________
 /// VERSION:| DATE:      | AUTHOR:   | CHANGES:   
 /// :---    | :---       | :---:     | :---   
@@ -105,7 +105,7 @@ fn main() -> Result<(), io::Error>
 {
 let mut shard_config: ShardConfig = ShardConfig::default();
 
-// Initialise flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
+// Initialize flexi_logger, see documentation of Struct flexi_logger::LogSpecification:
 match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardoverse::modules::pixel_draw=debug")
             .check_parser_error()
             .unwrap_or_else(|e| panic!("Logger initialization failed with {:?}", e))
@@ -118,7 +118,7 @@ match Logger::with_env_or_str("warn, shardoverse::central_core=debug, shardovers
             .start()
     {
     Ok(_reconf_handle) => {},
-    Err(error)         => { println!("ERROR initialising flexi_logger: {:?}", error); }, // return Err(error); },
+    Err(error)         => { println!("ERROR initializing flexi_logger: {:?}", error); }, // return Err(error); },
     }
 
 if   cfg!(debug_assertions) {println!("compiled in DEBUG mode");   }
@@ -131,7 +131,7 @@ warn!( "this is a  warn message");
 error!("this is an error");
 
 // Parse the command line using clap:
-let cmd_line = App::new("Shardoverse")
+let cmd_line = clap::App::new("Shardoverse")
                    .version("0.1")
                    .author("Clunion <Christian.Lunau@gmx.de>")
                    .about("A Roguelike Peer-to-Peer Multi Player Dungeon Explorer.")
@@ -172,11 +172,11 @@ let config_filename = cmd_line.value_of("configfile").unwrap_or(config::INI_FILE
 shard_config.ini_file_name   = config_filename.to_string();
 info!("config-file: {}", shard_config.ini_file_name);
 
-// Load configuration, states and assets, initialise everything:
+// Load configuration, states and assets, initialize everything:
 match config::init(config_filename)
     {
     Ok(config)  => { shard_config = config; },
-    Err(error)  => { error!("Error initialising: {:?}", error); return Err(error); },
+    Err(error)  => { error!("Error initializing: {:?}", error); return Err(error); },
     }
 
 // Increase the amount of output based on how many times the user used the "verbose" flag (i.e. 'myprog -v' or 'myprog -vvv' vs 'myprog -v -v -v':
@@ -189,7 +189,7 @@ match cmd_line.occurrences_of("verbosity")
     _ => {shard_config.verbosity = 9; info!("Verbosity={}, Maximum verbosity"   ,shard_config.verbosity); },
     }
 
-// Handle the existence of command line parameters by requesting matches by name:
+// Handle the existence of command line parameters by matching over name:
 if  cmd_line.is_present("test-mode")     {info!("Test Mode enabled")    ; shard_config.test        = true; }
 if  cmd_line.is_present("debug-mode")    {info!("Debug Mode enabled")   ; shard_config.debug       = true; } 
 if  cmd_line.is_present("training-mode") {info!("Training Mode enabled"); shard_config.training    = true; }
@@ -203,9 +203,10 @@ if  cmd_line.is_present("windowreset")
 if  cmd_line.is_present("configrecreate")   
     {
     info!("Config recreate detected"); 
-    // Recreates the configuraion settings, including config sections, windows coordinates, sizes, titles, ...:
+    // Recreates the configuration settings, including config sections, windows coordinates, sizes, titles, ...:
     shard_config = shard_config.recreate_all_configs(); 
     };
+
 
 // Hand over control to central core:
 match run_central_core(&mut shard_config)
@@ -216,11 +217,11 @@ match run_central_core(&mut shard_config)
 
 debug!("back in main()"); 
 
-// Save configuration and states, de-initialise everything:
+// Save configuration and states, de-initialize everything:
 match config::exit(config_filename, shard_config)
     {
     Ok(_)      => {},
-    Err(error) => { error!("de-initialising: {:?}", error); return Err(error); },
+    Err(error) => { error!("de-initializing: {:?}", error); return Err(error); },
     }
 
 Ok(())

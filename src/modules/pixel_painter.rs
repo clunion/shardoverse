@@ -241,7 +241,7 @@ mod tests
   #[test]
   fn test_formula_fill() 
   {
-    let result = pixel_painter(Path::new("non_existant_file"));
+    let result = pixel_painter(Path::new("non_existent_file"));
     assert!(!result.is_ok());
   }
 }

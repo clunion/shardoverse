@@ -1,8 +1,10 @@
 target
 log/*
 assets/audio
+assets/graphics/2D/tiles/u4graphics-master
 assets/graphics/2.5D-isometric
 assets/graphics/3D
 assets/gui
+assets/models
 assets/videos
 notes.txt
