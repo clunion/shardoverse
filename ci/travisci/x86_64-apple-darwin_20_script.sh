@@ -2,7 +2,7 @@ echo in Script: $0
 
 # set -xe
 
-# let cargo find the SDL2-Libs:
+# let cargo find more Libs:
 export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 

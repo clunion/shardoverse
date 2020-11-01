@@ -50,13 +50,3 @@ REM ### Add several necessary development tools:
 bash -lc "pacman -S --needed --noconfirm base-devel"
 bash -lc "pacman -S --needed --noconfirm msys2-devel"
 
-REM ### Installing the SDL2-Library:
-REM ### The SDL2-Libraries will be found via the Environment Variable LIBRARY_PATH!
-bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2"
-
-REM #### Then at least install the following:
-bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_image"
-bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_ttf"
-bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_mixer"
-bash -lc "pacman -S --needed --noconfirm  mingw-w64-x86_64-SDL2_gfx"
-
