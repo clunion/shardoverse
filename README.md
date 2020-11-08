@@ -449,30 +449,29 @@ the coloring looks much better, at least around loop-labels and lifetimes.
 ## Install an IDE (VSCode, optional)
 
 Start with download of [Visual Studio Code](https://code.visualstudio.com/).  
-Install as usual.
+Follow the instructions shown on the site (Install as usual).
 
-### Add some Plugins
+Infos on how to get started with VSCode can be found on the welcome-page within the program,
+or here: [VSCode Introvideos](https://code.visualstudio.com/docs/introvideos/basics)
 
-A minimal setup for developing with Rust in VSCode to start:  
+### Add some VSCode Extensions
+
+A minimal setup for developing with Rust in VSCode and to be able to debug:  
+
+* [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+* [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb)
+* [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer)
+
+That should look like this:  
+
 ![Plugins](.\doc\IDE\VSCode\Plugins_Initial.jpg)
 
-So we start with at least this plugin:
-
-* [rust-analyzer](https://rust-analyzer.github.io/manual.html)
+Setting up the debugging is further described here:  [how-to-debug-rust-with-visual-studio-code](https://www.forrestthewoods.com/blog/how-to-debug-rust-with-visual-studio-code/)
 
 ### Add Shardoverse to VSCode
 
-To start developing the Shardoverse project with VSCode, open the filesystem folder of shardoverse in VSCode's project Explorer:
-
-### Debugging Rust (by using VSCode)
-
-Required Plugins for debugging a Rust project:
-
-* [C/C++](https://code.visualstudio.com/docs/languages/cpp)
-* [CodeLLDB](https://github.com/vadimcn/vscode-lldb)
-* [rust-analyzer](https://rust-analyzer.github.io/manual.html)
-
-Further described here: [```how-to-debug-rust-with-visual-studio-code```](https://www.forrestthewoods.com/blog/how-to-debug-rust-with-visual-studio-code/)
+To start developing the Shardoverse project with VSCode, open the filesystem folder of shardoverse in VSCode's project Explorer:  
+![Plugins](.\doc\IDE\VSCode\Open_Folder.jpg)
 
 ### Using the MSys2-Shell in VSCode as the Terminal
 
@@ -491,6 +490,32 @@ Add the following lines to the file _settings.json_ of VSCode:
     }
 
 Check if the path to _bash.exe_ is correct, adjust here if not.
+
+With this simple setup, coding is already quite feasible.
+For convenience, adding some more VSCode Extensiomended:
+
+| Extension                                                                                                     | Description                                                       |
+|---------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+|[better-toml](https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml)                         | Adds some editing supporting features for toml files                   |
+|[code-spell-checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)| Spellchecks while typing, including text in comments, string definitions and more. |
+|[crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)| Help to manage dependencies while using Cargo.toml.|
+|[github-markdown-preview](https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview)| Changes VS Code's built-in markdown preview to match Github markdown rendering in style and content, adds 4 more Extensions to do that. |
+|[vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)            | Adds some Icons to the project explorer tree                           |
+|[vscode-markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) | Includes a library of rules to encourage standards and consistency for Markdown files. |
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+|[]()||
+
+
+
 
 ## Project structure
 
