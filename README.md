@@ -325,15 +325,15 @@ Since there is no game yet, the usage is simple.
 
 After starting shardoverse, the program can be left by closing the window.
 
-| Key           | Action                                                                 |
-|---------------|------------------------------------------------------------------------|
-| ESC           | Exit program                                                           |
-| Keypad-'+'    | Scale up / Zoom-In by 1 pixel per tile, until max of 255               |
-| Keypad-'-'    | Scale down / Zoom out by 1 pixel per tile, until min of 8              |
-| Keypad-','    | Reset scaling to the base of 32 (which also is the original tile-size) |
-| Keypad-'*'    | Toggle delay in main-loop on or off                                    |
-| Mouse-Wheel   | Zoom in/out with dynamic step size                                     |
-| P             | Paint colored pixels in main window (gets immediatly painted over now) |
+| Key           | Action                                                                  |
+|---------------|-------------------------------------------------------------------------|
+| ESC           | Exit program                                                            |
+| Keypad-'+'    | Scale up / Zoom-In by 1 pixel per tile, until max of 255                |
+| Keypad-'-'    | Scale down / Zoom out by 1 pixel per tile, until min of 8               |
+| Keypad-','    | Reset scaling to the base of 32 (which also is the original tile-size)  |
+| Keypad-'*'    | Toggle delay in main-loop on or off                                     |
+| Mouse-Wheel   | Zoom in/out with dynamic step size                                      |
+| P             | Paint colored pixels in main window (gets immediately painted over now) |
 
 When the program is started, a (currently empty) window should appear on screen.  
 If the window fails to appear, it is probably off-screen.
@@ -492,30 +492,29 @@ Add the following lines to the file _settings.json_ of VSCode:
 Check if the path to _bash.exe_ is correct, adjust here if not.
 
 With this simple setup, coding is already quite feasible.
-For convenience, adding some more VSCode Extensiomended:
+For convenience, adding some more VSCode Extensions:
 
-| Extension                                                                                                     | Description                                                       |
+| Extension                                                                                                     | Description                                                            |
 |---------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-|[better-toml](https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml)                         | Adds some editing supporting features for toml files                   |
+|[better-toml](https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml)                         | Adds some editing supporting features for toml files.                  |
 |[code-spell-checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)| Spellchecks while typing, including text in comments, string definitions and more. |
-|[crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)| Help to manage dependencies while using Cargo.toml.|
-|[github-markdown-preview](https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview)| Changes VS Code's built-in markdown preview to match Github markdown rendering in style and content, adds 4 more Extensions to do that. |
-|[vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)            | Adds some Icons to the project explorer tree                           |
-|[vscode-markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) | Includes a library of rules to encourage standards and consistency for Markdown files. |
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
-|[]()||
+|[crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)                                | Help to manage dependencies while using Cargo.toml.                    |
+|[git Lense](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)                               | Cited: "GitLens supercharges the built-in Visual Studio Code Git capabilities. It helps you to visualize code authorship at a glance via inline Git blame annotations and code lens, seamlessly navigate and explore the history of a file or branch, gain valuable insights via powerful comparison commands, and so much more." |
+|[gitignore](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore)                        | Some assistance in working with .gitignore files, language support and such. |
+|[project-manager](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)             | Enables access to projects from within VSCode, no matter where they are located. Define Projects (as Favorites) or choose to auto-detect Git, Mercurial or SVN repositories, VSCode folders, or other folder. |
+|[vscode-markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)      | Includes a library of rules to encourage standards and consistency for Markdown files. |
+|[github-markdown-preview](https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview) | Changes VS Code's built-in markdown preview to match Github markdown rendering in style and content, adds 4 more Extensions to do that. |
+|[vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)             | Adds some Icons to the project explorer tree.                          |
+|[Rust Test Explorer](https://marketplace.visualstudio.com/items?itemName=swellaby.vscode-rust-test-adapter)    | Rust Test Explorer for VS Code that enables viewing and running your Rust tests from the VS Code Sidebar. |
+|[Test Explorer UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)             | An extensible user interface for running tests in VS Code, used by Rust Test Explorer. |
 
+A nice explanation on how to use (an already configured) git inside of VSCode is found here:  [How to use Git inside of VSCode](https://www.youtube.com/watch?v=VOwyH2-VCVY) (from 2017).  
+A more detailed tutorial which includes the setting up of git: [How to use Git inside of VSCode - 2020](https://www.youtube.com/watch?v=F2DBSH2VoHQ)
 
-
+For the key-bindings, i started with Notepad++ keymap,
+moved to the Eclipse keymap and ended for now with a mixture of both,
+mainly for the Debugging keys F5-F8 (preferred to be like in Visual Studio) and the handling of multi-cursor editing (preferred to be like in UltraEdit and/or Notepad++)
+(a newer variant of what was known as column editing).  
 
 ## Project structure
 
