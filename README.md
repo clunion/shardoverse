@@ -10,6 +10,15 @@
 | x86_64 | Linux, FreeBSD, Apple-Darwin |stable, nightly | gnu                    | Travis-CI      | ![Travis-CI](https://travis-ci.com/clunion/shardoverse.svg?branch=master)                                 |
 | x86_64 | MS-Windows                   |stable, nightly | MSys2+MinGW64          | AppVeyor       | ![AppVeyor](https://ci.appveyor.com/api/projects/status/github/clunion/shardoverse?branch=master&svg=true)|
 
+## Attention, the default branch is renamed!
+
+The branch formerly known as `master` is now renamed to `main`!  
+To update local clones of the repository:  
+    git branch -m master main  
+    git fetch origin  
+    git branch -u origin/main main  
+    git remote set-head origin -a  
+
 ## What is this?
 
 A learning project to get into the coding of:
@@ -466,6 +475,12 @@ That should look like this:
 
 ![Plugins](.\doc\IDE\VSCode\Plugins_Initial.jpg)
 
+* [vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)
+
+* [Github Markdown Preview](https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview)
+
+
+
 Setting up the debugging is further described here:  [how-to-debug-rust-with-visual-studio-code](https://www.forrestthewoods.com/blog/how-to-debug-rust-with-visual-studio-code/)
 
 ### Add Shardoverse to VSCode
@@ -516,6 +531,23 @@ moved to the Eclipse keymap and ended for now with a mixture of both,
 mainly for the Debugging keys F5-F8 (preferred to be like in Visual Studio) and the handling of multi-cursor editing (preferred to be like in UltraEdit and/or Notepad++)
 (a newer variant of what was known as column editing).  
 
+## Adding MSVC toolchain on Windows
+
+go to https://www.rust-lang.org/tools/install  
+follow the path with the [Visual Studio C++ Build tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)  
+There, choose [Download Build Tools] in the upper part of the page,  
+that downloads the "vs_BuildTools.exe", a tiny downloader (bout 1.4MB)  
+for the small installation setup tool (45MB)  
+which then installs the huge VS-C++ Build-Tools (6.5GB),  
+when using only the default components.  
+
+To add the 64-Bit Rust toolchain, in the Terminal window:
+    rustup toolchain install nightly-x86_64-pc-windows-msvc
+for another appropriate 75MB.
+
+Then  
+      rustup default nightly-msvc  
+to activate it as the default toolchain.
 ## Project structure
 
 * Very small main.rs with parameter checking, initialization of the logging and only minimal logic
@@ -625,7 +657,7 @@ The following assets are considered to be used, if their creators/owners do not 
 
     [`pointers_part_5_by_yd`](https://opengameart.org/content/pointers-part-5)
 
-    [`Roguelike_RPG Icons_by_Joe-Williamson`](ttps://opengameart.org/content/roguelikerpg-icons)
+    [`Roguelike_RPG Icons_by_Joe-Williamson`](https://opengameart.org/content/roguelikerpg-icons)
 
 * ./assets/fonts
 
