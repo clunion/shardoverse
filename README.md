@@ -123,29 +123,116 @@ Perhaps it is now the right time to configure this shell/window for your liking.
 
     pacman -Syuu
 
-(repeat this until there is nothing more to update)
+--> **Repeat this until there is nothing more to update!**
 
-### Install the development toolchain
+### Update MSYS2 package mirrors
+
+This step may be needed if you have a fresh install of MSYS2.
+
+    pacman -Sy pacman-mirrors
+
+
+### Install the MinGW development toolchain
 
     pacman -S mingw-w64-x86_64-toolchain
+
+When asked, choosing ``all`` seems not a bad idea here, since most parts are needed anyway.
 
 ### Add several necessary development tools
 
     pacman -S base-devel
     pacman -S msys2-devel
 
-### Needed for the Bevy fast-compile configuration (linking does not work yet with this MSys2 settings)
+### Needed for the Bevy fast-compile configuration
+
+(linking does not work yet with this MSys2 settings)
 
     pacman -S mingw-w64-x86_64-clang
     pacman -S mingw-w64-x86_64-lld
 
-### Just for fun, we'll not really need this:
-
-    pacman -S mingw-w64-x86_64-vulkan-devel
-
 #### Generate the manpages for the installed Msys2-Tools
 
     /usr/bin/mandb --quiet
+This probably takes some time...
+
+next: <------------------------------------
+
+### Install git-for-windows for Msys2
+
+Here Git is used for version control and a bit for source backups.  
+In bigger projects it is used to coordinate the different contributors working in parallel, as a base for continuous integration and for publishing the results.
+
+There are several possible variants to use Git on Windows (e.g. git-scm, msys/git, Git as plugin to some IDE, ... ), each has different advantages.  
+Here git-for-windows/mingw-w64-x86_64-git is chosen, because it:  
+
+* works as a commandline tool in the MSys2-Shell,
+* supports VSCode and extensions like GitLense and
+* can be used by TortoiseGit
+all in one.
+
+Git-for-Windows/mingw64 can be installed using the Msys2 package manager `pacman` and set up in 5 steps as described at:  
+[`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
+
+This site is update once in a while, description may differ from the steps shown here. When they differ, the MSYS2-proper-text is most probably right.  
+
+#### In short:
+
+1. Edit the pacman configuration file of Msys2: /etc/**pacman.conf** (probably in windows to be found at C:\msys64\etc\pacman.conf)  
+Add the **[git-for-windows]** section for mingw64 (= x86-64) at the place described there.
+1. add and accept the additional **signing-keys** for the git-for-windows repository.  
+This may get  a bit difficult at times, perhaps the key is not initially trusted. If this happens, see Troubleshooting below.
+1. sync the new repository repeatedly via  
+    `pacman -Syyuu`  
+    until there is nothing more to sync.
+1. update Msys2 repeatedly by using  
+    `pacman -Suu`  
+    until there is nothing more to update.
+1. install git via:  
+    `pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra`
+
+#### Troubleshooting git-for-windows for Msys2 installation
+
+In case something went wrong with the keys (leading to installation of git failing), one or all of the following may get things in the right direction:
+
+* locally signing the key of the git-for-windows repository:  
+    pacman-key --list-sigs  
+    to find the git-for-windows key that probably is not yet trusted. Grab the short *identifier* and put that into the following command if you want to trust that site:  
+    pacman-key --lsign-key *7115A57376871B1C*
+
+* re-get the keyring of msys2:
+
+    pacman -S msys2-keyring  
+
+* a re-initialization of the pacman trust db may help:  
+
+    pacman -Scc  
+    rm -R /etc/pacman.d/gnupg/  
+    gpg --refresh-keys  
+    pacman-key --init  
+    pacman-key --populate  
+    pacman-key --refresh-keys  
+
+### Also add ssh-pageant:
+
+This is a way to get the automated/transparent SSH-Key login to GitHub working, which is required by GitHub!
+(It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
+
+    pacman -S ssh-pageant
+
+Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
+
+Make sure to use the same Socket-File in the setup of ssh-pageant (within the Msys2-Shell)
+and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).
+
+Here, a file with Path and name like this is used:
+
+    /e/Temp/msys_cyglockfile
+
+Currently, the variant using the Cygwin compatible socket seems to work with Msys2.
+If not, try the other (msysgit) variant.
+File path and name used in KeeAgent:
+
+    E:\Temp\msys_cyglockfile
 
 ------------------
 
@@ -180,7 +267,7 @@ after that start the installation with: [return]
 
 Now it's time to configure the windows-environment and the environment within the shell.
 
-### Configure the environment within the MSys2-Shell
+### Configure the environment within the MSys2-Shell for Rust
 
 In one of the dot-files which get executed at start of the shell (in login-mode), perhaps in the *.bash_profile*, add the location of the Rust binaries to the PATH-variable (now in the Unix notation):
 
@@ -267,44 +354,6 @@ While *The Rust Programming Language* is the **THE BOOK** and is written in a wa
 ### Roguelike programming in Rust
 
 * [`Roguelike Tutorial - In Rust`](https://bfnightly.bracketproductions.com/rustbook/) - A great tutorial of how to write a roguelike in Rust, covering every aspect and using modern techniques like Data Driven Design and Entity Component Systems!
-
-### Install git for Msys2
-
-Git is used for version control, to coordinate the different contributors working in parallel, as a base for continuous integration and, later, for publishing the results.
-
-Git can be set up as described in 9 steps at: [`git: Install-inside-MSYS2-proper`](https://github.com/git-for-windows/git/wiki/Install-inside-MSYS2-proper)
-
-#### In short:
-
-* Edit the pacman configuration file of Msys2: /etc/**pacman.conf** (probably in windows to be found at C:\msys64\etc\pacman.conf)
-* add the git-for-windows-**mingw32** for mingw64 in the strangely twisted way described there
-* add and accept their **signing-keys**
-* sync the new repository via ```pacman -Syyuu```
-* update Msys2 repeatedly by using ```pacman -Suu``` until there is nothing more to update
-* install git via:
-    ```pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra```
-
-### Also add ssh-pageant:
-
-This is necessary to get the automated/transparent SSH-Key login to GitHub working.
-(It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
-
-    pacman -S ssh-pageant
-
-Then set it up as described here: [`ssh-pageant`](https://github.com/cuviper/ssh-pageant)
-
-Make sure to use the same Socket-File in the setup of ssh-pageant (within the Msys2-Shell)
-and in the configuration of Pageant/KeeAgent (outside the Msys2-Shell, that is: in the Windows environment).
-
-Here, a file with Path and name like this is used:
-
-    /e/Temp/msys_cyglockfile
-
-Currently, the variant using the Cygwin compatible socket seems to work with Msys2.
-If not, try the other (msysgit) variant.
-File path and name used in KeeAgent:
-
-    E:\Temp\msys_cyglockfile
 
 ## Clone the git repository of Shardoverse
 
