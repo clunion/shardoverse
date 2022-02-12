@@ -142,6 +142,8 @@ When asked, choosing ``all`` seems not a bad idea here, since most parts are nee
 
     pacman -S base-devel
     pacman -S msys2-devel
+    pacman -S man
+    pacman -S gzip
 
 ### Needed for the Bevy fast-compile configuration
 

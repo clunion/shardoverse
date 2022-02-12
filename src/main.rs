@@ -4,8 +4,7 @@
 //! **`SYNOPSIS:   `** A Roguelike Peer-to-Peer Multi Player Dungeon Explorer Game written in Rust    
 //! ___________________________________________________________________________________________________________________________
 //! **`FILE:       `** main.rs 🦀   
-//! **`DESCRIPTION:`**   
-//! The one and only start and entry point of the program.   
+//! **`DESCRIPTION:`** The one and only start and entry point of the program.   
 //! ___________________________________________________________________________________________________________________________
 //! **`LICENSE:    `**   
 //! Copyright 2020 by Christian Lunau (clunion), Julian Lunau (someone-out-there) and Jaron Lunau (endless-means).   
