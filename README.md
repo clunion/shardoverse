@@ -214,7 +214,7 @@ In case something went wrong with the keys (leading to installation of git faili
     pacman-key --populate  
     pacman-key --refresh-keys  
 
-### Also add ssh-pageant:
+### Also add ssh-pageant  (obsolet???)
 
 This is a way to get the automated/transparent SSH-Key login to GitHub working, which is required by GitHub!
 (It may additionally need a running Putty-Pageant, Keepass-KeeAgent or other SSH-agent, see further below)
@@ -275,7 +275,7 @@ In one of the dot-files which get executed at start of the shell (in login-mode)
 
       export PATH="/c/Users/<your username>/.cargo/bin:$PATH"
 
-#### Tell Rust where to find Libraries!
+#### Tell Rust where to find Libraries!  (obsolet???)
 
 In the MSys2 environment on MS-Windows (and Apple-Darwin), Rust (or, more precisely, cargo) looks in the path stored in the shell variable named LIBRARY_PATH.
 This Variable has to be set in one of the MSys2-Shell startup scripts (.bash_profile or the like) to the correct path containing libs.
@@ -450,6 +450,10 @@ it is reasonable to resort to using a Windows-Git tool like [`TortoiseGit`](http
 Originally it was intended not to use TortoiseGit from the start, because one of goals of this project is to learn Git, and that means in the console way first.
 
 ## Using Git with Notepad++
+
+First add the Path to Notepad++.exe to the Windows-Environment-Variable PATH:
+The Path where Notepad++.exe resides on your system could be `C:\Program Files\Notepad++`,
+if so, then add this to your Windows Users PATH environment-Variable.
 
 There is a small problem integrating Notepad++: in usual configuration NP++ opens a new tab for a new text document,
 which will happen every time when Git asks for, say, a commit description.

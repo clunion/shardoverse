@@ -1,8 +1,13 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": ".."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"terminal.integrated.cwd": "C:\\clu\\Devment\\Rust\\shardoverse",
+		"cSpell.words": [
+			"vsync"
+		]
+	}
 }
